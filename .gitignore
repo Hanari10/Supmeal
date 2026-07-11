@@ -1,0 +1,41 @@
+# Dépendances Node.js
+node_modules/
+
+# Fichiers d'environnement contenant des secrets
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Fichiers générés
+dist/
+build/
+coverage/
+.next/
+
+# Fichiers temporaires
+tmp/
+temp/
+*.tmp
+*.log
+
+# Images et fichiers envoyés par les utilisateurs
+stockage/*
+!stockage/.gitkeep
+
+# Fichiers des éditeurs
+.vscode/
+.idea/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Base de données locale éventuelle
+*.db
+*.sqlite
+*.sqlite3
+
+# Prisma
+serveur/prisma/dev.db
