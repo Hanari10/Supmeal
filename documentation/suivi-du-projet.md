@@ -6,9 +6,10 @@
 - [x] Créer la structure initiale
 - [x] Initialiser le serveur NestJS
 - [x] Installer Prisma
-- [ ] Finaliser la conception
-- [ ] Créer le schéma de la base de données
-- [ ] Configurer PostgreSQL
+- [x] Finaliser la conception
+- [x] Créer le schéma conceptuel de la base de données
+- [x] Configurer PostgreSQL
+- [ ] Traduire le modèle de données dans Prisma
 - [ ] Configurer Docker Compose
 
 ## Authentification
