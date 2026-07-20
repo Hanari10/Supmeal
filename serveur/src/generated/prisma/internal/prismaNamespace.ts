@@ -699,7 +699,7 @@ export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[k
 export const IngredientScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  unit: 'unit',
+  defaultUnit: 'defaultUnit',
   category: 'category',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
