@@ -42,7 +42,7 @@ model OAuthAccount {
 model Ingredient {
   id        String   @id @default(uuid())
   name      String   @unique
-  defaultUnit      String?
+  defaultUnit String?
   category  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,5 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
+import { Prisma } from '../generated/prisma/client';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 
@@ -7,10 +12,23 @@ import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 export class IngredientsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createIngredientDto: CreateIngredientDto) {
-    return this.prisma.ingredient.create({
-      data: createIngredientDto,
-    });
+  async create(createIngredientDto: CreateIngredientDto) {
+    try {
+      return await this.prisma.ingredient.create({
+        data: createIngredientDto,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'Un ingrédient portant ce nom existe déjà.',
+        );
+      }
+
+      throw error;
+    }
   }
 
   findAll() {
@@ -21,15 +39,23 @@ export class IngredientsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.ingredient.findUnique({
+  async findOne(id: string) {
+    const ingredient = await this.prisma.ingredient.findUnique({
       where: {
         id,
       },
     });
+
+    if (!ingredient) {
+      throw new NotFoundException(`Aucun ingrédient trouvé avec l'id ${id}`);
+    }
+
+    return ingredient;
   }
 
-  update(id: string, updateIngredientDto: UpdateIngredientDto) {
+  async update(id: string, updateIngredientDto: UpdateIngredientDto) {
+    await this.findOne(id);
+
     return this.prisma.ingredient.update({
       where: {
         id,
@@ -38,7 +64,9 @@ export class IngredientsService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
+
     return this.prisma.ingredient.delete({
       where: {
         id,
