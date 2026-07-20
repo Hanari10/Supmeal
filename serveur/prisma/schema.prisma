@@ -39,3 +39,11 @@ model OAuthAccount {
   @@map("oauth_accounts")
 }
 
+model Ingredient {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  unit      String?
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
