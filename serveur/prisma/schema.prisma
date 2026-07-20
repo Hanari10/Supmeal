@@ -38,3 +38,4 @@ model OAuthAccount {
   @@index([userId])
   @@map("oauth_accounts")
 }
+

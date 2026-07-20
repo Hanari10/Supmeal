@@ -17,6 +17,7 @@ async function bootstrap(): Promise<void> {
     .setTitle('SUPMEAL API')
     .setDescription("Documentation de l'API SUPMEAL")
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
