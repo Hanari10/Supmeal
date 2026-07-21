@@ -56,6 +56,9 @@ export class IngredientsController {
     return this.ingredientsService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Modifier un ingrédient',
+  })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -64,6 +67,9 @@ export class IngredientsController {
     return this.ingredientsService.update(id, updateIngredientDto);
   }
 
+  @ApiOperation({
+    summary: 'Supprimer un ingrédient',
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ingredientsService.remove(id);
