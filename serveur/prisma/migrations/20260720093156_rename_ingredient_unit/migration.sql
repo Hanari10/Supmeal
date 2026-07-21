@@ -6,4 +6,4 @@
 */
 -- AlterTable
 ALTER TABLE "Ingredient" DROP COLUMN "unit",
-ADD COLUMN     "defaultUnit" TEXT;
+ADD COLUMN     "defaultMeasurementUnit" TEXT;

@@ -24,5 +24,5 @@ export class CreateIngredientDto {
   @IsOptional()
   @IsString()
   @MaxLength(20)
-  defaultUnit?: string;
+  defaultMeasurementUnit?: string;
 }

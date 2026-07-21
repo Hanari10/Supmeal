@@ -8,6 +8,7 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model User {
   id                 String         @id @default(uuid()) @db.Uuid
   email              String         @unique
@@ -40,23 +41,55 @@ model OAuthAccount {
 }
 
 model Ingredient {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  defaultUnit String?
-  category  String?
+  id                     String   @id @default(uuid())
+  name                   String   @unique
+  category               String?
+  defaultMeasurementUnit String?
+
+  recipeIngredients RecipeIngredient[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Recipe {
   id              String   @id @default(uuid())
+
   name            String
   description     String?
+
   preparationTime Int?
   cookingTime     Int?
+
   servings        Int?
+
   difficulty      String?
+
   imageUrl        String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+
+  recipeIngredients RecipeIngredient[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RecipeIngredient {
+  id String @id @default(uuid())
+
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  quantity Float
+
+  unit String?
+
+  order Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([recipeId, ingredientId])
 }
