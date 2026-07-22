@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { RecipeIngredientsService } from './recipe-ingredients.service';
 import { CreateRecipeIngredientDto } from './dto/create-recipe-ingredient.dto';
 import { UpdateRecipeIngredientDto } from './dto/update-recipe-ingredient.dto';
 
-@Controller('recipe-ingredients')
+@Controller('recipes/:recipeId/ingredients')
 export class RecipeIngredientsController {
-  constructor(private readonly recipeIngredientsService: RecipeIngredientsService) {}
+  constructor(
+    private readonly recipeIngredientsService: RecipeIngredientsService,
+  ) {}
 
   @Post()
-  create(@Body() createRecipeIngredientDto: CreateRecipeIngredientDto) {
-    return this.recipeIngredientsService.create(createRecipeIngredientDto);
+  create(
+    @Param('recipeId') recipeId: string,
+    @Body() createRecipeIngredientDto: CreateRecipeIngredientDto,
+  ) {
+    return this.recipeIngredientsService.create(
+      recipeId,
+      createRecipeIngredientDto,
+    );
   }
-
   @Get()
-  findAll() {
-    return this.recipeIngredientsService.findAll();
+  findAll(@Param('recipeId') recipeId: string) {
+    return this.recipeIngredientsService.findAll(recipeId);
+  }
+  @Patch(':ingredientId')
+  update(
+    @Param('recipeId') recipeId: string,
+    @Param('ingredientId') ingredientId: string,
+    @Body() updateRecipeIngredientDto: UpdateRecipeIngredientDto,
+  ) {
+    return this.recipeIngredientsService.update(
+      recipeId,
+      ingredientId,
+      updateRecipeIngredientDto,
+    );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.recipeIngredientsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeIngredientDto: UpdateRecipeIngredientDto) {
-    return this.recipeIngredientsService.update(+id, updateRecipeIngredientDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recipeIngredientsService.remove(+id);
+  @Delete(':ingredientId')
+  remove(
+    @Param('recipeId') recipeId: string,
+    @Param('ingredientId') ingredientId: string,
+  ) {
+    return this.recipeIngredientsService.remove(recipeId, ingredientId);
   }
 }
