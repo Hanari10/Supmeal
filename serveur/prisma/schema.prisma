@@ -22,6 +22,7 @@ model User {
   preferredCuisines  String[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
+  recipes            Recipe[]
   oauthAccounts      OAuthAccount[]
 
   @@map("users")
@@ -53,24 +54,26 @@ model Ingredient {
 }
 
 model Recipe {
-  id              String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  name            String
-  description     String?
+  name        String
+  description String?
 
   preparationTime Int?
   cookingTime     Int?
-
   servings        Int?
-
   difficulty      String?
-
   imageUrl        String?
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   recipeIngredients RecipeIngredient[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model RecipeIngredient {

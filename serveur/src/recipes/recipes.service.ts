@@ -1,9 +1,9 @@
 import {
-  ConflictException,
+  //ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '../generated/prisma/client';
+//import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
@@ -12,35 +12,31 @@ import { UpdateRecipeDto } from './dto/update-recipe.dto';
 export class RecipesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createRecipeDto: CreateRecipeDto) {
-    try {
-      return await this.prisma.recipe.create({
-        data: createRecipeDto,
-      });
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException('Une recette portant ce nom existe déjà.');
-      }
-
-      throw error;
-    }
+  async create(userId: string, createRecipeDto: CreateRecipeDto) {
+    return this.prisma.recipe.create({
+      data: {
+        ...createRecipeDto,
+        userId,
+      },
+    });
   }
 
-  findAll() {
+  findAll(userId: string) {
     return this.prisma.recipe.findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         name: 'asc',
       },
     });
   }
 
-  async findOne(id: string) {
-    const recipe = await this.prisma.recipe.findUnique({
+  async findOne(userId: string, id: string) {
+    const recipe = await this.prisma.recipe.findFirst({
       where: {
         id,
+        userId,
       },
     });
 
@@ -51,8 +47,8 @@ export class RecipesService {
     return recipe;
   }
 
-  async update(id: string, updateRecipeDto: UpdateRecipeDto) {
-    await this.findOne(id);
+  async update(userId: string, id: string, updateRecipeDto: UpdateRecipeDto) {
+    await this.findOne(userId, id);
 
     return this.prisma.recipe.update({
       where: {
@@ -62,8 +58,8 @@ export class RecipesService {
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(userId: string, id: string) {
+    await this.findOne(userId, id);
 
     return this.prisma.recipe.delete({
       where: {

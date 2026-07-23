@@ -1,13 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -17,8 +20,11 @@ import {
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Recipes')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @Controller('recipes')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
@@ -33,16 +39,19 @@ export class RecipesController {
     description: 'Une recette portant ce nom existe déjà.',
   })
   @Post()
-  create(@Body() createRecipeDto: CreateRecipeDto) {
-    return this.recipesService.create(createRecipeDto);
+  create(
+    @Request() request: { user: { id: string; email: string } },
+    @Body() createRecipeDto: CreateRecipeDto,
+  ) {
+    return this.recipesService.create(request.user.id, createRecipeDto);
   }
 
   @ApiOperation({
     summary: 'Récupérer toutes les recettes',
   })
   @Get()
-  findAll() {
-    return this.recipesService.findAll();
+  findAll(@Request() request: { user: { id: string; email: string } }) {
+    return this.recipesService.findAll(request.user.id);
   }
 
   @ApiOperation({
@@ -52,8 +61,11 @@ export class RecipesController {
     description: 'Recette introuvable.',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.recipesService.findOne(id);
+  findOne(
+    @Request() request: { user: { id: string; email: string } },
+    @Param('id') id: string,
+  ) {
+    return this.recipesService.findOne(request.user.id, id);
   }
 
   @ApiOperation({
@@ -63,8 +75,12 @@ export class RecipesController {
     description: 'Recette introuvable.',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.recipesService.update(id, updateRecipeDto);
+  update(
+    @Request() request: { user: { id: string; email: string } },
+    @Param('id') id: string,
+    @Body() updateRecipeDto: UpdateRecipeDto,
+  ) {
+    return this.recipesService.update(request.user.id, id, updateRecipeDto);
   }
 
   @ApiOperation({
@@ -74,7 +90,10 @@ export class RecipesController {
     description: 'Recette introuvable.',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recipesService.remove(id);
+  remove(
+    @Request() request: { user: { id: string; email: string } },
+    @Param('id') id: string,
+  ) {
+    return this.recipesService.remove(request.user.id, id);
   }
 }
