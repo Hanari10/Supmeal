@@ -67,6 +67,24 @@ export class IngredientsService {
   async remove(id: string) {
     await this.findOne(id);
 
+    const recipeUsageCount = await this.prisma.recipeIngredient.count({
+      where: {
+        ingredientId: id,
+      },
+    });
+
+    const shoppingListUsageCount = await this.prisma.shoppingListItem.count({
+      where: {
+        ingredientId: id,
+      },
+    });
+
+    if (recipeUsageCount > 0 || shoppingListUsageCount > 0) {
+      throw new ConflictException(
+        'Cet ingrédient ne peut pas être supprimé car il est utilisé dans une recette ou une liste de courses.',
+      );
+    }
+
     return this.prisma.ingredient.delete({
       where: {
         id,
