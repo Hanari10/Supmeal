@@ -74,3 +74,28 @@ export type ShoppingList = Prisma.ShoppingListModel
  * 
  */
 export type ShoppingListItem = Prisma.ShoppingListItemModel
+/**
+ * Model Cookbook
+ * 
+ */
+export type Cookbook = Prisma.CookbookModel
+/**
+ * Model CookbookMember
+ * 
+ */
+export type CookbookMember = Prisma.CookbookMemberModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model MealPlan
+ * 
+ */
+export type MealPlan = Prisma.MealPlanModel
+/**
+ * Model RecipeComment
+ * 
+ */
+export type RecipeComment = Prisma.RecipeCommentModel
