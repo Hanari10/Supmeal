@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -20,6 +21,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { SearchRecipesDto } from './dto/search-recipes.dto';
 import { RecipesService } from './recipes.service';
 
 @ApiTags('recipes')
@@ -60,6 +62,16 @@ export class RecipesController {
   @ApiNotFoundResponse({
     description: 'Recette introuvable.',
   })
+  @ApiOperation({
+    summary: 'Rechercher des recettes',
+  })
+  @Get('search')
+  search(
+    @Request() request: { user: { id: string; email: string } },
+    @Query() filters: SearchRecipesDto,
+  ) {
+    return this.recipesService.search(request.user.id, filters);
+  }
   @Get(':id')
   findOne(
     @Request() request: { user: { id: string; email: string } },

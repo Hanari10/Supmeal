@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../database/prisma.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { SearchRecipesDto } from './dto/search-recipes.dto';
 
 @Injectable()
 export class RecipesService {
@@ -135,6 +136,63 @@ export class RecipesService {
     return this.prisma.recipe.delete({
       where: {
         id,
+      },
+    });
+  }
+
+  async search(userId: string, filters: SearchRecipesDto) {
+    return this.prisma.recipe.findMany({
+      where: {
+        userId,
+
+        ...(filters.query && {
+          OR: [
+            {
+              name: {
+                contains: filters.query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: filters.query,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        }),
+
+        ...(filters.difficulty && {
+          difficulty: filters.difficulty,
+        }),
+
+        ...(filters.maxPreparationTime !== undefined && {
+          preparationTime: {
+            lte: filters.maxPreparationTime,
+          },
+        }),
+
+        ...(filters.tag && {
+          tags: {
+            some: {
+              tag: {
+                name: filters.tag,
+              },
+            },
+          },
+        }),
+      },
+
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+
+      orderBy: {
+        createdAt: 'desc',
       },
     });
   }
