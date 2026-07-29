@@ -28,6 +28,7 @@ model User {
   cookbookMemberships CookbookMember[]
   comments            RecipeComment[]
   mealPlans           MealPlan[]
+  favorites           Favorite[]
 
   @@map("users")
 }
@@ -76,9 +77,10 @@ model Recipe {
   cookbookId      String?
   cookbook        Cookbook? @relation(fields: [cookbookId], references: [id], onDelete: SetNull)
 
-  tags RecipeTag[]
-  mealPlans  MealPlan[]
-  comments   RecipeComment[]
+  tags      RecipeTag[]
+  mealPlans MealPlan[]
+  comments  RecipeComment[]
+  favorites Favorite[]
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -218,3 +220,13 @@ model RecipeTag {
   @@id([recipeId, tagId])
 }
 
+model Favorite {
+  userId    String   @db.Uuid
+  recipeId  String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, recipeId])
+}

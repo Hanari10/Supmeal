@@ -104,3 +104,8 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type RecipeTag = Prisma.RecipeTagModel
+/**
+ * Model Favorite
+ * 
+ */
+export type Favorite = Prisma.FavoriteModel

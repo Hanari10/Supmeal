@@ -308,6 +308,7 @@ export type RecipeWhereInput = {
   tags?: Prisma.RecipeTagListRelationFilter
   mealPlans?: Prisma.MealPlanListRelationFilter
   comments?: Prisma.RecipeCommentListRelationFilter
+  favorites?: Prisma.FavoriteListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipeIngredients?: Prisma.RecipeIngredientListRelationFilter
 }
@@ -332,6 +333,7 @@ export type RecipeOrderByWithRelationInput = {
   tags?: Prisma.RecipeTagOrderByRelationAggregateInput
   mealPlans?: Prisma.MealPlanOrderByRelationAggregateInput
   comments?: Prisma.RecipeCommentOrderByRelationAggregateInput
+  favorites?: Prisma.FavoriteOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
   recipeIngredients?: Prisma.RecipeIngredientOrderByRelationAggregateInput
 }
@@ -359,6 +361,7 @@ export type RecipeWhereUniqueInput = Prisma.AtLeast<{
   tags?: Prisma.RecipeTagListRelationFilter
   mealPlans?: Prisma.MealPlanListRelationFilter
   comments?: Prisma.RecipeCommentListRelationFilter
+  favorites?: Prisma.FavoriteListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipeIngredients?: Prisma.RecipeIngredientListRelationFilter
 }, "id">
@@ -425,6 +428,7 @@ export type RecipeCreateInput = {
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
@@ -448,6 +452,7 @@ export type RecipeUncheckedCreateInput = {
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -469,6 +474,7 @@ export type RecipeUpdateInput = {
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
@@ -492,6 +498,7 @@ export type RecipeUncheckedUpdateInput = {
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -780,6 +787,20 @@ export type RecipeUpdateOneRequiredWithoutTagsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RecipeUpdateToOneWithWhereWithoutTagsInput, Prisma.RecipeUpdateWithoutTagsInput>, Prisma.RecipeUncheckedUpdateWithoutTagsInput>
 }
 
+export type RecipeCreateNestedOneWithoutFavoritesInput = {
+  create?: Prisma.XOR<Prisma.RecipeCreateWithoutFavoritesInput, Prisma.RecipeUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutFavoritesInput
+  connect?: Prisma.RecipeWhereUniqueInput
+}
+
+export type RecipeUpdateOneRequiredWithoutFavoritesNestedInput = {
+  create?: Prisma.XOR<Prisma.RecipeCreateWithoutFavoritesInput, Prisma.RecipeUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutFavoritesInput
+  upsert?: Prisma.RecipeUpsertWithoutFavoritesInput
+  connect?: Prisma.RecipeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RecipeUpdateToOneWithWhereWithoutFavoritesInput, Prisma.RecipeUpdateWithoutFavoritesInput>, Prisma.RecipeUncheckedUpdateWithoutFavoritesInput>
+}
+
 export type RecipeCreateWithoutUserInput = {
   id?: string
   name: string
@@ -798,6 +819,7 @@ export type RecipeCreateWithoutUserInput = {
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
 
@@ -819,6 +841,7 @@ export type RecipeUncheckedCreateWithoutUserInput = {
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -887,6 +910,7 @@ export type RecipeCreateWithoutRecipeIngredientsInput = {
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
 }
 
@@ -909,6 +933,7 @@ export type RecipeUncheckedCreateWithoutRecipeIngredientsInput = {
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
 }
 
 export type RecipeCreateOrConnectWithoutRecipeIngredientsInput = {
@@ -945,6 +970,7 @@ export type RecipeUpdateWithoutRecipeIngredientsInput = {
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
 }
 
@@ -967,6 +993,7 @@ export type RecipeUncheckedUpdateWithoutRecipeIngredientsInput = {
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
 export type RecipeCreateWithoutCookbookInput = {
@@ -986,6 +1013,7 @@ export type RecipeCreateWithoutCookbookInput = {
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
@@ -1008,6 +1036,7 @@ export type RecipeUncheckedCreateWithoutCookbookInput = {
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -1054,6 +1083,7 @@ export type RecipeCreateWithoutMealPlansInput = {
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
@@ -1076,6 +1106,7 @@ export type RecipeUncheckedCreateWithoutMealPlansInput = {
   updatedAt?: Date | string
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -1112,6 +1143,7 @@ export type RecipeUpdateWithoutMealPlansInput = {
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
@@ -1134,6 +1166,7 @@ export type RecipeUncheckedUpdateWithoutMealPlansInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1154,6 +1187,7 @@ export type RecipeCreateWithoutCommentsInput = {
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
   tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
@@ -1176,6 +1210,7 @@ export type RecipeUncheckedCreateWithoutCommentsInput = {
   updatedAt?: Date | string
   tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -1212,6 +1247,7 @@ export type RecipeUpdateWithoutCommentsInput = {
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
@@ -1234,6 +1270,7 @@ export type RecipeUncheckedUpdateWithoutCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1254,6 +1291,7 @@ export type RecipeCreateWithoutTagsInput = {
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
 }
@@ -1276,6 +1314,7 @@ export type RecipeUncheckedCreateWithoutTagsInput = {
   updatedAt?: Date | string
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
 
@@ -1312,6 +1351,7 @@ export type RecipeUpdateWithoutTagsInput = {
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
@@ -1332,6 +1372,111 @@ export type RecipeUncheckedUpdateWithoutTagsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
+  comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
+  recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
+}
+
+export type RecipeCreateWithoutFavoritesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  preparationTime?: number | null
+  cookingTime?: number | null
+  servings?: number | null
+  difficulty?: string | null
+  imageUrl?: string | null
+  sourceUrl?: string | null
+  favorite?: boolean
+  instructions?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
+  mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
+  comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  user: Prisma.UserCreateNestedOneWithoutRecipesInput
+  recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
+}
+
+export type RecipeUncheckedCreateWithoutFavoritesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  preparationTime?: number | null
+  cookingTime?: number | null
+  servings?: number | null
+  difficulty?: string | null
+  imageUrl?: string | null
+  sourceUrl?: string | null
+  favorite?: boolean
+  instructions?: string
+  cookbookId?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
+  mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
+  comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
+}
+
+export type RecipeCreateOrConnectWithoutFavoritesInput = {
+  where: Prisma.RecipeWhereUniqueInput
+  create: Prisma.XOR<Prisma.RecipeCreateWithoutFavoritesInput, Prisma.RecipeUncheckedCreateWithoutFavoritesInput>
+}
+
+export type RecipeUpsertWithoutFavoritesInput = {
+  update: Prisma.XOR<Prisma.RecipeUpdateWithoutFavoritesInput, Prisma.RecipeUncheckedUpdateWithoutFavoritesInput>
+  create: Prisma.XOR<Prisma.RecipeCreateWithoutFavoritesInput, Prisma.RecipeUncheckedCreateWithoutFavoritesInput>
+  where?: Prisma.RecipeWhereInput
+}
+
+export type RecipeUpdateToOneWithWhereWithoutFavoritesInput = {
+  where?: Prisma.RecipeWhereInput
+  data: Prisma.XOR<Prisma.RecipeUpdateWithoutFavoritesInput, Prisma.RecipeUncheckedUpdateWithoutFavoritesInput>
+}
+
+export type RecipeUpdateWithoutFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  instructions?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
+  mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
+  comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
+  recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
+}
+
+export type RecipeUncheckedUpdateWithoutFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  instructions?: Prisma.StringFieldUpdateOperationsInput | string
+  cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
@@ -1372,6 +1517,7 @@ export type RecipeUpdateWithoutUserInput = {
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1393,6 +1539,7 @@ export type RecipeUncheckedUpdateWithoutUserInput = {
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1447,6 +1594,7 @@ export type RecipeUpdateWithoutCookbookInput = {
   tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
 }
@@ -1469,6 +1617,7 @@ export type RecipeUncheckedUpdateWithoutCookbookInput = {
   tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1498,6 +1647,7 @@ export type RecipeCountOutputType = {
   tags: number
   mealPlans: number
   comments: number
+  favorites: number
   recipeIngredients: number
 }
 
@@ -1505,6 +1655,7 @@ export type RecipeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   tags?: boolean | RecipeCountOutputTypeCountTagsArgs
   mealPlans?: boolean | RecipeCountOutputTypeCountMealPlansArgs
   comments?: boolean | RecipeCountOutputTypeCountCommentsArgs
+  favorites?: boolean | RecipeCountOutputTypeCountFavoritesArgs
   recipeIngredients?: boolean | RecipeCountOutputTypeCountRecipeIngredientsArgs
 }
 
@@ -1542,6 +1693,13 @@ export type RecipeCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types
 /**
  * RecipeCountOutputType without action
  */
+export type RecipeCountOutputTypeCountFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FavoriteWhereInput
+}
+
+/**
+ * RecipeCountOutputType without action
+ */
 export type RecipeCountOutputTypeCountRecipeIngredientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.RecipeIngredientWhereInput
 }
@@ -1567,6 +1725,7 @@ export type RecipeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   tags?: boolean | Prisma.Recipe$tagsArgs<ExtArgs>
   mealPlans?: boolean | Prisma.Recipe$mealPlansArgs<ExtArgs>
   comments?: boolean | Prisma.Recipe$commentsArgs<ExtArgs>
+  favorites?: boolean | Prisma.Recipe$favoritesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipeIngredients?: boolean | Prisma.Recipe$recipeIngredientsArgs<ExtArgs>
   _count?: boolean | Prisma.RecipeCountOutputTypeDefaultArgs<ExtArgs>
@@ -1636,6 +1795,7 @@ export type RecipeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tags?: boolean | Prisma.Recipe$tagsArgs<ExtArgs>
   mealPlans?: boolean | Prisma.Recipe$mealPlansArgs<ExtArgs>
   comments?: boolean | Prisma.Recipe$commentsArgs<ExtArgs>
+  favorites?: boolean | Prisma.Recipe$favoritesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipeIngredients?: boolean | Prisma.Recipe$recipeIngredientsArgs<ExtArgs>
   _count?: boolean | Prisma.RecipeCountOutputTypeDefaultArgs<ExtArgs>
@@ -1656,6 +1816,7 @@ export type $RecipePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     tags: Prisma.$RecipeTagPayload<ExtArgs>[]
     mealPlans: Prisma.$MealPlanPayload<ExtArgs>[]
     comments: Prisma.$RecipeCommentPayload<ExtArgs>[]
+    favorites: Prisma.$FavoritePayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
     recipeIngredients: Prisma.$RecipeIngredientPayload<ExtArgs>[]
   }
@@ -2073,6 +2234,7 @@ export interface Prisma__RecipeClient<T, Null = never, ExtArgs extends runtime.T
   tags<T extends Prisma.Recipe$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mealPlans<T extends Prisma.Recipe$mealPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$mealPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MealPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.Recipe$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  favorites<T extends Prisma.Recipe$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   recipeIngredients<T extends Prisma.Recipe$recipeIngredientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$recipeIngredientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2608,6 +2770,30 @@ export type Recipe$commentsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.RecipeCommentScalarFieldEnum | Prisma.RecipeCommentScalarFieldEnum[]
+}
+
+/**
+ * Recipe.favorites
+ */
+export type Recipe$favoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Favorite
+   */
+  select?: Prisma.FavoriteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Favorite
+   */
+  omit?: Prisma.FavoriteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FavoriteInclude<ExtArgs> | null
+  where?: Prisma.FavoriteWhereInput
+  orderBy?: Prisma.FavoriteOrderByWithRelationInput | Prisma.FavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.FavoriteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FavoriteScalarFieldEnum | Prisma.FavoriteScalarFieldEnum[]
 }
 
 /**

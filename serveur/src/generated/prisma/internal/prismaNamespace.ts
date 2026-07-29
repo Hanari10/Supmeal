@@ -396,7 +396,8 @@ export const ModelName = {
   MealPlan: 'MealPlan',
   RecipeComment: 'RecipeComment',
   Tag: 'Tag',
-  RecipeTag: 'RecipeTag'
+  RecipeTag: 'RecipeTag',
+  Favorite: 'Favorite'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "oAuthAccount" | "ingredient" | "recipe" | "recipeIngredient" | "shoppingList" | "shoppingListItem" | "cookbook" | "cookbookMember" | "mealPlan" | "recipeComment" | "tag" | "recipeTag"
+    modelProps: "user" | "oAuthAccount" | "ingredient" | "recipe" | "recipeIngredient" | "shoppingList" | "shoppingListItem" | "cookbook" | "cookbookMember" | "mealPlan" | "recipeComment" | "tag" | "recipeTag" | "favorite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1378,6 +1379,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Favorite: {
+      payload: Prisma.$FavoritePayload<ExtArgs>
+      fields: Prisma.FavoriteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FavoriteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FavoriteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        findFirst: {
+          args: Prisma.FavoriteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FavoriteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        findMany: {
+          args: Prisma.FavoriteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+        }
+        create: {
+          args: Prisma.FavoriteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        createMany: {
+          args: Prisma.FavoriteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FavoriteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+        }
+        delete: {
+          args: Prisma.FavoriteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        update: {
+          args: Prisma.FavoriteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        deleteMany: {
+          args: Prisma.FavoriteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FavoriteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FavoriteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+        }
+        upsert: {
+          args: Prisma.FavoriteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+        }
+        aggregate: {
+          args: Prisma.FavoriteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFavorite>
+        }
+        groupBy: {
+          args: Prisma.FavoriteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FavoriteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FavoriteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FavoriteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1574,6 +1649,15 @@ export const RecipeTagScalarFieldEnum = {
 } as const
 
 export type RecipeTagScalarFieldEnum = (typeof RecipeTagScalarFieldEnum)[keyof typeof RecipeTagScalarFieldEnum]
+
+
+export const FavoriteScalarFieldEnum = {
+  userId: 'userId',
+  recipeId: 'recipeId',
+  createdAt: 'createdAt'
+} as const
+
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1791,6 +1875,7 @@ export type GlobalOmitConfig = {
   recipeComment?: Prisma.RecipeCommentOmit
   tag?: Prisma.TagOmit
   recipeTag?: Prisma.RecipeTagOmit
+  favorite?: Prisma.FavoriteOmit
 }
 
 /* Types for Logging */

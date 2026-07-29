@@ -10,6 +10,7 @@ import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { CookbooksModule } from './cookbooks/cookbooks.module';
 import { TagsModule } from './tags/tags.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TagsModule } from './tags/tags.module';
     ShoppingListModule,
     CookbooksModule,
     TagsModule,
+    FavoritesModule,
   ],
 })
 export class AppModule {}
