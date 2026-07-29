@@ -1,5 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsInt,
   IsOptional,
   IsString,
@@ -18,52 +19,79 @@ export class CreateRecipeDto {
   @MaxLength(100)
   name!: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: 'Une recette simple de crêpes.',
+    required: false,
   })
   @IsOptional()
   @IsString()
-  @MaxLength(2000)
+  @MaxLength(500)
   description?: string;
 
-  @ApiPropertyOptional({
-    example: 15,
-    description: 'Temps de préparation en minutes.',
+  @ApiProperty({
+    example: 'Mélanger les ingrédients puis cuire les crêpes.',
   })
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  preparationTime?: number;
+  @IsString()
+  instructions!: string;
 
-  @ApiPropertyOptional({
-    example: 20,
-    description: 'Temps de cuisson en minutes.',
-  })
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  cookingTime?: number;
-
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: 4,
+    required: false,
   })
   @IsOptional()
   @IsInt()
   @Min(1)
   servings?: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
+    example: 10,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  preparationTime?: number;
+
+  @ApiProperty({
+    example: 15,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  cookingTime?: number;
+
+  @ApiProperty({
     example: 'Facile',
+    required: false,
   })
   @IsOptional()
   @IsString()
-  @MaxLength(30)
   difficulty?: string;
 
-  @ApiPropertyOptional({
-    example: 'https://example.com/crepes.jpg',
+  @ApiProperty({
+    example: 'https://exemple.com/crepes.jpg',
+    required: false,
   })
   @IsOptional()
   @IsUrl()
   imageUrl?: string;
+
+  @ApiProperty({
+    example: 'https://exemple.com/recette-crepes',
+    required: false,
+  })
+  @IsOptional()
+  @IsUrl()
+  sourceUrl?: string;
+
+  @ApiProperty({
+    example: ['Dessert', 'Rapide'],
+    required: false,
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
 }

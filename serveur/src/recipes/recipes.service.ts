@@ -1,9 +1,8 @@
 import {
-  //ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-//import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
@@ -13,10 +12,35 @@ export class RecipesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(userId: string, createRecipeDto: CreateRecipeDto) {
+    const { tags, ...recipeData } = createRecipeDto;
+
+    const uniqueTags = [...new Set(tags ?? [])];
+
     return this.prisma.recipe.create({
       data: {
-        ...createRecipeDto,
+        ...recipeData,
         userId,
+        tags: {
+          create: uniqueTags.map((tagName) => ({
+            tag: {
+              connectOrCreate: {
+                where: {
+                  name: tagName,
+                },
+                create: {
+                  name: tagName,
+                },
+              },
+            },
+          })),
+        },
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
   }
@@ -26,40 +50,87 @@ export class RecipesService {
       where: {
         userId,
       },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
       orderBy: {
-        name: 'asc',
+        createdAt: 'desc',
       },
     });
   }
 
-  async findOne(userId: string, id: string) {
-    const recipe = await this.prisma.recipe.findFirst({
+  async findOne(id: string, userId: string) {
+    const recipe = await this.prisma.recipe.findUnique({
       where: {
         id,
-        userId,
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
 
     if (!recipe) {
-      throw new NotFoundException(`Aucune recette trouvée avec l'id ${id}`);
+      throw new NotFoundException('Recette introuvable.');
+    }
+
+    if (recipe.userId !== userId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cette recette.");
     }
 
     return recipe;
   }
 
-  async update(userId: string, id: string, updateRecipeDto: UpdateRecipeDto) {
-    await this.findOne(userId, id);
+  async update(id: string, userId: string, updateRecipeDto: UpdateRecipeDto) {
+    await this.findOne(id, userId);
+
+    const { tags, ...recipeData } = updateRecipeDto;
+    const uniqueTags = tags ? [...new Set(tags)] : undefined;
 
     return this.prisma.recipe.update({
       where: {
         id,
       },
-      data: updateRecipeDto,
+      data: {
+        ...recipeData,
+
+        ...(uniqueTags !== undefined && {
+          tags: {
+            deleteMany: {},
+            create: uniqueTags.map((tagName) => ({
+              tag: {
+                connectOrCreate: {
+                  where: {
+                    name: tagName,
+                  },
+                  create: {
+                    name: tagName,
+                  },
+                },
+              },
+            })),
+          },
+        }),
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
   }
 
-  async remove(userId: string, id: string) {
-    await this.findOne(userId, id);
+  async remove(id: string, userId: string) {
+    await this.findOne(id, userId);
 
     return this.prisma.recipe.delete({
       where: {

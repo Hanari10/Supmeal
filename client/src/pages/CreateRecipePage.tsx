@@ -14,6 +14,7 @@ function CreateRecipePage() {
   const [cookingTime, setCookingTime] = useState(0);
   const [difficulty, setDifficulty] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [instructions, setInstructions] = useState('');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -25,6 +26,7 @@ function CreateRecipePage() {
       await createRecipe({
         name,
         description: description || undefined,
+        instructions,
         preparationTime,
         cookingTime,
         servings,
@@ -68,6 +70,18 @@ function CreateRecipePage() {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             required
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="instructions">Instructions</label>
+          <br />
+          <textarea
+            id="instructions"
+            value={instructions}
+            onChange={(e) => setInstructions(e.target.value)}
           />
         </div>
 

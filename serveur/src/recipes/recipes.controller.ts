@@ -11,18 +11,18 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { RecipesService } from './recipes.service';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { RecipesService } from './recipes.service';
 
-@ApiTags('Recipes')
+@ApiTags('recipes')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('recipes')
@@ -33,10 +33,7 @@ export class RecipesController {
     summary: 'Créer une recette',
   })
   @ApiCreatedResponse({
-    description: 'Recette créée avec succès.',
-  })
-  @ApiConflictResponse({
-    description: 'Une recette portant ce nom existe déjà.',
+    description: 'Recette créée.',
   })
   @Post()
   create(
@@ -47,7 +44,10 @@ export class RecipesController {
   }
 
   @ApiOperation({
-    summary: 'Récupérer toutes les recettes',
+    summary: 'Lister les recettes',
+  })
+  @ApiOkResponse({
+    description: 'Liste des recettes.',
   })
   @Get()
   findAll(@Request() request: { user: { id: string; email: string } }) {
@@ -55,7 +55,7 @@ export class RecipesController {
   }
 
   @ApiOperation({
-    summary: 'Récupérer une recette par son identifiant',
+    summary: 'Récupérer une recette',
   })
   @ApiNotFoundResponse({
     description: 'Recette introuvable.',
@@ -65,7 +65,7 @@ export class RecipesController {
     @Request() request: { user: { id: string; email: string } },
     @Param('id') id: string,
   ) {
-    return this.recipesService.findOne(request.user.id, id);
+    return this.recipesService.findOne(id, request.user.id);
   }
 
   @ApiOperation({
@@ -80,7 +80,7 @@ export class RecipesController {
     @Param('id') id: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
   ) {
-    return this.recipesService.update(request.user.id, id, updateRecipeDto);
+    return this.recipesService.update(id, request.user.id, updateRecipeDto);
   }
 
   @ApiOperation({
@@ -94,6 +94,6 @@ export class RecipesController {
     @Request() request: { user: { id: string; email: string } },
     @Param('id') id: string,
   ) {
-    return this.recipesService.remove(request.user.id, id);
+    return this.recipesService.remove(id, request.user.id);
   }
 }

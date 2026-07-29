@@ -85,11 +85,6 @@ export type Cookbook = Prisma.CookbookModel
  */
 export type CookbookMember = Prisma.CookbookMemberModel
 /**
- * Model Tag
- * 
- */
-export type Tag = Prisma.TagModel
-/**
  * Model MealPlan
  * 
  */
@@ -99,3 +94,13 @@ export type MealPlan = Prisma.MealPlanModel
  * 
  */
 export type RecipeComment = Prisma.RecipeCommentModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model RecipeTag
+ * 
+ */
+export type RecipeTag = Prisma.RecipeTagModel

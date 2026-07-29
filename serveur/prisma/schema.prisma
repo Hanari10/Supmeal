@@ -72,11 +72,11 @@ model Recipe {
   imageUrl        String?
   sourceUrl       String?
   favorite        Boolean   @default(false)
-  instructions    String @default("")
+  instructions    String    @default("")
   cookbookId      String?
   cookbook        Cookbook? @relation(fields: [cookbookId], references: [id], onDelete: SetNull)
 
-  recipeTags Tag[]
+  tags RecipeTag[]
   mealPlans  MealPlan[]
   comments   RecipeComment[]
 
@@ -174,14 +174,6 @@ model CookbookMember {
   @@unique([cookbookId, userId])
 }
 
-model Tag {
-  id String @id @default(uuid())
-
-  name String @unique
-
-  recipes Recipe[]
-}
-
 model MealPlan {
   id String @id @default(uuid())
 
@@ -208,3 +200,21 @@ model RecipeComment {
 
   createdAt DateTime @default(now())
 }
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+
+  recipe RecipeTag[]
+}
+
+model RecipeTag {
+  recipeId String
+  tagId    String
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([recipeId, tagId])
+}
+

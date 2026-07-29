@@ -45,20 +45,26 @@ function RecipesPage() {
         <ul>
           {recipes.map((recipe) => (
             <li key={recipe.id}>
-              <strong>{recipe.name}</strong>
+              <p>
+                <strong>Nom :</strong> {recipe.name}
+              </p>
 
               {recipe.description && (
-                <>
-                  <br />
-                  {recipe.description}
-                </>
+                <p>
+                  <strong>Description :</strong> {recipe.description}
+                </p>
               )}
 
-              {recipe.servings && (
-                <>
-                  <br />
-                  {recipe.servings} portions
-                </>
+              {recipe.instructions && (
+                <p>
+                  <strong>Instructions :</strong> {recipe.instructions}
+                </p>
+              )}
+
+              {recipe.servings !== undefined && (
+                <p>
+                  <strong>Portions :</strong> {recipe.servings} portions
+                </p>
               )}
             </li>
           ))}

@@ -305,7 +305,7 @@ export type RecipeWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   cookbook?: Prisma.XOR<Prisma.CookbookNullableScalarRelationFilter, Prisma.CookbookWhereInput> | null
-  recipeTags?: Prisma.TagListRelationFilter
+  tags?: Prisma.RecipeTagListRelationFilter
   mealPlans?: Prisma.MealPlanListRelationFilter
   comments?: Prisma.RecipeCommentListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -329,7 +329,7 @@ export type RecipeOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   cookbook?: Prisma.CookbookOrderByWithRelationInput
-  recipeTags?: Prisma.TagOrderByRelationAggregateInput
+  tags?: Prisma.RecipeTagOrderByRelationAggregateInput
   mealPlans?: Prisma.MealPlanOrderByRelationAggregateInput
   comments?: Prisma.RecipeCommentOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -356,7 +356,7 @@ export type RecipeWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   cookbook?: Prisma.XOR<Prisma.CookbookNullableScalarRelationFilter, Prisma.CookbookWhereInput> | null
-  recipeTags?: Prisma.TagListRelationFilter
+  tags?: Prisma.RecipeTagListRelationFilter
   mealPlans?: Prisma.MealPlanListRelationFilter
   comments?: Prisma.RecipeCommentListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -422,7 +422,7 @@ export type RecipeCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -445,7 +445,7 @@ export type RecipeUncheckedCreateInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
@@ -466,7 +466,7 @@ export type RecipeUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -489,7 +489,7 @@ export type RecipeUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
@@ -738,44 +738,6 @@ export type RecipeUncheckedUpdateManyWithoutCookbookNestedInput = {
   deleteMany?: Prisma.RecipeScalarWhereInput | Prisma.RecipeScalarWhereInput[]
 }
 
-export type RecipeCreateNestedManyWithoutRecipeTagsInput = {
-  create?: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput> | Prisma.RecipeCreateWithoutRecipeTagsInput[] | Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput[]
-  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput | Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput[]
-  connect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-}
-
-export type RecipeUncheckedCreateNestedManyWithoutRecipeTagsInput = {
-  create?: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput> | Prisma.RecipeCreateWithoutRecipeTagsInput[] | Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput[]
-  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput | Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput[]
-  connect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-}
-
-export type RecipeUpdateManyWithoutRecipeTagsNestedInput = {
-  create?: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput> | Prisma.RecipeCreateWithoutRecipeTagsInput[] | Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput[]
-  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput | Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput[]
-  upsert?: Prisma.RecipeUpsertWithWhereUniqueWithoutRecipeTagsInput | Prisma.RecipeUpsertWithWhereUniqueWithoutRecipeTagsInput[]
-  set?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  disconnect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  delete?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  connect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  update?: Prisma.RecipeUpdateWithWhereUniqueWithoutRecipeTagsInput | Prisma.RecipeUpdateWithWhereUniqueWithoutRecipeTagsInput[]
-  updateMany?: Prisma.RecipeUpdateManyWithWhereWithoutRecipeTagsInput | Prisma.RecipeUpdateManyWithWhereWithoutRecipeTagsInput[]
-  deleteMany?: Prisma.RecipeScalarWhereInput | Prisma.RecipeScalarWhereInput[]
-}
-
-export type RecipeUncheckedUpdateManyWithoutRecipeTagsNestedInput = {
-  create?: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput> | Prisma.RecipeCreateWithoutRecipeTagsInput[] | Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput[]
-  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput | Prisma.RecipeCreateOrConnectWithoutRecipeTagsInput[]
-  upsert?: Prisma.RecipeUpsertWithWhereUniqueWithoutRecipeTagsInput | Prisma.RecipeUpsertWithWhereUniqueWithoutRecipeTagsInput[]
-  set?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  disconnect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  delete?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  connect?: Prisma.RecipeWhereUniqueInput | Prisma.RecipeWhereUniqueInput[]
-  update?: Prisma.RecipeUpdateWithWhereUniqueWithoutRecipeTagsInput | Prisma.RecipeUpdateWithWhereUniqueWithoutRecipeTagsInput[]
-  updateMany?: Prisma.RecipeUpdateManyWithWhereWithoutRecipeTagsInput | Prisma.RecipeUpdateManyWithWhereWithoutRecipeTagsInput[]
-  deleteMany?: Prisma.RecipeScalarWhereInput | Prisma.RecipeScalarWhereInput[]
-}
-
 export type RecipeCreateNestedOneWithoutMealPlansInput = {
   create?: Prisma.XOR<Prisma.RecipeCreateWithoutMealPlansInput, Prisma.RecipeUncheckedCreateWithoutMealPlansInput>
   connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutMealPlansInput
@@ -804,6 +766,20 @@ export type RecipeUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RecipeUpdateToOneWithWhereWithoutCommentsInput, Prisma.RecipeUpdateWithoutCommentsInput>, Prisma.RecipeUncheckedUpdateWithoutCommentsInput>
 }
 
+export type RecipeCreateNestedOneWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.RecipeCreateWithoutTagsInput, Prisma.RecipeUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutTagsInput
+  connect?: Prisma.RecipeWhereUniqueInput
+}
+
+export type RecipeUpdateOneRequiredWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.RecipeCreateWithoutTagsInput, Prisma.RecipeUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.RecipeCreateOrConnectWithoutTagsInput
+  upsert?: Prisma.RecipeUpsertWithoutTagsInput
+  connect?: Prisma.RecipeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RecipeUpdateToOneWithWhereWithoutTagsInput, Prisma.RecipeUpdateWithoutTagsInput>, Prisma.RecipeUncheckedUpdateWithoutTagsInput>
+}
+
 export type RecipeCreateWithoutUserInput = {
   id?: string
   name: string
@@ -819,7 +795,7 @@ export type RecipeCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
@@ -840,7 +816,7 @@ export type RecipeUncheckedCreateWithoutUserInput = {
   cookbookId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
@@ -908,7 +884,7 @@ export type RecipeCreateWithoutRecipeIngredientsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -930,7 +906,7 @@ export type RecipeUncheckedCreateWithoutRecipeIngredientsInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
 }
@@ -966,7 +942,7 @@ export type RecipeUpdateWithoutRecipeIngredientsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -988,7 +964,7 @@ export type RecipeUncheckedUpdateWithoutRecipeIngredientsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
 }
@@ -1007,7 +983,7 @@ export type RecipeCreateWithoutCookbookInput = {
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -1029,7 +1005,7 @@ export type RecipeUncheckedCreateWithoutCookbookInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
@@ -1061,69 +1037,6 @@ export type RecipeUpdateManyWithWhereWithoutCookbookInput = {
   data: Prisma.XOR<Prisma.RecipeUpdateManyMutationInput, Prisma.RecipeUncheckedUpdateManyWithoutCookbookInput>
 }
 
-export type RecipeCreateWithoutRecipeTagsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  preparationTime?: number | null
-  cookingTime?: number | null
-  servings?: number | null
-  difficulty?: string | null
-  imageUrl?: string | null
-  sourceUrl?: string | null
-  favorite?: boolean
-  instructions?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
-  comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
-  user: Prisma.UserCreateNestedOneWithoutRecipesInput
-  recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
-}
-
-export type RecipeUncheckedCreateWithoutRecipeTagsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  preparationTime?: number | null
-  cookingTime?: number | null
-  servings?: number | null
-  difficulty?: string | null
-  imageUrl?: string | null
-  sourceUrl?: string | null
-  favorite?: boolean
-  instructions?: string
-  cookbookId?: string | null
-  userId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
-  comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
-  recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
-}
-
-export type RecipeCreateOrConnectWithoutRecipeTagsInput = {
-  where: Prisma.RecipeWhereUniqueInput
-  create: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput>
-}
-
-export type RecipeUpsertWithWhereUniqueWithoutRecipeTagsInput = {
-  where: Prisma.RecipeWhereUniqueInput
-  update: Prisma.XOR<Prisma.RecipeUpdateWithoutRecipeTagsInput, Prisma.RecipeUncheckedUpdateWithoutRecipeTagsInput>
-  create: Prisma.XOR<Prisma.RecipeCreateWithoutRecipeTagsInput, Prisma.RecipeUncheckedCreateWithoutRecipeTagsInput>
-}
-
-export type RecipeUpdateWithWhereUniqueWithoutRecipeTagsInput = {
-  where: Prisma.RecipeWhereUniqueInput
-  data: Prisma.XOR<Prisma.RecipeUpdateWithoutRecipeTagsInput, Prisma.RecipeUncheckedUpdateWithoutRecipeTagsInput>
-}
-
-export type RecipeUpdateManyWithWhereWithoutRecipeTagsInput = {
-  where: Prisma.RecipeScalarWhereInput
-  data: Prisma.XOR<Prisma.RecipeUpdateManyMutationInput, Prisma.RecipeUncheckedUpdateManyWithoutRecipeTagsInput>
-}
-
 export type RecipeCreateWithoutMealPlansInput = {
   id?: string
   name: string
@@ -1139,7 +1052,7 @@ export type RecipeCreateWithoutMealPlansInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
@@ -1161,7 +1074,7 @@ export type RecipeUncheckedCreateWithoutMealPlansInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
@@ -1197,7 +1110,7 @@ export type RecipeUpdateWithoutMealPlansInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
@@ -1219,7 +1132,7 @@ export type RecipeUncheckedUpdateWithoutMealPlansInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
@@ -1239,7 +1152,7 @@ export type RecipeCreateWithoutCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
-  recipeTags?: Prisma.TagCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
   user: Prisma.UserCreateNestedOneWithoutRecipesInput
   recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
@@ -1261,7 +1174,7 @@ export type RecipeUncheckedCreateWithoutCommentsInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  recipeTags?: Prisma.TagUncheckedCreateNestedManyWithoutRecipesInput
+  tags?: Prisma.RecipeTagUncheckedCreateNestedManyWithoutRecipeInput
   mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
 }
@@ -1297,7 +1210,7 @@ export type RecipeUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
@@ -1319,8 +1232,108 @@ export type RecipeUncheckedUpdateWithoutCommentsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
+  recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
+}
+
+export type RecipeCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  preparationTime?: number | null
+  cookingTime?: number | null
+  servings?: number | null
+  difficulty?: string | null
+  imageUrl?: string | null
+  sourceUrl?: string | null
+  favorite?: boolean
+  instructions?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cookbook?: Prisma.CookbookCreateNestedOneWithoutRecipesInput
+  mealPlans?: Prisma.MealPlanCreateNestedManyWithoutRecipeInput
+  comments?: Prisma.RecipeCommentCreateNestedManyWithoutRecipeInput
+  user: Prisma.UserCreateNestedOneWithoutRecipesInput
+  recipeIngredients?: Prisma.RecipeIngredientCreateNestedManyWithoutRecipeInput
+}
+
+export type RecipeUncheckedCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  preparationTime?: number | null
+  cookingTime?: number | null
+  servings?: number | null
+  difficulty?: string | null
+  imageUrl?: string | null
+  sourceUrl?: string | null
+  favorite?: boolean
+  instructions?: string
+  cookbookId?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  mealPlans?: Prisma.MealPlanUncheckedCreateNestedManyWithoutRecipeInput
+  comments?: Prisma.RecipeCommentUncheckedCreateNestedManyWithoutRecipeInput
+  recipeIngredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
+}
+
+export type RecipeCreateOrConnectWithoutTagsInput = {
+  where: Prisma.RecipeWhereUniqueInput
+  create: Prisma.XOR<Prisma.RecipeCreateWithoutTagsInput, Prisma.RecipeUncheckedCreateWithoutTagsInput>
+}
+
+export type RecipeUpsertWithoutTagsInput = {
+  update: Prisma.XOR<Prisma.RecipeUpdateWithoutTagsInput, Prisma.RecipeUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.RecipeCreateWithoutTagsInput, Prisma.RecipeUncheckedCreateWithoutTagsInput>
+  where?: Prisma.RecipeWhereInput
+}
+
+export type RecipeUpdateToOneWithWhereWithoutTagsInput = {
+  where?: Prisma.RecipeWhereInput
+  data: Prisma.XOR<Prisma.RecipeUpdateWithoutTagsInput, Prisma.RecipeUncheckedUpdateWithoutTagsInput>
+}
+
+export type RecipeUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  instructions?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
+  mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
+  comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
+  recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
+}
+
+export type RecipeUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  instructions?: Prisma.StringFieldUpdateOperationsInput | string
+  cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
+  comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
 }
 
@@ -1356,7 +1369,7 @@ export type RecipeUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
@@ -1377,7 +1390,7 @@ export type RecipeUncheckedUpdateWithoutUserInput = {
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
@@ -1431,7 +1444,7 @@ export type RecipeUpdateWithoutCookbookInput = {
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1453,7 +1466,7 @@ export type RecipeUncheckedUpdateWithoutCookbookInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipeTags?: Prisma.TagUncheckedUpdateManyWithoutRecipesNestedInput
+  tags?: Prisma.RecipeTagUncheckedUpdateManyWithoutRecipeNestedInput
   mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
   comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
   recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
@@ -1476,80 +1489,20 @@ export type RecipeUncheckedUpdateManyWithoutCookbookInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type RecipeUpdateWithoutRecipeTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  instructions?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  cookbook?: Prisma.CookbookUpdateOneWithoutRecipesNestedInput
-  mealPlans?: Prisma.MealPlanUpdateManyWithoutRecipeNestedInput
-  comments?: Prisma.RecipeCommentUpdateManyWithoutRecipeNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
-  recipeIngredients?: Prisma.RecipeIngredientUpdateManyWithoutRecipeNestedInput
-}
-
-export type RecipeUncheckedUpdateWithoutRecipeTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  instructions?: Prisma.StringFieldUpdateOperationsInput | string
-  cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  mealPlans?: Prisma.MealPlanUncheckedUpdateManyWithoutRecipeNestedInput
-  comments?: Prisma.RecipeCommentUncheckedUpdateManyWithoutRecipeNestedInput
-  recipeIngredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
-}
-
-export type RecipeUncheckedUpdateManyWithoutRecipeTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  preparationTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cookingTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  instructions?: Prisma.StringFieldUpdateOperationsInput | string
-  cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 
 /**
  * Count Type RecipeCountOutputType
  */
 
 export type RecipeCountOutputType = {
-  recipeTags: number
+  tags: number
   mealPlans: number
   comments: number
   recipeIngredients: number
 }
 
 export type RecipeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  recipeTags?: boolean | RecipeCountOutputTypeCountRecipeTagsArgs
+  tags?: boolean | RecipeCountOutputTypeCountTagsArgs
   mealPlans?: boolean | RecipeCountOutputTypeCountMealPlansArgs
   comments?: boolean | RecipeCountOutputTypeCountCommentsArgs
   recipeIngredients?: boolean | RecipeCountOutputTypeCountRecipeIngredientsArgs
@@ -1568,8 +1521,8 @@ export type RecipeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * RecipeCountOutputType without action
  */
-export type RecipeCountOutputTypeCountRecipeTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TagWhereInput
+export type RecipeCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecipeTagWhereInput
 }
 
 /**
@@ -1611,7 +1564,7 @@ export type RecipeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   cookbook?: boolean | Prisma.Recipe$cookbookArgs<ExtArgs>
-  recipeTags?: boolean | Prisma.Recipe$recipeTagsArgs<ExtArgs>
+  tags?: boolean | Prisma.Recipe$tagsArgs<ExtArgs>
   mealPlans?: boolean | Prisma.Recipe$mealPlansArgs<ExtArgs>
   comments?: boolean | Prisma.Recipe$commentsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1680,7 +1633,7 @@ export type RecipeSelectScalar = {
 export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "preparationTime" | "cookingTime" | "servings" | "difficulty" | "imageUrl" | "sourceUrl" | "favorite" | "instructions" | "cookbookId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
 export type RecipeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cookbook?: boolean | Prisma.Recipe$cookbookArgs<ExtArgs>
-  recipeTags?: boolean | Prisma.Recipe$recipeTagsArgs<ExtArgs>
+  tags?: boolean | Prisma.Recipe$tagsArgs<ExtArgs>
   mealPlans?: boolean | Prisma.Recipe$mealPlansArgs<ExtArgs>
   comments?: boolean | Prisma.Recipe$commentsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1700,7 +1653,7 @@ export type $RecipePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Recipe"
   objects: {
     cookbook: Prisma.$CookbookPayload<ExtArgs> | null
-    recipeTags: Prisma.$TagPayload<ExtArgs>[]
+    tags: Prisma.$RecipeTagPayload<ExtArgs>[]
     mealPlans: Prisma.$MealPlanPayload<ExtArgs>[]
     comments: Prisma.$RecipeCommentPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
@@ -2117,7 +2070,7 @@ readonly fields: RecipeFieldRefs;
 export interface Prisma__RecipeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cookbook<T extends Prisma.Recipe$cookbookArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$cookbookArgs<ExtArgs>>): Prisma.Prisma__CookbookClient<runtime.Types.Result.GetResult<Prisma.$CookbookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  recipeTags<T extends Prisma.Recipe$recipeTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$recipeTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tags<T extends Prisma.Recipe$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mealPlans<T extends Prisma.Recipe$mealPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$mealPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MealPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.Recipe$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Recipe$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2586,27 +2539,27 @@ export type Recipe$cookbookArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Recipe.recipeTags
+ * Recipe.tags
  */
-export type Recipe$recipeTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Recipe$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Tag
+   * Select specific fields to fetch from the RecipeTag
    */
-  select?: Prisma.TagSelect<ExtArgs> | null
+  select?: Prisma.RecipeTagSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Tag
+   * Omit specific fields from the RecipeTag
    */
-  omit?: Prisma.TagOmit<ExtArgs> | null
+  omit?: Prisma.RecipeTagOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TagInclude<ExtArgs> | null
-  where?: Prisma.TagWhereInput
-  orderBy?: Prisma.TagOrderByWithRelationInput | Prisma.TagOrderByWithRelationInput[]
-  cursor?: Prisma.TagWhereUniqueInput
+  include?: Prisma.RecipeTagInclude<ExtArgs> | null
+  where?: Prisma.RecipeTagWhereInput
+  orderBy?: Prisma.RecipeTagOrderByWithRelationInput | Prisma.RecipeTagOrderByWithRelationInput[]
+  cursor?: Prisma.RecipeTagWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TagScalarFieldEnum | Prisma.TagScalarFieldEnum[]
+  distinct?: Prisma.RecipeTagScalarFieldEnum | Prisma.RecipeTagScalarFieldEnum[]
 }
 
 /**
