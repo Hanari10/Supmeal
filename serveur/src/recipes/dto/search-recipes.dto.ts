@@ -24,4 +24,12 @@ export class SearchRecipesDto {
   @IsInt()
   @Min(0)
   maxPreparationTime?: number;
+
+  @ApiPropertyOptional({
+    description: "Nom de l'ingrédient recherché",
+    example: 'tomate',
+  })
+  @IsOptional()
+  @IsString()
+  ingredient?: string;
 }

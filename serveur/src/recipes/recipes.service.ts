@@ -163,7 +163,10 @@ export class RecipesService {
         }),
 
         ...(filters.difficulty && {
-          difficulty: filters.difficulty,
+          difficulty: {
+            equals: filters.difficulty,
+            mode: 'insensitive',
+          },
         }),
 
         ...(filters.maxPreparationTime !== undefined && {
@@ -176,7 +179,23 @@ export class RecipesService {
           tags: {
             some: {
               tag: {
-                name: filters.tag,
+                name: {
+                  contains: filters.tag,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          },
+        }),
+
+        ...(filters.ingredient && {
+          recipeIngredients: {
+            some: {
+              ingredient: {
+                name: {
+                  contains: filters.ingredient,
+                  mode: 'insensitive',
+                },
               },
             },
           },
@@ -187,6 +206,15 @@ export class RecipesService {
         tags: {
           include: {
             tag: true,
+          },
+        },
+
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
           },
         },
       },
