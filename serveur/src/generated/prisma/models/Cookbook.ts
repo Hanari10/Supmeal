@@ -182,9 +182,9 @@ export type CookbookWhereInput = {
   ownerId?: Prisma.UuidFilter<"Cookbook"> | string
   createdAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipes?: Prisma.RecipeListRelationFilter
   members?: Prisma.CookbookMemberListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type CookbookOrderByWithRelationInput = {
@@ -193,9 +193,9 @@ export type CookbookOrderByWithRelationInput = {
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  owner?: Prisma.UserOrderByWithRelationInput
   recipes?: Prisma.RecipeOrderByRelationAggregateInput
   members?: Prisma.CookbookMemberOrderByRelationAggregateInput
+  owner?: Prisma.UserOrderByWithRelationInput
 }
 
 export type CookbookWhereUniqueInput = Prisma.AtLeast<{
@@ -207,9 +207,9 @@ export type CookbookWhereUniqueInput = Prisma.AtLeast<{
   ownerId?: Prisma.UuidFilter<"Cookbook"> | string
   createdAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipes?: Prisma.RecipeListRelationFilter
   members?: Prisma.CookbookMemberListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type CookbookOrderByWithAggregationInput = {
@@ -239,9 +239,9 @@ export type CookbookCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
   recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
   members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
 export type CookbookUncheckedCreateInput = {
@@ -259,9 +259,9 @@ export type CookbookUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
   recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
   members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
 export type CookbookUncheckedUpdateInput = {
@@ -473,8 +473,8 @@ export type CookbookCreateWithoutRecipesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
   members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
 export type CookbookUncheckedCreateWithoutRecipesInput = {
@@ -507,8 +507,8 @@ export type CookbookUpdateWithoutRecipesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
   members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
 export type CookbookUncheckedUpdateWithoutRecipesInput = {
@@ -525,8 +525,8 @@ export type CookbookCreateWithoutMembersInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
   recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
+  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
 export type CookbookUncheckedCreateWithoutMembersInput = {
@@ -559,8 +559,8 @@ export type CookbookUpdateWithoutMembersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
   recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
 export type CookbookUncheckedUpdateWithoutMembersInput = {
@@ -650,9 +650,9 @@ export type CookbookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   ownerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipes?: boolean | Prisma.Cookbook$recipesArgs<ExtArgs>
   members?: boolean | Prisma.Cookbook$membersArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CookbookCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cookbook"]>
 
@@ -684,9 +684,9 @@ export type CookbookSelectScalar = {
 
 export type CookbookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["cookbook"]>
 export type CookbookInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipes?: boolean | Prisma.Cookbook$recipesArgs<ExtArgs>
   members?: boolean | Prisma.Cookbook$membersArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CookbookCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CookbookIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -699,9 +699,9 @@ export type CookbookIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $CookbookPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Cookbook"
   objects: {
-    owner: Prisma.$UserPayload<ExtArgs>
     recipes: Prisma.$RecipePayload<ExtArgs>[]
     members: Prisma.$CookbookMemberPayload<ExtArgs>[]
+    owner: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1103,9 +1103,9 @@ readonly fields: CookbookFieldRefs;
  */
 export interface Prisma__CookbookClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   recipes<T extends Prisma.Cookbook$recipesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cookbook$recipesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   members<T extends Prisma.Cookbook$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cookbook$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CookbookMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
