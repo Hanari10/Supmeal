@@ -72,6 +72,97 @@ export class ShoppingListService {
     });
   }
 
+  async generateFromMealPlan(userId: string) {
+    const mealPlans = await this.prisma.mealPlan.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        recipe: {
+          include: {
+            recipeIngredients: true,
+          },
+        },
+      },
+    });
+
+    if (mealPlans.length === 0) {
+      throw new NotFoundException(
+        'Aucun repas planifié pour générer la liste de courses.',
+      );
+    }
+
+    const groupedIngredients = new Map<
+      string,
+      {
+        ingredientId: string;
+        quantity: number;
+        unit: string | null;
+      }
+    >();
+
+    for (const mealPlan of mealPlans) {
+      for (const recipeIngredient of mealPlan.recipe.recipeIngredients) {
+        const unit = recipeIngredient.unit ?? null;
+
+        const key = `${recipeIngredient.ingredientId}-${unit ?? 'sans-unite'}`;
+
+        const existingIngredient = groupedIngredients.get(key);
+
+        if (existingIngredient) {
+          existingIngredient.quantity += recipeIngredient.quantity;
+        } else {
+          groupedIngredients.set(key, {
+            ingredientId: recipeIngredient.ingredientId,
+            quantity: recipeIngredient.quantity,
+            unit,
+          });
+        }
+      }
+    }
+
+    const shoppingList = await this.prisma.shoppingList.upsert({
+      where: {
+        userId,
+      },
+      update: {},
+      create: {
+        userId,
+      },
+    });
+
+    await this.prisma.shoppingListItem.deleteMany({
+      where: {
+        shoppingListId: shoppingList.id,
+      },
+    });
+
+    await this.prisma.shoppingListItem.createMany({
+      data: Array.from(groupedIngredients.values()).map((ingredient) => ({
+        shoppingListId: shoppingList.id,
+        ingredientId: ingredient.ingredientId,
+        quantity: ingredient.quantity,
+        unit: ingredient.unit,
+      })),
+    });
+
+    return this.prisma.shoppingList.findUnique({
+      where: {
+        id: shoppingList.id,
+      },
+      include: {
+        items: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
+    });
+  }
+
   async update(
     userId: string,
     itemId: string,

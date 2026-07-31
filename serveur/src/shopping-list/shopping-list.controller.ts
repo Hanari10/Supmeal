@@ -56,6 +56,20 @@ export class ShoppingListController {
   @ApiNotFoundResponse({
     description: 'Ingrédient introuvable.',
   })
+  @ApiOperation({
+    summary: 'Générer la liste de courses depuis le planning',
+  })
+  @ApiCreatedResponse({
+    description: 'Liste de courses générée avec succès.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Aucun repas planifié.',
+  })
+  @Post('generate-from-meal-plan')
+  generateFromMealPlan(@Request() request: AuthenticatedRequest) {
+    return this.shoppingListService.generateFromMealPlan(request.user.id);
+  }
+
   @Post('items')
   create(
     @Request() request: AuthenticatedRequest,
