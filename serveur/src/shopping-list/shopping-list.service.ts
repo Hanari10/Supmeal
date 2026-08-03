@@ -102,19 +102,27 @@ export class ShoppingListService {
     >();
 
     for (const mealPlan of mealPlans) {
+      const originalServings = mealPlan.recipe.servings ?? 1;
+
+      const plannedServings =
+        (mealPlan.servings as number | null) ?? originalServings;
+
+      const multiplier = plannedServings / originalServings;
+
       for (const recipeIngredient of mealPlan.recipe.recipeIngredients) {
         const unit = recipeIngredient.unit ?? null;
+        const quantity = recipeIngredient.quantity * multiplier;
 
         const key = `${recipeIngredient.ingredientId}-${unit ?? 'sans-unite'}`;
 
-        const existingIngredient = groupedIngredients.get(key);
+        const existing = groupedIngredients.get(key);
 
-        if (existingIngredient) {
-          existingIngredient.quantity += recipeIngredient.quantity;
+        if (existing) {
+          existing.quantity += quantity;
         } else {
           groupedIngredients.set(key, {
             ingredientId: recipeIngredient.ingredientId,
-            quantity: recipeIngredient.quantity,
+            quantity,
             unit,
           });
         }

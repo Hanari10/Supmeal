@@ -20,8 +20,18 @@ export type MealPlanModel = runtime.Types.Result.DefaultSelection<Prisma.$MealPl
 
 export type AggregateMealPlan = {
   _count: MealPlanCountAggregateOutputType | null
+  _avg: MealPlanAvgAggregateOutputType | null
+  _sum: MealPlanSumAggregateOutputType | null
   _min: MealPlanMinAggregateOutputType | null
   _max: MealPlanMaxAggregateOutputType | null
+}
+
+export type MealPlanAvgAggregateOutputType = {
+  servings: number | null
+}
+
+export type MealPlanSumAggregateOutputType = {
+  servings: number | null
 }
 
 export type MealPlanMinAggregateOutputType = {
@@ -30,6 +40,7 @@ export type MealPlanMinAggregateOutputType = {
   recipeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  servings: number | null
   day: $Enums.WeekDay | null
   mealType: $Enums.MealType | null
 }
@@ -40,6 +51,7 @@ export type MealPlanMaxAggregateOutputType = {
   recipeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  servings: number | null
   day: $Enums.WeekDay | null
   mealType: $Enums.MealType | null
 }
@@ -50,11 +62,20 @@ export type MealPlanCountAggregateOutputType = {
   recipeId: number
   createdAt: number
   updatedAt: number
+  servings: number
   day: number
   mealType: number
   _all: number
 }
 
+
+export type MealPlanAvgAggregateInputType = {
+  servings?: true
+}
+
+export type MealPlanSumAggregateInputType = {
+  servings?: true
+}
 
 export type MealPlanMinAggregateInputType = {
   id?: true
@@ -62,6 +83,7 @@ export type MealPlanMinAggregateInputType = {
   recipeId?: true
   createdAt?: true
   updatedAt?: true
+  servings?: true
   day?: true
   mealType?: true
 }
@@ -72,6 +94,7 @@ export type MealPlanMaxAggregateInputType = {
   recipeId?: true
   createdAt?: true
   updatedAt?: true
+  servings?: true
   day?: true
   mealType?: true
 }
@@ -82,6 +105,7 @@ export type MealPlanCountAggregateInputType = {
   recipeId?: true
   createdAt?: true
   updatedAt?: true
+  servings?: true
   day?: true
   mealType?: true
   _all?: true
@@ -125,6 +149,18 @@ export type MealPlanAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: MealPlanAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: MealPlanSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: MealPlanMinAggregateInputType
@@ -155,6 +191,8 @@ export type MealPlanGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: MealPlanCountAggregateInputType | true
+  _avg?: MealPlanAvgAggregateInputType
+  _sum?: MealPlanSumAggregateInputType
   _min?: MealPlanMinAggregateInputType
   _max?: MealPlanMaxAggregateInputType
 }
@@ -165,9 +203,12 @@ export type MealPlanGroupByOutputType = {
   recipeId: string
   createdAt: Date
   updatedAt: Date
+  servings: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
   _count: MealPlanCountAggregateOutputType | null
+  _avg: MealPlanAvgAggregateOutputType | null
+  _sum: MealPlanSumAggregateOutputType | null
   _min: MealPlanMinAggregateOutputType | null
   _max: MealPlanMaxAggregateOutputType | null
 }
@@ -196,6 +237,7 @@ export type MealPlanWhereInput = {
   recipeId?: Prisma.StringFilter<"MealPlan"> | string
   createdAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
+  servings?: Prisma.IntNullableFilter<"MealPlan"> | number | null
   day?: Prisma.EnumWeekDayFilter<"MealPlan"> | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFilter<"MealPlan"> | $Enums.MealType
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -208,6 +250,7 @@ export type MealPlanOrderByWithRelationInput = {
   recipeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  servings?: Prisma.SortOrderInput | Prisma.SortOrder
   day?: Prisma.SortOrder
   mealType?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -224,6 +267,7 @@ export type MealPlanWhereUniqueInput = Prisma.AtLeast<{
   recipeId?: Prisma.StringFilter<"MealPlan"> | string
   createdAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
+  servings?: Prisma.IntNullableFilter<"MealPlan"> | number | null
   day?: Prisma.EnumWeekDayFilter<"MealPlan"> | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFilter<"MealPlan"> | $Enums.MealType
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -236,11 +280,14 @@ export type MealPlanOrderByWithAggregationInput = {
   recipeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  servings?: Prisma.SortOrderInput | Prisma.SortOrder
   day?: Prisma.SortOrder
   mealType?: Prisma.SortOrder
   _count?: Prisma.MealPlanCountOrderByAggregateInput
+  _avg?: Prisma.MealPlanAvgOrderByAggregateInput
   _max?: Prisma.MealPlanMaxOrderByAggregateInput
   _min?: Prisma.MealPlanMinOrderByAggregateInput
+  _sum?: Prisma.MealPlanSumOrderByAggregateInput
 }
 
 export type MealPlanScalarWhereWithAggregatesInput = {
@@ -252,6 +299,7 @@ export type MealPlanScalarWhereWithAggregatesInput = {
   recipeId?: Prisma.StringWithAggregatesFilter<"MealPlan"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MealPlan"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MealPlan"> | Date | string
+  servings?: Prisma.IntNullableWithAggregatesFilter<"MealPlan"> | number | null
   day?: Prisma.EnumWeekDayWithAggregatesFilter<"MealPlan"> | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeWithAggregatesFilter<"MealPlan"> | $Enums.MealType
 }
@@ -260,6 +308,7 @@ export type MealPlanCreateInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
   user: Prisma.UserCreateNestedOneWithoutMealPlansInput
@@ -272,6 +321,7 @@ export type MealPlanUncheckedCreateInput = {
   recipeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -280,6 +330,7 @@ export type MealPlanUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
   user?: Prisma.UserUpdateOneRequiredWithoutMealPlansNestedInput
@@ -292,6 +343,7 @@ export type MealPlanUncheckedUpdateInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -302,6 +354,7 @@ export type MealPlanCreateManyInput = {
   recipeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -310,6 +363,7 @@ export type MealPlanUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -320,6 +374,7 @@ export type MealPlanUncheckedUpdateManyInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -346,8 +401,13 @@ export type MealPlanCountOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   day?: Prisma.SortOrder
   mealType?: Prisma.SortOrder
+}
+
+export type MealPlanAvgOrderByAggregateInput = {
+  servings?: Prisma.SortOrder
 }
 
 export type MealPlanMaxOrderByAggregateInput = {
@@ -356,6 +416,7 @@ export type MealPlanMaxOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   day?: Prisma.SortOrder
   mealType?: Prisma.SortOrder
 }
@@ -366,8 +427,13 @@ export type MealPlanMinOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   day?: Prisma.SortOrder
   mealType?: Prisma.SortOrder
+}
+
+export type MealPlanSumOrderByAggregateInput = {
+  servings?: Prisma.SortOrder
 }
 
 export type MealPlanCreateNestedManyWithoutUserInput = {
@@ -466,6 +532,7 @@ export type MealPlanCreateWithoutUserInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
   recipe: Prisma.RecipeCreateNestedOneWithoutMealPlansInput
@@ -476,6 +543,7 @@ export type MealPlanUncheckedCreateWithoutUserInput = {
   recipeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -515,6 +583,7 @@ export type MealPlanScalarWhereInput = {
   recipeId?: Prisma.StringFilter<"MealPlan"> | string
   createdAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MealPlan"> | Date | string
+  servings?: Prisma.IntNullableFilter<"MealPlan"> | number | null
   day?: Prisma.EnumWeekDayFilter<"MealPlan"> | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFilter<"MealPlan"> | $Enums.MealType
 }
@@ -523,6 +592,7 @@ export type MealPlanCreateWithoutRecipeInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
   user: Prisma.UserCreateNestedOneWithoutMealPlansInput
@@ -533,6 +603,7 @@ export type MealPlanUncheckedCreateWithoutRecipeInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -568,6 +639,7 @@ export type MealPlanCreateManyUserInput = {
   recipeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -576,6 +648,7 @@ export type MealPlanUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
   recipe?: Prisma.RecipeUpdateOneRequiredWithoutMealPlansNestedInput
@@ -586,6 +659,7 @@ export type MealPlanUncheckedUpdateWithoutUserInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -595,6 +669,7 @@ export type MealPlanUncheckedUpdateManyWithoutUserInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -604,6 +679,7 @@ export type MealPlanCreateManyRecipeInput = {
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  servings?: number | null
   day: $Enums.WeekDay
   mealType: $Enums.MealType
 }
@@ -612,6 +688,7 @@ export type MealPlanUpdateWithoutRecipeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
   user?: Prisma.UserUpdateOneRequiredWithoutMealPlansNestedInput
@@ -622,6 +699,7 @@ export type MealPlanUncheckedUpdateWithoutRecipeInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -631,6 +709,7 @@ export type MealPlanUncheckedUpdateManyWithoutRecipeInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   day?: Prisma.EnumWeekDayFieldUpdateOperationsInput | $Enums.WeekDay
   mealType?: Prisma.EnumMealTypeFieldUpdateOperationsInput | $Enums.MealType
 }
@@ -643,6 +722,7 @@ export type MealPlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   recipeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  servings?: boolean
   day?: boolean
   mealType?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -655,6 +735,7 @@ export type MealPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   recipeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  servings?: boolean
   day?: boolean
   mealType?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -667,6 +748,7 @@ export type MealPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   recipeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  servings?: boolean
   day?: boolean
   mealType?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -679,11 +761,12 @@ export type MealPlanSelectScalar = {
   recipeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  servings?: boolean
   day?: boolean
   mealType?: boolean
 }
 
-export type MealPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "recipeId" | "createdAt" | "updatedAt" | "day" | "mealType", ExtArgs["result"]["mealPlan"]>
+export type MealPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "recipeId" | "createdAt" | "updatedAt" | "servings" | "day" | "mealType", ExtArgs["result"]["mealPlan"]>
 export type MealPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
@@ -709,6 +792,7 @@ export type $MealPlanPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     recipeId: string
     createdAt: Date
     updatedAt: Date
+    servings: number | null
     day: $Enums.WeekDay
     mealType: $Enums.MealType
   }, ExtArgs["result"]["mealPlan"]>
@@ -1141,6 +1225,7 @@ export interface MealPlanFieldRefs {
   readonly recipeId: Prisma.FieldRef<"MealPlan", 'String'>
   readonly createdAt: Prisma.FieldRef<"MealPlan", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MealPlan", 'DateTime'>
+  readonly servings: Prisma.FieldRef<"MealPlan", 'Int'>
   readonly day: Prisma.FieldRef<"MealPlan", 'WeekDay'>
   readonly mealType: Prisma.FieldRef<"MealPlan", 'MealType'>
 }

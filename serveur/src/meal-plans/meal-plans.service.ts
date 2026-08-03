@@ -42,6 +42,7 @@ export class MealPlansService {
         recipeId: dto.recipeId,
         day: dto.day,
         mealType: dto.mealType,
+        servings: dto.servings ?? recipe.servings ?? 1,
       },
       include: {
         recipe: {

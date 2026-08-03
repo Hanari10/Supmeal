@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { MealType, WeekDay } from '../../generated/prisma/enums';
-import { IsEnum, IsUUID } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsPositive, IsUUID } from 'class-validator';
 
 export class CreateMealPlanDto {
   @ApiProperty({
@@ -20,4 +20,13 @@ export class CreateMealPlanDto {
   })
   @IsEnum(MealType)
   mealType!: MealType;
+
+  @ApiPropertyOptional({
+    description: 'Nombre de portions prévues',
+    example: 4,
+  })
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  servings?: number;
 }

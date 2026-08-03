@@ -1655,6 +1655,7 @@ export const MealPlanScalarFieldEnum = {
   recipeId: 'recipeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  servings: 'servings',
   day: 'day',
   mealType: 'mealType'
 } as const

@@ -23,6 +23,7 @@ enum MealType {
   LUNCH
   DINNER
 }
+
 model User {
   id                  String           @id @default(uuid()) @db.Uuid
   email               String           @unique
@@ -55,7 +56,7 @@ model OAuthAccount {
   createdAt         DateTime @default(now())
   userId            String   @db.Uuid
 
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -63,12 +64,12 @@ model OAuthAccount {
 }
 
 model Ingredient {
-  id                      String    @id @default(uuid())
-  name                    String    @unique
-  category                String?
-  defaultMeasurementUnit  String?
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  id                     String   @id @default(uuid())
+  name                   String   @unique
+  category               String?
+  defaultMeasurementUnit String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   recipeIngredients RecipeIngredient[]
   shoppingListItems ShoppingListItem[]
@@ -85,21 +86,21 @@ model Recipe {
   difficulty      String?
   imageUrl        String?
   sourceUrl       String?
-  favorite        Boolean   @default(false)
-  instructions    String    @default("")
+  favorite        Boolean  @default(false)
+  instructions    String   @default("")
   cookbookId      String?
-  userId          String    @db.Uuid
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  tags                RecipeTag[]
-  mealPlans           MealPlan[]
-  comments            RecipeComment[]
-  favorites           Favorite[]
-  recipeIngredients   RecipeIngredient[]
+  userId          String   @db.Uuid
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cookbook        Cookbook?   @relation(fields: [cookbookId], references: [id], onDelete: SetNull)
+  tags              RecipeTag[]
+  mealPlans         MealPlan[]
+  comments          RecipeComment[]
+  favorites         Favorite[]
+  recipeIngredients RecipeIngredient[]
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cookbook Cookbook? @relation(fields: [cookbookId], references: [id], onDelete: SetNull)
 
   @@index([userId])
 }
@@ -107,16 +108,16 @@ model Recipe {
 model RecipeIngredient {
   id String @id @default(uuid())
 
-  recipeId      String
-  ingredientId  String
-  quantity      Float
-  unit          String?
-  order         Int?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  recipe        Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  ingredient    Ingredient @relation(fields: [ingredientId], references: [id])
+  recipeId     String
+  ingredientId String
+  quantity     Float
+  unit         String?
+  order        Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@unique([recipeId, ingredientId])
 }
@@ -124,13 +125,13 @@ model RecipeIngredient {
 model ShoppingList {
   id String @id @default(uuid())
 
-  userId    String    @db.Uuid
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   items ShoppingListItem[]
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
 }
@@ -138,41 +139,41 @@ model ShoppingList {
 model ShoppingListItem {
   id String @id @default(uuid())
 
-  shoppingListId  String
-  ingredientId    String
-  quantity        Float
-  unit            String?
-  checked         Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  shoppingListId String
+  ingredientId   String
+  quantity       Float
+  unit           String?
+  checked        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  shoppingList    ShoppingList  @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
-  ingredient      Ingredient    @relation(fields: [ingredientId], references: [id])
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient   @relation(fields: [ingredientId], references: [id])
 }
 
 model Cookbook {
   id String @id @default(uuid())
 
   name      String
-  ownerId   String    @db.Uuid
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  ownerId   String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   recipes Recipe[]
   members CookbookMember[]
 
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 model CookbookMember {
   id String @id @default(uuid())
 
-  cookbookId  String
-  userId      String  @db.Uuid
-  role        String
+  cookbookId String
+  userId     String @db.Uuid
+  role       String
 
-  cookbook    Cookbook  @relation(fields: [cookbookId], references: [id], onDelete: Cascade)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cookbook Cookbook @relation(fields: [cookbookId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([cookbookId, userId])
 }
@@ -181,12 +182,12 @@ model RecipeComment {
   id String @id @default(uuid())
 
   recipeId  String
-  userId    String    @db.Uuid
+  userId    String   @db.Uuid
   content   String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
-  recipe  Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Tag {
@@ -218,18 +219,19 @@ model Favorite {
 }
 
 model MealPlan {
-  id         String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  userId     String   @db.Uuid
-  recipeId   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  userId    String   @db.Uuid
+  recipeId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  servings  Int?
 
-  day        WeekDay
-  mealType   MealType
+  day      WeekDay
+  mealType MealType
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, day, mealType])
 }
