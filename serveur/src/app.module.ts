@@ -12,6 +12,7 @@ import { CookbooksModule } from './cookbooks/cookbooks.module';
 import { TagsModule } from './tags/tags.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { MealPlansModule } from './meal-plans/meal-plans.module';
+import { DataTransferModule } from './data-transfer/data-transfer.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MealPlansModule } from './meal-plans/meal-plans.module';
     TagsModule,
     FavoritesModule,
     MealPlansModule,
+    DataTransferModule,
   ],
 })
 export class AppModule {}
