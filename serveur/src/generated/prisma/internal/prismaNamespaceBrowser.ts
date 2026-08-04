@@ -209,7 +209,8 @@ export const RecipeCommentScalarFieldEnum = {
   recipeId: 'recipeId',
   userId: 'userId',
   content: 'content',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type RecipeCommentScalarFieldEnum = (typeof RecipeCommentScalarFieldEnum)[keyof typeof RecipeCommentScalarFieldEnum]

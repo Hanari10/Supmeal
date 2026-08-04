@@ -185,6 +185,7 @@ model RecipeComment {
   userId    String   @db.Uuid
   content   String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

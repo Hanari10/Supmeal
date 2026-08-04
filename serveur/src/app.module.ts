@@ -13,6 +13,7 @@ import { TagsModule } from './tags/tags.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { MealPlansModule } from './meal-plans/meal-plans.module';
 import { DataTransferModule } from './data-transfer/data-transfer.module';
+import { RecipeCommentsModule } from './recipe-comments/recipe-comments.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DataTransferModule } from './data-transfer/data-transfer.module';
     FavoritesModule,
     MealPlansModule,
     DataTransferModule,
+    RecipeCommentsModule,
   ],
 })
 export class AppModule {}
