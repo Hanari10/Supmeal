@@ -14,6 +14,11 @@ function MainLayout() {
       command: () => navigate('/'),
     },
     {
+      label: 'Ingrédients',
+      icon: 'pi pi-box',
+      command: () => navigate('/ingredients'),
+    },
+    {
       label: 'Recettes',
       icon: 'pi pi-book',
       command: () => navigate('/recettes'),
@@ -29,9 +34,9 @@ function MainLayout() {
       command: () => navigate('/liste-de-courses'),
     },
     {
-      label: 'Ingrédients',
-      icon: 'pi pi-box',
-      command: () => navigate('/ingredients'),
+      label: 'Cookbooks',
+      icon: 'pi pi-users',
+      command: () => navigate('/cookbooks'),
     },
     {
       label: 'Profil',

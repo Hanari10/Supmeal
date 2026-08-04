@@ -59,12 +59,36 @@ export class ShoppingListService {
       },
     });
 
+    const unit = createShoppingListItemDto.unit ?? null;
+
+    const existingItem = await this.prisma.shoppingListItem.findFirst({
+      where: {
+        shoppingListId: shoppingList.id,
+        ingredientId: createShoppingListItemDto.ingredientId,
+        unit,
+      },
+    });
+
+    if (existingItem) {
+      return this.prisma.shoppingListItem.update({
+        where: {
+          id: existingItem.id,
+        },
+        data: {
+          quantity: existingItem.quantity + createShoppingListItemDto.quantity,
+        },
+        include: {
+          ingredient: true,
+        },
+      });
+    }
+
     return this.prisma.shoppingListItem.create({
       data: {
         shoppingListId: shoppingList.id,
         ingredientId: createShoppingListItemDto.ingredientId,
         quantity: createShoppingListItemDto.quantity,
-        unit: createShoppingListItemDto.unit,
+        unit,
       },
       include: {
         ingredient: true,
@@ -104,8 +128,7 @@ export class ShoppingListService {
     for (const mealPlan of mealPlans) {
       const originalServings = mealPlan.recipe.servings ?? 1;
 
-      const plannedServings =
-        (mealPlan.servings as number | null) ?? originalServings;
+      const plannedServings = mealPlan.servings ?? originalServings;
 
       const multiplier = plannedServings / originalServings;
 

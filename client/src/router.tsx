@@ -9,6 +9,7 @@ import RecipesPage from './pages/RecipesPage';
 import RegisterPage from './pages/RegisterPage';
 import ShoppingListPage from './pages/ShoppingListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
+import CookbooksPage from './pages/CookbooksPage';
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: '/profil',
         element: <ProfilePage />,
+      },
+      {
+        path: '/cookbooks',
+        element: <CookbooksPage />,
       },
     ],
   },
