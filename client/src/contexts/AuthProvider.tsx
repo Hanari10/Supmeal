@@ -66,14 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     setToken(response.accessToken);
 
-    try {
-      const profile = await getProfile();
-      setUser(profile);
-    } catch (error) {
-      removeToken();
-      setUser(null);
-      throw error;
-    }
+    setUser(response.user);
   }
 
   function logout(): void {

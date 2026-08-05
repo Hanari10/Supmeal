@@ -11,6 +11,7 @@ import ShoppingListPage from './pages/ShoppingListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import CookbooksPage from './pages/CookbooksPage';
 import MealPlansPage from './pages/MealPlansPage';
+import FavoritesPage from './pages/FavoritesPage';
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: '/planning',
         element: <MealPlansPage />,
+      },
+      {
+        path: '/favoris',
+        element: <FavoritesPage />,
       },
     ],
   },

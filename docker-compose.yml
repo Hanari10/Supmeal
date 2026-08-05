@@ -1,29 +1,60 @@
 services:
-  base-de-donnees:
+  postgres:
     image: postgres:17-alpine
-    container_name: supmeal-base-de-donnees
+    container_name: supmeal-postgres
     restart: unless-stopped
 
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: supmeal
+      POSTGRES_USER: supmeal
+      POSTGRES_PASSWORD: supmeal_developpement
 
     ports:
-      - '${POSTGRES_PORT}:5432'
+      - "5433:5432"
 
     volumes:
-      - donnees-postgresql:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
     healthcheck:
       test:
         [
-          'CMD-SHELL',
-          'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}',
+          "CMD-SHELL",
+          "pg_isready -U supmeal -d supmeal"
         ]
       interval: 5s
       timeout: 5s
       retries: 10
 
+  backend:
+    build:
+      context: ./serveur
+
+    container_name: supmeal-backend
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      DATABASE_URL: postgresql://supmeal:supmeal_developpement@postgres:5432/supmeal?schema=public
+      JWT_SECRET: ${JWT_SECRET:-change_me_before_delivery}
+
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./client
+
+    container_name: supmeal-frontend
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "8080:80"
+
 volumes:
-  donnees-postgresql:
+  postgres-data:
