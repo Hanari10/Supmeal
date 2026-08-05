@@ -3,7 +3,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import {
+  ConfirmDialog,
+  confirmDialog,
+} from 'primereact/confirmdialog';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -15,33 +18,65 @@ import {
   getIngredients,
   updateIngredient,
 } from '../services/ingredientService';
+
+import { useToast } from '../hooks/useToast';
 import type { Ingredient } from '../types/ingredient';
 
 function IngredientsPage() {
+  const { showSuccess, showError } = useToast();
+
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+
   const [dialogVisible, setDialogVisible] = useState(false);
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
 
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
-  const [defaultMeasurementUnit, setDefaultMeasurementUnit] = useState('');
+  const [defaultMeasurementUnit, setDefaultMeasurementUnit] =
+    useState('');
 
-  async function loadIngredients() {
+  async function refreshIngredients() {
     try {
-      setLoading(true);
       const data = await getIngredients();
       setIngredients(data);
-    } finally {
-      setLoading(false);
+    } catch {
+      showError(
+        'Chargement impossible',
+        'Impossible de récupérer les ingrédients.',
+      );
     }
   }
 
   useEffect(() => {
-    void loadIngredients();
-  }, []);
+    let isCancelled = false;
+
+    getIngredients()
+      .then((data) => {
+        if (!isCancelled) {
+          setIngredients(data);
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          showError(
+            'Chargement impossible',
+            'Impossible de récupérer les ingrédients.',
+          );
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [showError]);
 
   const filteredIngredients = useMemo(() => {
     const value = search.trim().toLowerCase();
@@ -54,24 +89,32 @@ function IngredientsPage() {
       return (
         ingredient.name.toLowerCase().includes(value) ||
         ingredient.category?.toLowerCase().includes(value) ||
-        ingredient.defaultMeasurementUnit?.toLowerCase().includes(value)
+        ingredient.defaultMeasurementUnit
+          ?.toLowerCase()
+          .includes(value)
       );
     });
   }, [ingredients, search]);
 
   function openCreateDialog() {
     setSelectedIngredient(null);
+
     setName('');
     setCategory('');
     setDefaultMeasurementUnit('');
+
     setDialogVisible(true);
   }
 
   function openEditDialog(ingredient: Ingredient) {
     setSelectedIngredient(ingredient);
+
     setName(ingredient.name);
     setCategory(ingredient.category ?? '');
-    setDefaultMeasurementUnit(ingredient.defaultMeasurementUnit ?? '');
+    setDefaultMeasurementUnit(
+      ingredient.defaultMeasurementUnit ?? '',
+    );
+
     setDialogVisible(true);
   }
 
@@ -84,36 +127,76 @@ function IngredientsPage() {
     };
 
     if (!data.name) {
+      showError(
+        'Champ obligatoire',
+        'Le nom de l’ingrédient est obligatoire.',
+      );
+
       return;
     }
 
-    if (selectedIngredient) {
-      await updateIngredient(selectedIngredient.id, data);
-    } else {
-      await createIngredient(data);
-    }
+    try {
+      if (selectedIngredient) {
+        await updateIngredient(selectedIngredient.id, data);
 
-    setDialogVisible(false);
-    await loadIngredients();
+        showSuccess(
+          'Modification enregistrée',
+          'L’ingrédient a été modifié.',
+        );
+      } else {
+        await createIngredient(data);
+
+        showSuccess(
+          'Ingrédient créé',
+          'Le nouvel ingrédient a été ajouté.',
+        );
+      }
+
+      setDialogVisible(false);
+
+      await refreshIngredients();
+    } catch {
+      showError(
+        'Erreur',
+        "Impossible d'enregistrer l'ingrédient.",
+      );
+    }
   }
 
   function confirmDelete(ingredient: Ingredient) {
     confirmDialog({
-      message: `Supprimer l’ingrédient « ${ingredient.name} » ?`,
+      message: `Supprimer "${ingredient.name}" ?`,
       header: 'Confirmation',
+
       icon: 'pi pi-exclamation-triangle',
+
       acceptLabel: 'Supprimer',
       rejectLabel: 'Annuler',
+
       acceptClassName: 'p-button-danger',
+
       accept: async () => {
-        await deleteIngredient(ingredient.id);
-        await loadIngredients();
+        try {
+          await deleteIngredient(ingredient.id);
+
+          await refreshIngredients();
+
+          showSuccess(
+            'Suppression effectuée',
+            "L'ingrédient a été supprimé.",
+          );
+        } catch {
+          showError(
+            'Suppression impossible',
+            'Cet ingrédient est probablement utilisé dans une recette.',
+          );
+        }
       },
     });
   }
 
   return (
-    <Card title="Ingrédients">
+        <Card title="Ingrédients">
       <ConfirmDialog />
 
       <Toolbar
@@ -128,6 +211,7 @@ function IngredientsPage() {
         end={() => (
           <span className="p-input-icon-left">
             <i className="pi pi-search" />
+
             <InputText
               placeholder="Rechercher..."
               value={search}
@@ -148,7 +232,11 @@ function IngredientsPage() {
         sortMode="multiple"
         responsiveLayout="scroll"
       >
-        <Column field="name" header="Nom" sortable />
+        <Column
+          field="name"
+          header="Nom"
+          sortable
+        />
 
         <Column
           field="category"
@@ -200,7 +288,10 @@ function IngredientsPage() {
             : 'Nouvel ingrédient'
         }
         visible={dialogVisible}
-        style={{ width: '32rem', maxWidth: '95vw' }}
+        style={{
+          width: '32rem',
+          maxWidth: '95vw',
+        }}
         modal
         onHide={() => setDialogVisible(false)}
         footer={
@@ -224,7 +315,10 @@ function IngredientsPage() {
       >
         <div className="flex flex-column gap-3">
           <div>
-            <label htmlFor="ingredient-name" className="block mb-2">
+            <label
+              htmlFor="ingredient-name"
+              className="block mb-2"
+            >
               Nom
             </label>
 
@@ -237,7 +331,10 @@ function IngredientsPage() {
           </div>
 
           <div>
-            <label htmlFor="ingredient-category" className="block mb-2">
+            <label
+              htmlFor="ingredient-category"
+              className="block mb-2"
+            >
               Catégorie
             </label>
 
@@ -250,7 +347,10 @@ function IngredientsPage() {
           </div>
 
           <div>
-            <label htmlFor="ingredient-unit" className="block mb-2">
+            <label
+              htmlFor="ingredient-unit"
+              className="block mb-2"
+            >
               Unité par défaut
             </label>
 

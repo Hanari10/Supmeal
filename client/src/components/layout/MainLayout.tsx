@@ -1,67 +1,133 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
-import { PanelMenu } from 'primereact/panelmenu';
+import { Sidebar } from 'primereact/sidebar';
 
-function MainLayout() {
-  const navigate = useNavigate();
+import { useAuth } from '../../hooks/useAuth';
 
-  const items = [
-    {
-      label: 'Tableau de bord',
-      icon: 'pi pi-home',
-      command: () => navigate('/'),
-    },
-    {
-      label: 'Ingrédients',
-      icon: 'pi pi-box',
-      command: () => navigate('/ingredients'),
-    },
-    {
-      label: 'Recettes',
-      icon: 'pi pi-book',
-      command: () => navigate('/recettes'),
-    },
-    {
-      label: 'Nouvelle recette',
-      icon: 'pi pi-plus',
-      command: () => navigate('/recettes/nouvelle'),
-    },
-    {
-      label: 'Liste de courses',
-      icon: 'pi pi-shopping-cart',
-      command: () => navigate('/liste-de-courses'),
-    },
-    {
-      label: 'Cookbooks',
-      icon: 'pi pi-users',
-      command: () => navigate('/cookbooks'),
-    },
-    {
-      label: 'Profil',
-      icon: 'pi pi-user',
-      command: () => navigate('/profil'),
-    },
-  ];
+interface NavigationItem {
+  label: string;
+  icon: string;
+  path: string;
+}
 
+interface NavigationContentProps {
+  userEmail?: string;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+  onLogout: () => void;
+}
+
+const navigationItems: NavigationItem[] = [
+  {
+    label: 'Tableau de bord',
+    icon: 'pi pi-home',
+    path: '/',
+  },
+  {
+    label: 'Recettes',
+    icon: 'pi pi-book',
+    path: '/recettes',
+  },
+  {
+    label: 'Nouvelle recette',
+    icon: 'pi pi-plus',
+    path: '/recettes/nouvelle',
+  },
+  {
+    label: 'Ingrédients',
+    icon: 'pi pi-box',
+    path: '/ingredients',
+  },
+  {
+    label: 'Liste de courses',
+    icon: 'pi pi-shopping-cart',
+    path: '/liste-de-courses',
+  },
+  {
+    label: 'Cookbooks',
+    icon: 'pi pi-users',
+    path: '/cookbooks',
+  },
+  {
+    label: 'Planning',
+    icon: 'pi pi-calendar',
+    path: '/planning',
+  },
+  {
+    label: 'Favoris',
+    icon: 'pi pi-heart',
+    path: '/favoris',
+  },
+  {
+    label: 'Profil',
+    icon: 'pi pi-user',
+    path: '/profil',
+  },
+];
+
+function isActivePath(currentPath: string, itemPath: string) {
+  if (itemPath === '/') {
+    return currentPath === '/';
+  }
+
+  return currentPath.startsWith(itemPath);
+}
+
+function NavigationContent({
+  userEmail,
+  currentPath,
+  onNavigate,
+  onLogout,
+}: NavigationContentProps) {
   return (
-    <div className="flex" style={{ minHeight: '100vh' }}>
-      <aside
-        style={{
-          width: '270px',
-          padding: '1rem',
-          borderRight: '1px solid #dcdcdc',
-          background: '#f8f9fa',
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>🍽️ SUPMEAL</h2>
+    <div className="flex flex-column h-full w-full">
+      <div>
+        <h2 className="mt-0 mb-1">SUPMEAL</h2>
 
+        <span className="text-600 text-sm">
+          Gestion de recettes et de repas
+        </span>
+      </div>
+
+      <Divider />
+
+      <div className="flex flex-column gap-2">
+        {navigationItems.map((item) => {
+          const active = isActivePath(currentPath, item.path);
+
+          return (
+            <Button
+              key={item.path}
+              label={item.label}
+              icon={item.icon}
+              severity={active ? undefined : 'secondary'}
+              text={!active}
+              className="w-full justify-content-start"
+              onClick={() => onNavigate(item.path)}
+            />
+          );
+        })}
+      </div>
+
+      <div className="mt-auto">
         <Divider />
 
-        <PanelMenu model={items} />
+        <div className="mb-3">
+          <span className="block text-600 text-sm mb-1">
+            Utilisateur connecté
+          </span>
 
-        <Divider />
+          <strong className="text-sm">
+            {userEmail ?? 'Utilisateur'}
+          </strong>
+        </div>
 
         <Button
           label="Déconnexion"
@@ -69,20 +135,90 @@ function MainLayout() {
           severity="danger"
           outlined
           className="w-full"
-          onClick={() => {
-            localStorage.removeItem('token');
-            navigate('/connexion');
-          }}
+          onClick={onLogout}
+        />
+      </div>
+    </div>
+  );
+}
+
+function MainLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const [mobileMenuVisible, setMobileMenuVisible] =
+    useState(false);
+
+  function handleNavigation(path: string) {
+    navigate(path);
+    setMobileMenuVisible(false);
+  }
+
+  function handleLogout() {
+    logout();
+    navigate('/connexion');
+  }
+
+  return (
+    <div className="min-h-screen surface-ground">
+      <header className="md:hidden flex align-items-center justify-content-between p-3 surface-card border-bottom-1 surface-border">
+        <strong>SUPMEAL</strong>
+
+        <Button
+          icon="pi pi-bars"
+          rounded
+          text
+          aria-label="Ouvrir le menu"
+          onClick={() => setMobileMenuVisible(true)}
+        />
+      </header>
+
+      <Sidebar
+        visible={mobileMenuVisible}
+        onHide={() => setMobileMenuVisible(false)}
+        className="w-18rem"
+      >
+        <NavigationContent
+          userEmail={user?.email}
+          currentPath={location.pathname}
+          onNavigate={handleNavigation}
+          onLogout={handleLogout}
+        />
+      </Sidebar>
+
+      <aside
+        className="hidden md:flex fixed left-0 top-0 h-screen surface-card border-right-1 surface-border p-3"
+        style={{ width: '270px' }}
+      >
+        <NavigationContent
+          userEmail={user?.email}
+          currentPath={location.pathname}
+          onNavigate={handleNavigation}
+          onLogout={handleLogout}
         />
       </aside>
 
       <main
+        className="p-3 md:p-5"
         style={{
-          flex: 1,
-          padding: '2rem',
-          background: '#ffffff',
+          marginLeft: 'var(--supmeal-sidebar-offset)',
         }}
       >
+        <style>
+          {`
+            :root {
+              --supmeal-sidebar-offset: 0;
+            }
+
+            @media (min-width: 768px) {
+              :root {
+                --supmeal-sidebar-offset: 270px;
+              }
+            }
+          `}
+        </style>
+
         <Outlet />
       </main>
     </div>
