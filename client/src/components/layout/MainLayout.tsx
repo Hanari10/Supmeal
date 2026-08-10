@@ -77,7 +77,10 @@ const navigationItems: NavigationItem[] = [
   },
 ];
 
-function isActivePath(currentPath: string, itemPath: string) {
+function isActivePath(
+  currentPath: string,
+  itemPath: string,
+) {
   if (itemPath === '/') {
     return currentPath === '/';
   }
@@ -92,9 +95,11 @@ function NavigationContent({
   onLogout,
 }: NavigationContentProps) {
   return (
-    <div className="flex flex-column h-full w-full">
+    <div className="flex flex-column min-h-full w-full">
       <div>
-        <h2 className="mt-0 mb-1">SUPMEAL</h2>
+        <h2 className="mt-0 mb-1">
+          SUPMEAL
+        </h2>
 
         <span className="text-600 text-sm">
           Gestion de recettes et de repas
@@ -105,23 +110,32 @@ function NavigationContent({
 
       <div className="flex flex-column gap-2">
         {navigationItems.map((item) => {
-          const active = isActivePath(currentPath, item.path);
+          const active = isActivePath(
+            currentPath,
+            item.path,
+          );
 
           return (
             <Button
               key={item.path}
               label={item.label}
               icon={item.icon}
-              severity={active ? undefined : 'secondary'}
+              severity={
+                active
+                  ? undefined
+                  : 'secondary'
+              }
               text={!active}
               className="w-full justify-content-start"
-              onClick={() => onNavigate(item.path)}
+              onClick={() =>
+                onNavigate(item.path)
+              }
             />
           );
         })}
       </div>
 
-      <div className="mt-auto">
+      <div className="mt-auto pt-3">
         <Divider />
 
         <div className="mb-3">
@@ -129,7 +143,12 @@ function NavigationContent({
             Utilisateur connecté
           </span>
 
-          <strong className="text-sm">
+          <strong
+            className="text-sm"
+            style={{
+              overflowWrap: 'anywhere',
+            }}
+          >
             {userEmail ?? 'Utilisateur'}
           </strong>
         </div>
@@ -152,8 +171,10 @@ function MainLayout() {
   const location = useLocation();
   const { user, logout } = useAuth();
 
-  const [mobileMenuVisible, setMobileMenuVisible] =
-    useState(false);
+  const [
+    mobileMenuVisible,
+    setMobileMenuVisible,
+  ] = useState(false);
 
   function handleNavigation(path: string) {
     navigate(path);
@@ -175,31 +196,51 @@ function MainLayout() {
           rounded
           text
           aria-label="Ouvrir le menu"
-          onClick={() => setMobileMenuVisible(true)}
+          onClick={() =>
+            setMobileMenuVisible(true)
+          }
         />
       </header>
 
       <Sidebar
         visible={mobileMenuVisible}
-        onHide={() => setMobileMenuVisible(false)}
+        onHide={() =>
+          setMobileMenuVisible(false)
+        }
         className="w-18rem"
       >
-        <NavigationContent
-          userEmail={user?.email}
-          currentPath={location.pathname}
-          onNavigate={handleNavigation}
-          onLogout={handleLogout}
-        />
+        <div
+          style={{
+            minHeight: '100%',
+          }}
+        >
+          <NavigationContent
+            userEmail={user?.email}
+            currentPath={
+              location.pathname
+            }
+            onNavigate={
+              handleNavigation
+            }
+            onLogout={handleLogout}
+          />
+        </div>
       </Sidebar>
 
       <aside
-        className="hidden md:flex fixed left-0 top-0 h-screen surface-card border-right-1 surface-border p-3"
-        style={{ width: '270px' }}
+        className="hidden md:flex fixed left-0 top-0 h-screen surface-card border-right-1 surface-border p-3 overflow-y-auto"
+        style={{
+          width: '270px',
+        }}
       >
         <NavigationContent
           userEmail={user?.email}
-          currentPath={location.pathname}
-          onNavigate={handleNavigation}
+          currentPath={
+            location.pathname
+          }
+          onNavigate={
+            handleNavigation
+          }
           onLogout={handleLogout}
         />
       </aside>
@@ -207,7 +248,8 @@ function MainLayout() {
       <main
         className="p-3 md:p-5"
         style={{
-          marginLeft: 'var(--supmeal-sidebar-offset)',
+          marginLeft:
+            'var(--supmeal-sidebar-offset)',
         }}
       >
         <style>
