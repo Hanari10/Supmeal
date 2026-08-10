@@ -12,6 +12,9 @@ import CreateRecipePage from './pages/CreateRecipePage';
 import CookbooksPage from './pages/CookbooksPage';
 import MealPlansPage from './pages/MealPlansPage';
 import FavoritesPage from './pages/FavoritesPage';
+import DataTransferPage from './pages/DataTransferPage';
+import RecipeDetailsPage from './pages/RecipeDetailsPage';
+import EditRecipePage from './pages/EditRecipePage';
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +67,18 @@ export const router = createBrowserRouter([
       {
         path: '/favoris',
         element: <FavoritesPage />,
+      },
+      {
+        path: '/import-export',
+        element: <DataTransferPage />,
+      },
+      {
+        path: '/recettes/:id',
+        element: <RecipeDetailsPage />,
+      },
+      {
+        path: '/recettes/:id/modifier',
+        element: <EditRecipePage />,
       },
     ],
   },

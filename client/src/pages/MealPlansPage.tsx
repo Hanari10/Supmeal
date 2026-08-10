@@ -299,6 +299,10 @@ function MealPlansPage() {
                 rounded
                 text
                 aria-label="Modifier"
+                tooltip="Modifier"
+                tooltipOptions={{
+                  position: 'top',
+                }}
                 onClick={() => openEditDialog(mealPlan)}
               />
 
@@ -308,6 +312,10 @@ function MealPlansPage() {
                 rounded
                 text
                 aria-label="Supprimer"
+                tooltip="Supprimer"
+                tooltipOptions={{
+                  position: 'top',
+                }}
                 onClick={() => confirmDelete(mealPlan)}
               />
             </div>
@@ -346,7 +354,10 @@ function MealPlansPage() {
       >
         <div className="flex flex-column gap-3">
           <div>
-            <label htmlFor="meal-recipe" className="block mb-2">
+            <label
+              htmlFor="meal-recipe"
+              className="block mb-2"
+            >
               Recette
             </label>
 
@@ -359,12 +370,17 @@ function MealPlansPage() {
               optionValue="id"
               placeholder="Sélectionner une recette"
               filter
-              onChange={(event) => setRecipeId(event.value)}
+              onChange={(event) =>
+                setRecipeId(event.value)
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="meal-day" className="block mb-2">
+            <label
+              htmlFor="meal-day"
+              className="block mb-2"
+            >
               Jour
             </label>
 
@@ -373,12 +389,17 @@ function MealPlansPage() {
               className="w-full"
               value={day}
               options={dayOptions}
-              onChange={(event) => setDay(event.value)}
+              onChange={(event) =>
+                setDay(event.value)
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="meal-type" className="block mb-2">
+            <label
+              htmlFor="meal-type"
+              className="block mb-2"
+            >
               Type de repas
             </label>
 
@@ -387,7 +408,9 @@ function MealPlansPage() {
               className="w-full"
               value={mealType}
               options={mealTypeOptions}
-              onChange={(event) => setMealType(event.value)}
+              onChange={(event) =>
+                setMealType(event.value)
+              }
             />
           </div>
 

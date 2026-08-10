@@ -1,8 +1,10 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+
 import { PrismaService } from '../database/prisma.service';
 import { CreateRecipeIngredientDto } from './dto/create-recipe-ingredient.dto';
 import { UpdateRecipeIngredientDto } from './dto/update-recipe-ingredient.dto';
@@ -10,7 +12,8 @@ import { UpdateRecipeIngredientDto } from './dto/update-recipe-ingredient.dto';
 @Injectable()
 export class RecipeIngredientsService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(recipeId: string, dto: CreateRecipeIngredientDto) {
+
+  private async checkRecipeAccess(recipeId: string, userId: string) {
     const recipe = await this.prisma.recipe.findUnique({
       where: {
         id: recipeId,
@@ -18,8 +21,22 @@ export class RecipeIngredientsService {
     });
 
     if (!recipe) {
-      throw new NotFoundException('Recette non trouvée');
+      throw new NotFoundException('Recette non trouvée.');
     }
+
+    if (recipe.userId !== userId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cette recette.");
+    }
+
+    return recipe;
+  }
+
+  async create(
+    recipeId: string,
+    userId: string,
+    dto: CreateRecipeIngredientDto,
+  ) {
+    await this.checkRecipeAccess(recipeId, userId);
 
     const ingredient = await this.prisma.ingredient.findUnique({
       where: {
@@ -28,7 +45,7 @@ export class RecipeIngredientsService {
     });
 
     if (!ingredient) {
-      throw new NotFoundException('Ingrédieent non trouvé');
+      throw new NotFoundException('Ingrédient non trouvé.');
     }
 
     const existingRecipeIngredient =
@@ -42,7 +59,7 @@ export class RecipeIngredientsService {
       });
 
     if (existingRecipeIngredient) {
-      throw new ConflictException('Cet ingrédient est déjà dans la recette');
+      throw new ConflictException('Cet ingrédient est déjà dans la recette.');
     }
 
     return this.prisma.recipeIngredient.create({
@@ -58,7 +75,10 @@ export class RecipeIngredientsService {
       },
     });
   }
-  async findAll(recipeId: string) {
+
+  async findAll(recipeId: string, userId: string) {
+    await this.checkRecipeAccess(recipeId, userId);
+
     return this.prisma.recipeIngredient.findMany({
       where: {
         recipeId,
@@ -71,11 +91,15 @@ export class RecipeIngredientsService {
       },
     });
   }
+
   async update(
     recipeId: string,
     ingredientId: string,
+    userId: string,
     dto: UpdateRecipeIngredientDto,
   ) {
+    await this.checkRecipeAccess(recipeId, userId);
+
     const recipeIngredient = await this.prisma.recipeIngredient.findUnique({
       where: {
         recipeId_ingredientId: {
@@ -86,7 +110,7 @@ export class RecipeIngredientsService {
     });
 
     if (!recipeIngredient) {
-      throw new NotFoundException('Ingrédient non trouvé dans la recette');
+      throw new NotFoundException('Ingrédient non trouvé dans la recette.');
     }
 
     return this.prisma.recipeIngredient.update({
@@ -107,7 +131,9 @@ export class RecipeIngredientsService {
     });
   }
 
-  async remove(recipeId: string, ingredientId: string) {
+  async remove(recipeId: string, ingredientId: string, userId: string) {
+    await this.checkRecipeAccess(recipeId, userId);
+
     const recipeIngredient = await this.prisma.recipeIngredient.findUnique({
       where: {
         recipeId_ingredientId: {
@@ -118,7 +144,7 @@ export class RecipeIngredientsService {
     });
 
     if (!recipeIngredient) {
-      throw new NotFoundException('Ingrédient non trouvé dans la recette');
+      throw new NotFoundException('Ingrédient non trouvé dans la recette.');
     }
 
     return this.prisma.recipeIngredient.delete({

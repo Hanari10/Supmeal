@@ -31,6 +31,11 @@ const navigationItems: NavigationItem[] = [
     path: '/',
   },
   {
+    label: 'Ingrédients',
+    icon: 'pi pi-box',
+    path: '/ingredients',
+  },
+  {
     label: 'Recettes',
     icon: 'pi pi-book',
     path: '/recettes',
@@ -41,9 +46,14 @@ const navigationItems: NavigationItem[] = [
     path: '/recettes/nouvelle',
   },
   {
-    label: 'Ingrédients',
-    icon: 'pi pi-box',
-    path: '/ingredients',
+    label: 'Favoris',
+    icon: 'pi pi-heart',
+    path: '/favoris',
+  },
+  {
+    label: 'Planning',
+    icon: 'pi pi-calendar',
+    path: '/planning',
   },
   {
     label: 'Liste de courses',
@@ -56,14 +66,9 @@ const navigationItems: NavigationItem[] = [
     path: '/cookbooks',
   },
   {
-    label: 'Planning',
-    icon: 'pi pi-calendar',
-    path: '/planning',
-  },
-  {
-    label: 'Favoris',
-    icon: 'pi pi-heart',
-    path: '/favoris',
+    label: 'Import / Export',
+    icon: 'pi pi-file-export',
+    path: '/import-export',
   },
   {
     label: 'Profil',

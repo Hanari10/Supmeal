@@ -70,11 +70,12 @@ export class CreateRecipeDto {
   difficulty?: string;
 
   @ApiProperty({
-    example: 'https://exemple.com/crepes.jpg',
+    example: '/uploads/recipes/crepes.jpg',
     required: false,
   })
   @IsOptional()
-  @IsUrl()
+  @IsString()
+  @MaxLength(500)
   imageUrl?: string;
 
   @ApiProperty({

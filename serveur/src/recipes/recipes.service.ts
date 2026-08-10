@@ -42,6 +42,14 @@ export class RecipesService {
             tag: true,
           },
         },
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
       },
     });
   }
@@ -55,6 +63,14 @@ export class RecipesService {
         tags: {
           include: {
             tag: true,
+          },
+        },
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
           },
         },
       },
@@ -73,6 +89,14 @@ export class RecipesService {
         tags: {
           include: {
             tag: true,
+          },
+        },
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
           },
         },
       },
@@ -124,6 +148,14 @@ export class RecipesService {
         tags: {
           include: {
             tag: true,
+          },
+        },
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
           },
         },
       },

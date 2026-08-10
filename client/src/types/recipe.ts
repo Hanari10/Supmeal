@@ -8,6 +8,16 @@ export interface Recipe {
   servings?: number;
   difficulty?: string;
   imageUrl?: string;
+
+  recipeIngredients?: {
+    ingredientId: string;
+    quantity: number;
+    unit?: string | null;
+
+    ingredient: {
+      name: string;
+    };
+  }[];
 }
 
 export interface CreateRecipeData {
@@ -20,3 +30,10 @@ export interface CreateRecipeData {
   difficulty?: string;
   imageUrl?: string;
 }
+
+export type UpdateRecipeData = Omit<
+  Partial<CreateRecipeData>,
+  'imageUrl'
+> & {
+  imageUrl?: string | null;
+};

@@ -258,6 +258,8 @@ function CookbooksPage() {
                 rounded
                 text
                 aria-label="Voir"
+                tooltip="Voir"
+                tooltipOptions={{ position: 'top' }}
                 onClick={() => openDetailsDialog(cookbook)}
               />
 
@@ -268,6 +270,8 @@ function CookbooksPage() {
                     rounded
                     text
                     aria-label="Ajouter un membre"
+                    tooltip="Ajouter un membre"
+                    tooltipOptions={{ position: 'top' }}
                     onClick={() => openMemberDialog(cookbook)}
                   />
 
@@ -276,6 +280,8 @@ function CookbooksPage() {
                     rounded
                     text
                     aria-label="Modifier"
+                    tooltip="Modifier"
+                    tooltipOptions={{ position: 'top' }}
                     onClick={() => openEditDialog(cookbook)}
                   />
 
@@ -285,9 +291,9 @@ function CookbooksPage() {
                     rounded
                     text
                     aria-label="Supprimer"
-                    onClick={() =>
-                      confirmCookbookDelete(cookbook)
-                    }
+                    tooltip="Supprimer"
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => confirmCookbookDelete(cookbook)}
                   />
                 </>
               )}
@@ -434,6 +440,8 @@ function CookbooksPage() {
                           severity="danger"
                           rounded
                           text
+                          tooltip="Retirer ce membre"
+                          tooltipOptions={{ position: 'top' }}
                           onClick={() =>
                             confirmMemberDelete(
                               selectedCookbook,

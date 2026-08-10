@@ -225,6 +225,8 @@ function ShoppingListPage() {
                 rounded
                 text
                 aria-label="Modifier"
+                tooltip="Modifier"
+                tooltipOptions={{ position: 'top' }}
                 onClick={() => openEditDialog(item)}
               />
 
@@ -234,6 +236,8 @@ function ShoppingListPage() {
                 rounded
                 text
                 aria-label="Supprimer"
+                tooltip="Supprimer"
+                tooltipOptions={{ position: 'top' }}
                 onClick={() => confirmDelete(item)}
               />
             </div>

@@ -139,6 +139,10 @@ function FavoritesPage() {
               rounded
               loading={removingRecipeId === favorite.recipeId}
               aria-label="Retirer des favoris"
+              tooltip="Retirer des favoris"
+              tooltipOptions={{
+                position: 'top',
+              }}
               onClick={() => {
                 void handleRemoveFavorite(favorite);
               }}

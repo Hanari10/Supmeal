@@ -43,6 +43,9 @@ services:
     ports:
       - "3000:3000"
 
+    volumes:
+      - recipe-uploads:/app/uploads
+
   frontend:
     build:
       context: ./client
@@ -58,3 +61,4 @@ services:
 
 volumes:
   postgres-data:
+  recipe-uploads:

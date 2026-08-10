@@ -196,7 +196,7 @@ function IngredientsPage() {
   }
 
   return (
-        <Card title="Ingrédients">
+    <Card title="Ingrédients">
       <ConfirmDialog />
 
       <Toolbar
@@ -265,6 +265,10 @@ function IngredientsPage() {
                 rounded
                 text
                 aria-label="Modifier"
+                tooltip="Modifier"
+                tooltipOptions={{
+                  position: 'top',
+                }}
                 onClick={() => openEditDialog(ingredient)}
               />
 
@@ -274,6 +278,10 @@ function IngredientsPage() {
                 rounded
                 text
                 aria-label="Supprimer"
+                tooltip="Supprimer"
+                tooltipOptions={{
+                  position: 'top',
+                }}
                 onClick={() => confirmDelete(ingredient)}
               />
             </div>
@@ -342,7 +350,9 @@ function IngredientsPage() {
               id="ingredient-category"
               className="w-full"
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) =>
+                setCategory(event.target.value)
+              }
             />
           </div>
 
@@ -360,7 +370,9 @@ function IngredientsPage() {
               placeholder="g, kg, ml..."
               value={defaultMeasurementUnit}
               onChange={(event) =>
-                setDefaultMeasurementUnit(event.target.value)
+                setDefaultMeasurementUnit(
+                  event.target.value,
+                )
               }
             />
           </div>

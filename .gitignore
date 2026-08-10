@@ -39,3 +39,6 @@ Thumbs.db
 
 # Prisma
 serveur/prisma/dev.db
+
+# Fichiers uploadés par les utilisateurs
+serveur/uploads/
