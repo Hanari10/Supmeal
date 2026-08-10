@@ -1,6 +1,7 @@
 import { api } from './api';
 import type {
   AddCookbookMemberData,
+  AddCookbookRecipeData,
   Cookbook,
   CookbookMember,
   CreateCookbookData,
@@ -28,7 +29,11 @@ export async function updateCookbook(
   id: string,
   data: UpdateCookbookData,
 ): Promise<Cookbook> {
-  const response = await api.patch<Cookbook>(`/cookbooks/${id}`, data);
+  const response = await api.patch<Cookbook>(
+    `/cookbooks/${id}`,
+    data,
+  );
+
   return response.data;
 }
 
@@ -52,5 +57,30 @@ export async function removeCookbookMember(
   cookbookId: string,
   memberId: string,
 ): Promise<void> {
-  await api.delete(`/cookbooks/${cookbookId}/members/${memberId}`);
+  await api.delete(
+    `/cookbooks/${cookbookId}/members/${memberId}`,
+  );
+}
+
+export async function addCookbookRecipe(
+  cookbookId: string,
+  data: AddCookbookRecipeData,
+): Promise<Cookbook> {
+  const response = await api.post<Cookbook>(
+    `/cookbooks/${cookbookId}/recipes`,
+    data,
+  );
+
+  return response.data;
+}
+
+export async function removeCookbookRecipe(
+  cookbookId: string,
+  recipeId: string,
+): Promise<Cookbook> {
+  const response = await api.delete<Cookbook>(
+    `/cookbooks/${cookbookId}/recipes/${recipeId}`,
+  );
+
+  return response.data;
 }

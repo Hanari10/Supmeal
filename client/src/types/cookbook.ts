@@ -23,6 +23,8 @@ export interface CookbookRecipe {
   id: string;
   name: string;
   description?: string | null;
+  userId?: string;
+  cookbookId?: string | null;
 }
 
 export interface Cookbook {
@@ -47,4 +49,8 @@ export interface UpdateCookbookData {
 export interface AddCookbookMemberData {
   email: string;
   role: Exclude<CookbookRole, 'CREATOR'>;
+}
+
+export interface AddCookbookRecipeData {
+  recipeId: string;
 }

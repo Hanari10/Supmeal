@@ -13,9 +13,10 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CookbooksService } from './cookbooks.service';
+import { AddCookbookMemberDto } from './dto/add-cookbook-member.dto';
+import { AddCookbookRecipeDto } from './dto/add-cookbook-recipe.dto';
 import { CreateCookbookDto } from './dto/create-cookbook.dto';
 import { UpdateCookbookDto } from './dto/update-cookbook.dto';
-import { AddCookbookMemberDto } from './dto/add-cookbook-member.dto';
 
 @ApiTags('Cookbooks')
 @ApiBearerAuth()
@@ -60,6 +61,7 @@ export class CookbooksController {
   remove(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string) {
     return this.cookbooksService.remove(user.id, id);
   }
+
   @Post(':id/members')
   @ApiOperation({ summary: 'Ajouter un membre au cookbook' })
   addMember(
@@ -78,5 +80,29 @@ export class CookbooksController {
     @Param('memberId') memberId: string,
   ) {
     return this.cookbooksService.removeMember(user.id, id, memberId);
+  }
+
+  @Post(':id/recipes')
+  @ApiOperation({ summary: 'Ajouter une recette au cookbook' })
+  addRecipe(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id') id: string,
+    @Body() addCookbookRecipeDto: AddCookbookRecipeDto,
+  ) {
+    return this.cookbooksService.addRecipe(
+      user.id,
+      id,
+      addCookbookRecipeDto.recipeId,
+    );
+  }
+
+  @Delete(':id/recipes/:recipeId')
+  @ApiOperation({ summary: 'Retirer une recette du cookbook' })
+  removeRecipe(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id') id: string,
+    @Param('recipeId') recipeId: string,
+  ) {
+    return this.cookbooksService.removeRecipe(user.id, id, recipeId);
   }
 }

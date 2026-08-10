@@ -1,13 +1,13 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
+import { AddCookbookMemberDto } from './dto/add-cookbook-member.dto';
 import { CreateCookbookDto } from './dto/create-cookbook.dto';
 import { UpdateCookbookDto } from './dto/update-cookbook.dto';
-import { AddCookbookMemberDto } from './dto/add-cookbook-member.dto';
 
 @Injectable()
 export class CookbooksService {
@@ -27,6 +27,7 @@ export class CookbooksService {
       },
       include: {
         members: true,
+        recipes: true,
       },
     });
   }
@@ -117,6 +118,7 @@ export class CookbooksService {
       where: { id },
     });
   }
+
   async addMember(
     userId: string,
     cookbookId: string,
@@ -205,5 +207,118 @@ export class CookbooksService {
         id: memberId,
       },
     });
+  }
+
+  async addRecipe(userId: string, cookbookId: string, recipeId: string) {
+    const cookbook = await this.findOne(userId, cookbookId);
+
+    const membership = await this.prisma.cookbookMember.findUnique({
+      where: {
+        cookbookId_userId: {
+          cookbookId,
+          userId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException("Vous n'avez pas accès à ce cookbook.");
+    }
+
+    if (!['CREATOR', 'EDITOR'].includes(membership.role)) {
+      throw new ForbiddenException(
+        "Vous n'avez pas la permission d'ajouter des recettes à ce cookbook.",
+      );
+    }
+
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        id: recipeId,
+      },
+    });
+
+    if (!recipe) {
+      throw new NotFoundException('Recette introuvable.');
+    }
+
+    if (recipe.userId !== userId) {
+      throw new ForbiddenException(
+        'Vous ne pouvez ajouter que vos propres recettes.',
+      );
+    }
+
+    if (recipe.cookbookId === cookbookId) {
+      throw new BadRequestException(
+        'Cette recette appartient déjà à ce cookbook.',
+      );
+    }
+
+    if (recipe.cookbookId) {
+      throw new BadRequestException(
+        'Cette recette appartient déjà à un autre cookbook.',
+      );
+    }
+
+    await this.prisma.recipe.update({
+      where: {
+        id: recipeId,
+      },
+      data: {
+        cookbookId,
+      },
+    });
+
+    return this.findOne(userId, cookbook.id);
+  }
+
+  async removeRecipe(userId: string, cookbookId: string, recipeId: string) {
+    const cookbook = await this.findOne(userId, cookbookId);
+
+    const membership = await this.prisma.cookbookMember.findUnique({
+      where: {
+        cookbookId_userId: {
+          cookbookId,
+          userId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException("Vous n'avez pas accès à ce cookbook.");
+    }
+
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        id: recipeId,
+      },
+    });
+
+    if (!recipe || recipe.cookbookId !== cookbookId) {
+      throw new NotFoundException(
+        'Cette recette est introuvable dans ce cookbook.',
+      );
+    }
+
+    const canRemove =
+      cookbook.ownerId === userId ||
+      recipe.userId === userId ||
+      membership.role === 'EDITOR';
+
+    if (!canRemove) {
+      throw new ForbiddenException(
+        "Vous n'avez pas la permission de retirer cette recette.",
+      );
+    }
+
+    await this.prisma.recipe.update({
+      where: {
+        id: recipeId,
+      },
+      data: {
+        cookbookId: null,
+      },
+    });
+
+    return this.findOne(userId, cookbookId);
   }
 }

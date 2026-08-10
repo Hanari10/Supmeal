@@ -14,20 +14,26 @@ import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import { Toolbar } from 'primereact/toolbar';
 
+import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
 import {
   addCookbookMember,
+  addCookbookRecipe,
   createCookbook,
   deleteCookbook,
   getCookbooks,
   removeCookbookMember,
+  removeCookbookRecipe,
   updateCookbook,
 } from '../services/cookbookService';
-import { useAuth } from '../hooks/useAuth';
+import { getRecipes } from '../services/recipeService';
 import type {
   Cookbook,
   CookbookMember,
+  CookbookRecipe,
   CookbookRole,
 } from '../types/cookbook';
+import type { Recipe } from '../types/recipe';
 
 const roleOptions = [
   { label: 'Éditeur', value: 'EDITOR' },
@@ -44,19 +50,27 @@ const roleLabels: Record<CookbookRole, string> = {
 
 function CookbooksPage() {
   const { user } = useAuth();
+  const { showError, showSuccess } = useToast();
 
   const [cookbooks, setCookbooks] = useState<Cookbook[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   const [cookbookDialogVisible, setCookbookDialogVisible] =
     useState(false);
-  const [memberDialogVisible, setMemberDialogVisible] = useState(false);
+  const [memberDialogVisible, setMemberDialogVisible] =
+    useState(false);
   const [detailsDialogVisible, setDetailsDialogVisible] =
+    useState(false);
+  const [recipeDialogVisible, setRecipeDialogVisible] =
     useState(false);
 
   const [selectedCookbook, setSelectedCookbook] =
     useState<Cookbook | null>(null);
+
+  const [selectedRecipeId, setSelectedRecipeId] =
+    useState<string | null>(null);
 
   const [name, setName] = useState('');
   const [memberEmail, setMemberEmail] = useState('');
@@ -66,15 +80,43 @@ function CookbooksPage() {
   async function loadCookbooks() {
     try {
       setLoading(true);
+
       const data = await getCookbooks();
+
       setCookbooks(data);
     } finally {
       setLoading(false);
     }
   }
 
+  async function loadRecipes() {
+    const data = await getRecipes();
+    setRecipes(data);
+  }
+
   useEffect(() => {
-    void loadCookbooks();
+    let cancelled = false;
+
+    async function loadInitialData() {
+      const [cookbooksData, recipesData] = await Promise.all([
+        getCookbooks(),
+        getRecipes(),
+      ]);
+
+      if (cancelled) {
+        return;
+      }
+
+      setCookbooks(cookbooksData);
+      setRecipes(recipesData);
+      setLoading(false);
+    }
+
+    void loadInitialData();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const filteredCookbooks = useMemo(() => {
@@ -88,6 +130,20 @@ function CookbooksPage() {
       cookbook.name.toLowerCase().includes(value),
     );
   }, [cookbooks, search]);
+
+  const availableRecipes = useMemo(() => {
+    if (!selectedCookbook) {
+      return [];
+    }
+
+    const recipeIds = new Set(
+      selectedCookbook.recipes.map((recipe) => recipe.id),
+    );
+
+    return recipes.filter(
+      (recipe) => !recipeIds.has(recipe.id),
+    );
+  }, [recipes, selectedCookbook]);
 
   function openCreateDialog() {
     setSelectedCookbook(null);
@@ -111,6 +167,12 @@ function CookbooksPage() {
   function openDetailsDialog(cookbook: Cookbook) {
     setSelectedCookbook(cookbook);
     setDetailsDialogVisible(true);
+  }
+
+  function openRecipeDialog(cookbook: Cookbook) {
+    setSelectedCookbook(cookbook);
+    setSelectedRecipeId(null);
+    setRecipeDialogVisible(true);
   }
 
   async function saveCookbook() {
@@ -148,6 +210,46 @@ function CookbooksPage() {
     await loadCookbooks();
   }
 
+  async function saveRecipe() {
+    if (!selectedCookbook || !selectedRecipeId) {
+      return;
+    }
+
+    try {
+      const recipe = recipes.find(
+        (item) => item.id === selectedRecipeId,
+      );
+
+      const cookbookName = selectedCookbook.name;
+
+      const updatedCookbook = await addCookbookRecipe(
+        selectedCookbook.id,
+        {
+          recipeId: selectedRecipeId,
+        },
+      );
+
+      setSelectedCookbook(updatedCookbook);
+      setRecipeDialogVisible(false);
+      setSelectedRecipeId(null);
+
+      await loadCookbooks();
+      await loadRecipes();
+
+      showSuccess(
+        'Recette ajoutée',
+        recipe
+          ? `« ${recipe.name} » a été ajoutée au cookbook « ${cookbookName} ».`
+          : 'La recette a été ajoutée au cookbook.',
+      );
+    } catch {
+      showError(
+        'Ajout impossible',
+        'La recette n’a pas pu être ajoutée au cookbook.',
+      );
+    }
+  }
+
   function confirmCookbookDelete(cookbook: Cookbook) {
     confirmDialog({
       message: `Supprimer le cookbook « ${cookbook.name} » ?`,
@@ -175,10 +277,15 @@ function CookbooksPage() {
       rejectLabel: 'Annuler',
       acceptClassName: 'p-button-danger',
       accept: async () => {
-        await removeCookbookMember(cookbook.id, member.id);
-        await loadCookbooks();
+        await removeCookbookMember(
+          cookbook.id,
+          member.id,
+        );
 
         const updatedCookbooks = await getCookbooks();
+
+        setCookbooks(updatedCookbooks);
+
         const updatedCookbook = updatedCookbooks.find(
           (item) => item.id === cookbook.id,
         );
@@ -188,8 +295,76 @@ function CookbooksPage() {
     });
   }
 
+  function confirmRecipeDelete(
+    cookbook: Cookbook,
+    recipe: CookbookRecipe,
+  ) {
+    confirmDialog({
+      message: `Retirer la recette « ${recipe.name} » du cookbook ?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Retirer',
+      rejectLabel: 'Annuler',
+      acceptClassName: 'p-button-danger',
+      accept: async () => {
+        try {
+          const updatedCookbook =
+            await removeCookbookRecipe(
+              cookbook.id,
+              recipe.id,
+            );
+
+          setSelectedCookbook(updatedCookbook);
+
+          await loadCookbooks();
+          await loadRecipes();
+
+          showSuccess(
+            'Recette retirée',
+            `« ${recipe.name} » a été retirée du cookbook « ${cookbook.name} ».`,
+          );
+        } catch {
+          showError(
+            'Suppression impossible',
+            'La recette n’a pas pu être retirée du cookbook.',
+          );
+        }
+      },
+    });
+  }
+
   function isOwner(cookbook: Cookbook) {
     return cookbook.ownerId === user?.id;
+  }
+
+  function currentMembership(cookbook: Cookbook) {
+    return cookbook.members.find(
+      (member) => member.userId === user?.id,
+    );
+  }
+
+  function canAddRecipe(cookbook: Cookbook) {
+    const membership = currentMembership(cookbook);
+
+    return (
+      cookbook.ownerId === user?.id ||
+      membership?.role === 'CREATOR' ||
+      membership?.role === 'EDITOR'
+    );
+  }
+
+  function canRemoveRecipe(
+    cookbook: Cookbook,
+    recipe: CookbookRecipe,
+  ) {
+    const membership = currentMembership(cookbook);
+
+    return (
+      cookbook.ownerId === user?.id ||
+      recipe.userId === user?.id ||
+      membership?.role === 'CREATOR' ||
+      membership?.role === 'EDITOR'
+    );
   }
 
   return (
@@ -212,7 +387,9 @@ function CookbooksPage() {
             <InputText
               placeholder="Rechercher..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
             />
           </span>
         )}
@@ -228,7 +405,11 @@ function CookbooksPage() {
         emptyMessage="Aucun cookbook."
         responsiveLayout="scroll"
       >
-        <Column field="name" header="Nom" sortable />
+        <Column
+          field="name"
+          header="Nom"
+          sortable
+        />
 
         <Column
           header="Créateur"
@@ -239,13 +420,17 @@ function CookbooksPage() {
 
         <Column
           header="Membres"
-          body={(cookbook: Cookbook) => cookbook.members.length}
+          body={(cookbook: Cookbook) =>
+            cookbook.members.length
+          }
           sortable
         />
 
         <Column
           header="Recettes"
-          body={(cookbook: Cookbook) => cookbook.recipes.length}
+          body={(cookbook: Cookbook) =>
+            cookbook.recipes.length
+          }
           sortable
         />
 
@@ -259,9 +444,29 @@ function CookbooksPage() {
                 text
                 aria-label="Voir"
                 tooltip="Voir"
-                tooltipOptions={{ position: 'top' }}
-                onClick={() => openDetailsDialog(cookbook)}
+                tooltipOptions={{
+                  position: 'top',
+                }}
+                onClick={() =>
+                  openDetailsDialog(cookbook)
+                }
               />
+
+              {canAddRecipe(cookbook) && (
+                <Button
+                  icon="pi pi-book"
+                  rounded
+                  text
+                  aria-label="Ajouter une recette"
+                  tooltip="Ajouter une recette"
+                  tooltipOptions={{
+                    position: 'top',
+                  }}
+                  onClick={() =>
+                    openRecipeDialog(cookbook)
+                  }
+                />
+              )}
 
               {isOwner(cookbook) && (
                 <>
@@ -271,8 +476,12 @@ function CookbooksPage() {
                     text
                     aria-label="Ajouter un membre"
                     tooltip="Ajouter un membre"
-                    tooltipOptions={{ position: 'top' }}
-                    onClick={() => openMemberDialog(cookbook)}
+                    tooltipOptions={{
+                      position: 'top',
+                    }}
+                    onClick={() =>
+                      openMemberDialog(cookbook)
+                    }
                   />
 
                   <Button
@@ -281,8 +490,12 @@ function CookbooksPage() {
                     text
                     aria-label="Modifier"
                     tooltip="Modifier"
-                    tooltipOptions={{ position: 'top' }}
-                    onClick={() => openEditDialog(cookbook)}
+                    tooltipOptions={{
+                      position: 'top',
+                    }}
+                    onClick={() =>
+                      openEditDialog(cookbook)
+                    }
                   />
 
                   <Button
@@ -292,8 +505,12 @@ function CookbooksPage() {
                     text
                     aria-label="Supprimer"
                     tooltip="Supprimer"
-                    tooltipOptions={{ position: 'top' }}
-                    onClick={() => confirmCookbookDelete(cookbook)}
+                    tooltipOptions={{
+                      position: 'top',
+                    }}
+                    onClick={() =>
+                      confirmCookbookDelete(cookbook)
+                    }
                   />
                 </>
               )}
@@ -309,16 +526,23 @@ function CookbooksPage() {
             : 'Nouveau cookbook'
         }
         visible={cookbookDialogVisible}
-        style={{ width: '32rem', maxWidth: '95vw' }}
+        style={{
+          width: '32rem',
+          maxWidth: '95vw',
+        }}
         modal
-        onHide={() => setCookbookDialogVisible(false)}
+        onHide={() =>
+          setCookbookDialogVisible(false)
+        }
         footer={
           <div className="flex justify-content-end gap-2">
             <Button
               label="Annuler"
               severity="secondary"
               outlined
-              onClick={() => setCookbookDialogVisible(false)}
+              onClick={() =>
+                setCookbookDialogVisible(false)
+              }
             />
 
             <Button
@@ -331,7 +555,10 @@ function CookbooksPage() {
           </div>
         }
       >
-        <label htmlFor="cookbook-name" className="block mb-2">
+        <label
+          htmlFor="cookbook-name"
+          className="block mb-2"
+        >
           Nom
         </label>
 
@@ -339,23 +566,32 @@ function CookbooksPage() {
           id="cookbook-name"
           className="w-full"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) =>
+            setName(event.target.value)
+          }
         />
       </Dialog>
 
       <Dialog
         header="Ajouter un membre"
         visible={memberDialogVisible}
-        style={{ width: '32rem', maxWidth: '95vw' }}
+        style={{
+          width: '32rem',
+          maxWidth: '95vw',
+        }}
         modal
-        onHide={() => setMemberDialogVisible(false)}
+        onHide={() =>
+          setMemberDialogVisible(false)
+        }
         footer={
           <div className="flex justify-content-end gap-2">
             <Button
               label="Annuler"
               severity="secondary"
               outlined
-              onClick={() => setMemberDialogVisible(false)}
+              onClick={() =>
+                setMemberDialogVisible(false)
+              }
             />
 
             <Button
@@ -370,7 +606,10 @@ function CookbooksPage() {
       >
         <div className="flex flex-column gap-3">
           <div>
-            <label htmlFor="member-email" className="block mb-2">
+            <label
+              htmlFor="member-email"
+              className="block mb-2"
+            >
               Adresse email
             </label>
 
@@ -379,12 +618,17 @@ function CookbooksPage() {
               type="email"
               className="w-full"
               value={memberEmail}
-              onChange={(event) => setMemberEmail(event.target.value)}
+              onChange={(event) =>
+                setMemberEmail(event.target.value)
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="member-role" className="block mb-2">
+            <label
+              htmlFor="member-role"
+              className="block mb-2"
+            >
               Rôle
             </label>
 
@@ -393,18 +637,89 @@ function CookbooksPage() {
               className="w-full"
               value={memberRole}
               options={roleOptions}
-              onChange={(event) => setMemberRole(event.value)}
+              onChange={(event) =>
+                setMemberRole(event.value)
+              }
             />
           </div>
         </div>
       </Dialog>
 
       <Dialog
+        header="Ajouter une recette"
+        visible={recipeDialogVisible}
+        style={{
+          width: '32rem',
+          maxWidth: '95vw',
+        }}
+        modal
+        onHide={() =>
+          setRecipeDialogVisible(false)
+        }
+        footer={
+          <div className="flex justify-content-end gap-2">
+            <Button
+              label="Annuler"
+              severity="secondary"
+              outlined
+              onClick={() =>
+                setRecipeDialogVisible(false)
+              }
+            />
+
+            <Button
+              label="Ajouter"
+              icon="pi pi-plus"
+              disabled={!selectedRecipeId}
+              onClick={() => {
+                void saveRecipe();
+              }}
+            />
+          </div>
+        }
+      >
+        {availableRecipes.length > 0 ? (
+          <>
+            <label
+              htmlFor="cookbook-recipe"
+              className="block mb-2"
+            >
+              Recette
+            </label>
+
+            <Dropdown
+              inputId="cookbook-recipe"
+              className="w-full"
+              value={selectedRecipeId}
+              options={availableRecipes}
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Sélectionner une recette"
+              filter
+              filterBy="name"
+              onChange={(event) =>
+                setSelectedRecipeId(event.value)
+              }
+            />
+          </>
+        ) : (
+          <p className="m-0 text-600">
+            Aucune recette personnelle disponible à ajouter.
+          </p>
+        )}
+      </Dialog>
+
+      <Dialog
         header={selectedCookbook?.name ?? 'Cookbook'}
         visible={detailsDialogVisible}
-        style={{ width: '55rem', maxWidth: '95vw' }}
+        style={{
+          width: '55rem',
+          maxWidth: '95vw',
+        }}
         modal
-        onHide={() => setDetailsDialogVisible(false)}
+        onHide={() =>
+          setDetailsDialogVisible(false)
+        }
       >
         {selectedCookbook && (
           <div className="flex flex-column gap-4">
@@ -419,14 +734,19 @@ function CookbooksPage() {
                 <Column
                   header="Utilisateur"
                   body={(member: CookbookMember) =>
-                    member.user?.email ?? member.userId
+                    member.user?.email ??
+                    member.userId
                   }
                 />
 
                 <Column
                   header="Rôle"
                   body={(member: CookbookMember) => (
-                    <Tag value={roleLabels[member.role]} />
+                    <Tag
+                      value={
+                        roleLabels[member.role]
+                      }
+                    />
                   )}
                 />
 
@@ -441,7 +761,9 @@ function CookbooksPage() {
                           rounded
                           text
                           tooltip="Retirer ce membre"
-                          tooltipOptions={{ position: 'top' }}
+                          tooltipOptions={{
+                            position: 'top',
+                          }}
                           onClick={() =>
                             confirmMemberDelete(
                               selectedCookbook,
@@ -457,20 +779,68 @@ function CookbooksPage() {
             </section>
 
             <section>
-              <h3>Recettes</h3>
+              <div className="flex align-items-center justify-content-between gap-3 mb-3">
+                <h3 className="m-0">
+                  Recettes
+                </h3>
+
+                {canAddRecipe(selectedCookbook) && (
+                  <Button
+                    label="Ajouter une recette"
+                    icon="pi pi-plus"
+                    size="small"
+                    onClick={() =>
+                      openRecipeDialog(
+                        selectedCookbook,
+                      )
+                    }
+                  />
+                )}
+              </div>
 
               <DataTable
                 value={selectedCookbook.recipes}
                 emptyMessage="Aucune recette dans ce cookbook."
                 stripedRows
               >
-                <Column field="name" header="Nom" />
+                <Column
+                  field="name"
+                  header="Nom"
+                />
 
                 <Column
                   field="description"
                   header="Description"
-                  body={(recipe: Cookbook['recipes'][number]) =>
+                  body={(recipe: CookbookRecipe) =>
                     recipe.description || '-'
+                  }
+                />
+
+                <Column
+                  header="Actions"
+                  body={(recipe: CookbookRecipe) =>
+                    canRemoveRecipe(
+                      selectedCookbook,
+                      recipe,
+                    ) ? (
+                      <Button
+                        icon="pi pi-times"
+                        severity="danger"
+                        rounded
+                        text
+                        aria-label="Retirer du cookbook"
+                        tooltip="Retirer du cookbook"
+                        tooltipOptions={{
+                          position: 'top',
+                        }}
+                        onClick={() =>
+                          confirmRecipeDelete(
+                            selectedCookbook,
+                            recipe,
+                          )
+                        }
+                      />
+                    ) : null
                   }
                 />
               </DataTable>
