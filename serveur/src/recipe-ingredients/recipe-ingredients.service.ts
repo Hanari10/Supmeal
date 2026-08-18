@@ -31,22 +31,31 @@ export class RecipeIngredientsService {
     return recipe;
   }
 
-  async create(
-    recipeId: string,
-    userId: string,
-    dto: CreateRecipeIngredientDto,
-  ) {
-    await this.checkRecipeAccess(recipeId, userId);
-
+  private async checkIngredientAccess(ingredientId: string, userId: string) {
     const ingredient = await this.prisma.ingredient.findUnique({
       where: {
-        id: dto.ingredientId,
+        id: ingredientId,
       },
     });
 
     if (!ingredient) {
       throw new NotFoundException('Ingrédient non trouvé.');
     }
+
+    if (ingredient.userId !== userId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cet ingrédient.");
+    }
+
+    return ingredient;
+  }
+
+  async create(
+    recipeId: string,
+    userId: string,
+    dto: CreateRecipeIngredientDto,
+  ) {
+    await this.checkRecipeAccess(recipeId, userId);
+    await this.checkIngredientAccess(dto.ingredientId, userId);
 
     const existingRecipeIngredient =
       await this.prisma.recipeIngredient.findUnique({
@@ -107,10 +116,17 @@ export class RecipeIngredientsService {
           ingredientId,
         },
       },
+      include: {
+        ingredient: true,
+      },
     });
 
     if (!recipeIngredient) {
       throw new NotFoundException('Ingrédient non trouvé dans la recette.');
+    }
+
+    if (recipeIngredient.ingredient.userId !== userId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cet ingrédient.");
     }
 
     return this.prisma.recipeIngredient.update({
@@ -141,10 +157,17 @@ export class RecipeIngredientsService {
           ingredientId,
         },
       },
+      include: {
+        ingredient: true,
+      },
     });
 
     if (!recipeIngredient) {
       throw new NotFoundException('Ingrédient non trouvé dans la recette.');
+    }
+
+    if (recipeIngredient.ingredient.userId !== userId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cet ingrédient.");
     }
 
     return this.prisma.recipeIngredient.delete({

@@ -38,6 +38,7 @@ model User {
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   recipes             Recipe[]
+  ingredients         Ingredient[]
   oauthAccounts       OAuthAccount[]
   shoppingList        ShoppingList?
   cookbooks           Cookbook[]
@@ -65,14 +66,19 @@ model OAuthAccount {
 
 model Ingredient {
   id                     String   @id @default(uuid())
-  name                   String   @unique
+  name                   String
   category               String?
   defaultMeasurementUnit String?
+  userId                 String   @db.Uuid
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
-  recipeIngredients RecipeIngredient[]
-  shoppingListItems ShoppingListItem[]
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipeIngredients  RecipeIngredient[]
+  shoppingListItems  ShoppingListItem[]
+
+  @@unique([userId, name])
+  @@index([userId])
 }
 
 model Recipe {

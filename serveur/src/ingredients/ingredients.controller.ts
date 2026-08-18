@@ -1,24 +1,31 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import {
-  ApiTags,
-  ApiOperation,
-  ApiCreatedResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
-import { IngredientsService } from './ingredients.service';
+import { AuthGuard } from '@nestjs/passport';
+
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { IngredientsService } from './ingredients.service';
 
 @ApiTags('Ingredients')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @Controller('ingredients')
 export class IngredientsController {
   constructor(private readonly ingredientsService: IngredientsService) {}
@@ -30,19 +37,22 @@ export class IngredientsController {
     description: 'Ingrédient créé avec succès.',
   })
   @ApiConflictResponse({
-    description: 'Un ingrédient avec ce nom existe déjà.',
+    description: 'Un ingrédient avec ce nom existe déjà pour cet utilisateur.',
   })
   @Post()
-  create(@Body() createIngredientDto: CreateIngredientDto) {
-    return this.ingredientsService.create(createIngredientDto);
+  create(
+    @Request() request: { user: { id: string; email: string } },
+    @Body() createIngredientDto: CreateIngredientDto,
+  ) {
+    return this.ingredientsService.create(request.user.id, createIngredientDto);
   }
 
   @ApiOperation({
-    summary: 'Récupérer tous les ingrédients',
+    summary: 'Récupérer les ingrédients de l’utilisateur connecté',
   })
   @Get()
-  findAll() {
-    return this.ingredientsService.findAll();
+  findAll(@Request() request: { user: { id: string; email: string } }) {
+    return this.ingredientsService.findAll(request.user.id);
   }
 
   @ApiOperation({
@@ -52,8 +62,11 @@ export class IngredientsController {
     description: 'Ingrédient introuvable.',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ingredientsService.findOne(id);
+  findOne(
+    @Request() request: { user: { id: string; email: string } },
+    @Param('id') id: string,
+  ) {
+    return this.ingredientsService.findOne(id, request.user.id);
   }
 
   @ApiOperation({
@@ -61,17 +74,25 @@ export class IngredientsController {
   })
   @Patch(':id')
   update(
+    @Request() request: { user: { id: string; email: string } },
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
   ) {
-    return this.ingredientsService.update(id, updateIngredientDto);
+    return this.ingredientsService.update(
+      id,
+      request.user.id,
+      updateIngredientDto,
+    );
   }
 
   @ApiOperation({
     summary: 'Supprimer un ingrédient',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ingredientsService.remove(id);
+  remove(
+    @Request() request: { user: { id: string; email: string } },
+    @Param('id') id: string,
+  ) {
+    return this.ingredientsService.remove(id, request.user.id);
   }
 }

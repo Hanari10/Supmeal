@@ -24,11 +24,11 @@ Ce manuel présente les principales fonctionnalités disponibles dans la version
 
 # 2. Accès à l'application
 
-Une fois SUPMEAL démarré, l'utilisatrice accède à l'application depuis son navigateur web.
+Une fois SUPMEAL démarré, l'utilisateur accède à l'application depuis son navigateur web.
 
 Les fonctionnalités personnelles nécessitent une authentification.
 
-Une utilisatrice ne possédant pas encore de compte doit commencer par en créer un.
+Un utilisateur ne possédant pas encore de compte doit commencer par en créer un.
 
 ---
 
@@ -48,7 +48,7 @@ Une fois les informations renseignées, valider la création du compte.
 
 Si les données sont valides, le compte est créé.
 
-L'utilisatrice peut ensuite se connecter à SUPMEAL.
+L'utilisateur peut ensuite se connecter à SUPMEAL.
 
 ---
 
@@ -60,7 +60,7 @@ Depuis la page de connexion :
 2. saisir le mot de passe ;
 3. sélectionner **Se connecter**.
 
-Si les identifiants sont corrects, l'utilisatrice accède à l'espace principal de SUPMEAL.
+Si les identifiants sont corrects, l'utilisateur accède à l'espace principal de SUPMEAL.
 
 En cas d'identifiants incorrects, un message indique que la connexion n'a pas pu aboutir.
 
@@ -91,6 +91,8 @@ Profil
 
 Chaque rubrique correspond à un domaine fonctionnel de l'application.
 
+Sur les écrans disposant d'une hauteur réduite, la barre latérale peut être parcourue verticalement afin de conserver l'accès à l'ensemble des rubriques et au bouton de déconnexion.
+
 ---
 
 # 6. Tableau de bord
@@ -99,11 +101,12 @@ Le tableau de bord constitue le point d'entrée principal après la connexion.
 
 Il permet d'accéder rapidement aux fonctionnalités importantes de l'application.
 
-Depuis le menu latéral, l'utilisatrice peut ensuite naviguer vers les différentes sections de SUPMEAL.
+Depuis le menu latéral, l'utilisateur peut ensuite naviguer vers les différentes sections de SUPMEAL.
 
 ### Aperçu du tableau de bord
 
 ![Tableau de bord de SUPMEAL](images/dashboard.png)
+
 ![Suite du tableau de bord de SUPMEAL](images/dashboard_2.png)
 
 ---
@@ -153,7 +156,7 @@ Lait : 500 ml
 
 # 8. Gestion des recettes
 
-La section **Recettes** regroupe les recettes de l'utilisatrice.
+La section **Recettes** regroupe les recettes de l'utilisateur.
 
 Elle permet notamment :
 
@@ -218,9 +221,9 @@ Exemple :
 
 # 10. Ajouter des ingrédients à une recette
 
-Lors de la création d'une recette, l'utilisatrice peut lui associer des ingrédients.
+Lors de la création d'une recette, l'utilisateur peut lui associer des ingrédients.
 
-Pour chaque ingrédient, elle peut renseigner :
+Pour chaque ingrédient, il peut renseigner :
 
 - l'ingrédient concerné ;
 - la quantité ;
@@ -279,6 +282,7 @@ Cette vue permet de consulter la recette sans entrer dans le formulaire de modif
 ### Aperçu d'une fiche recette
 
 ![Fiche détaillée d'une recette dans SUPMEAL](images/fiche_recette.png)
+
 ![Suite de la fiche détaillée d'une recette](images/fiche_recette_2.png)
 
 ---
@@ -289,7 +293,7 @@ Depuis la liste des recettes ou la fiche détaillée, utiliser le bouton **Modif
 
 Le formulaire de modification permet de mettre à jour les informations existantes.
 
-L'utilisatrice peut notamment modifier :
+L'utilisateur peut notamment modifier :
 
 - le nom ;
 - la description ;
@@ -309,16 +313,18 @@ Après les modifications, enregistrer la recette.
 ### Aperçu de la modification d'une recette
 
 ![Modification des informations d'une recette](images/modifier_recette.png)
+
 ![Modification des ingrédients d'une recette](images/modifier_recette_2.png)
+
 ![Suite du formulaire de modification d'une recette](images/modifier_recette_3.png)
 
 ---
 
 # 14. Modifier l'image d'une recette
 
-Depuis le formulaire de modification, l'utilisatrice peut remplacer l'image existante par une nouvelle image.
+Depuis le formulaire de modification, l'utilisateur peut remplacer l'image existante par une nouvelle image.
 
-Elle peut également retirer l'image de la recette.
+Il peut également retirer l'image de la recette.
 
 Après enregistrement, la modification est appliquée à la recette.
 
@@ -415,7 +421,7 @@ Depuis la page de planning, utiliser le bouton permettant d'ajouter une planific
 Sélectionner les informations demandées, notamment :
 
 - la recette ;
-- la date ;
+- le jour de la semaine ;
 - le type de repas ;
 - le nombre de portions.
 
@@ -495,7 +501,7 @@ Cela évite d'obtenir plusieurs lignes identiques pour un même produit.
 
 ## 20.3. Unités différentes
 
-La version actuelle ne convertit pas automatiquement toutes les unités compatibles.
+La version actuelle ne convertit pas automatiquement les unités compatibles.
 
 Par exemple :
 
@@ -504,7 +510,7 @@ Farine : 1000 g
 Farine : 1 kg
 ```
 
-ne sont pas nécessairement transformés automatiquement en :
+ne sont pas automatiquement transformés en :
 
 ```text
 Farine : 2 kg
@@ -512,21 +518,119 @@ Farine : 2 kg
 
 Cette conversion constitue une amélioration envisageable.
 
----
-
 # 21. Cookbooks
 
-La section **Cookbooks** permet de gérer des regroupements de recettes.
+La section **Cookbooks** permet de créer des espaces regroupant plusieurs recettes et plusieurs membres.
 
-L'utilisatrice peut accéder à ses cookbooks et utiliser les fonctionnalités disponibles depuis cette page.
+---
 
-Les fonctionnalités collaboratives avancées prévues dans le cahier des charges peuvent être complétées dans de futures versions de l'application.
+## 21.1. Créer un cookbook
 
-Cela concerne notamment :
+Depuis la page **Cookbooks**, sélectionner :
 
-- la messagerie instantanée ;
-- les commentaires ;
-- certaines permissions collaboratives avancées.
+**Nouveau cookbook**
+
+Renseigner le nom souhaité puis enregistrer.
+
+Le créateur devient automatiquement propriétaire du cookbook.
+
+Une notification confirme la création lorsque l'opération a réussi.
+
+---
+
+## 21.2. Consulter un cookbook
+
+Utiliser le bouton **Voir** associé au cookbook.
+
+La fenêtre affiche notamment :
+
+- les membres ;
+- leurs rôles ;
+- les recettes actuellement présentes dans le cookbook.
+
+---
+
+## 21.3. Ajouter un membre
+
+Le propriétaire du cookbook peut utiliser le bouton **Ajouter un membre**.
+
+Il doit renseigner :
+
+- l'adresse e-mail de l'utilisateur ;
+- le rôle à lui attribuer.
+
+Les rôles proposés sont :
+
+- éditeur ;
+- lecteur ;
+- commentateur.
+
+L'utilisateur ajouté doit déjà posséder un compte SUPMEAL.
+
+Après validation :
+
+- une notification confirme l'ajout si l'opération réussit ;
+- un message d'erreur est affiché si le compte n'existe pas ou si l'utilisateur est déjà membre du cookbook.
+
+---
+
+## 21.4. Retirer un membre
+
+Le propriétaire du cookbook peut retirer un membre depuis la liste des membres.
+
+Une confirmation est demandée avant le retrait.
+
+Après validation, une notification confirme l'opération.
+
+Le créateur du cookbook ne peut pas être retiré de son propre cookbook.
+
+---
+
+## 21.5. Ajouter une recette
+
+Un utilisateur disposant des droits nécessaires peut sélectionner **Ajouter une recette**.
+
+Une liste des recettes personnelles disponibles est proposée.
+
+Sélectionner la recette souhaitée puis valider.
+
+Une notification confirme l'ajout.
+
+La recette apparaît ensuite dans la section **Recettes** du cookbook.
+
+Une recette déjà associée à un autre cookbook doit d'abord être retirée de celui-ci avant de pouvoir être ajoutée à un nouveau cookbook.
+
+---
+
+## 21.6. Retirer une recette
+
+Depuis le détail d'un cookbook, utiliser le bouton permettant de retirer une recette.
+
+Une confirmation est demandée.
+
+Après validation, une notification confirme le retrait.
+
+La recette est uniquement retirée du cookbook : elle n'est pas supprimée du compte de son créateur.
+
+Elle redevient alors disponible en tant que recette personnelle.
+
+---
+
+## 21.7. Permissions
+
+Les actions disponibles dépendent du rôle de l'utilisateur.
+
+Les rôles `CREATOR` et `EDITOR` permettent notamment d'ajouter des recettes.
+
+Les rôles `READER` et `COMMENTER` disposent de droits plus limités.
+
+La gestion complète et détaillée de toutes les permissions reste partiellement limitée dans la version actuelle.
+
+Les fonctions collaboratives avancées comme les commentaires et la messagerie instantanée ne sont pas encore disponibles.
+
+### Aperçu de la gestion des cookbooks
+
+![Gestion des cookbooks dans SUPMEAL](images/cookbooks.png)
 
 ---
 
@@ -563,7 +667,7 @@ Depuis la même page, sélectionner la fonction d'import.
 
 Choisir un fichier compatible puis lancer l'import.
 
-Les données reconnues par SUPMEAL sont alors intégrées au compte de l'utilisatrice.
+Les données reconnues par SUPMEAL sont alors intégrées au compte de l'utilisateur.
 
 Il est recommandé de vérifier le contenu du fichier avant son import.
 
@@ -573,7 +677,13 @@ Il est recommandé de vérifier le contenu du fichier avant son import.
 
 La section **Profil** permet de consulter et modifier les informations liées au compte.
 
-Selon les informations disponibles dans l'application, l'utilisatrice peut mettre à jour ses données personnelles.
+Selon les informations disponibles dans l'application, l'utilisateur peut mettre à jour ses données personnelles.
+
+Il peut notamment modifier :
+
+- son prénom ;
+- son nom ;
+- son mot de passe.
 
 ---
 
@@ -589,17 +699,19 @@ Le mot de passe ne doit pas être communiqué à d'autres personnes.
 
 # 25. Déconnexion
 
-Lorsque l'utilisatrice a terminé d'utiliser SUPMEAL, elle peut utiliser la fonction de déconnexion.
+Lorsque l'utilisateur a terminé d'utiliser SUPMEAL, il peut utiliser la fonction **Déconnexion** située dans la barre latérale.
 
 La session active est alors terminée et l'application revient vers la partie publique ou la page de connexion.
 
 Sur un appareil partagé, il est recommandé de toujours se déconnecter après utilisation.
 
+Lorsque la hauteur de la fenêtre est insuffisante pour afficher toute la barre latérale, celle-ci peut être parcourue verticalement afin de conserver l'accès au bouton **Déconnexion**.
+
 ---
 
 # 26. Messages et confirmations
 
-SUPMEAL utilise différents messages pour informer l'utilisatrice du résultat de ses actions.
+SUPMEAL utilise différents messages pour informer l'utilisateur du résultat de ses actions.
 
 Des notifications peuvent notamment apparaître après :
 
@@ -608,10 +720,15 @@ Des notifications peuvent notamment apparaître après :
 - une suppression ;
 - l'ajout d'un favori ;
 - le retrait d'un favori ;
+- la création ou la modification d'un cookbook ;
+- l'ajout d'un membre à un cookbook ;
+- le retrait d'un membre d'un cookbook ;
+- l'ajout d'une recette à un cookbook ;
+- le retrait d'une recette d'un cookbook ;
 - une erreur de chargement ;
 - une erreur de validation.
 
-Certaines opérations sensibles, comme la suppression, utilisent également une demande de confirmation.
+Certaines opérations sensibles, comme les suppressions ou les retraits, utilisent également une demande de confirmation.
 
 ---
 
@@ -635,6 +752,10 @@ Pour profiter correctement des différentes fonctionnalités, un ordre d'utilisa
 7. Ajouter des recettes au planning
         ↓
 8. Générer la liste de courses
+        ↓
+9. Créer éventuellement un cookbook
+        ↓
+10. Ajouter des membres et des recettes au cookbook
 ```
 
 L'import peut également être utilisé pour récupérer directement des données existantes.
@@ -643,11 +764,11 @@ L'import peut également être utilisé pour récupérer directement des donnée
 
 # 28. Exemple de scénario complet
 
-Une utilisatrice souhaite préparer des crêpes.
+Un utilisateur souhaite préparer des crêpes.
 
 ### Étape 1 — Ingrédients
 
-Elle crée ou sélectionne :
+Il crée ou sélectionne :
 
 ```text
 Farine
@@ -658,7 +779,7 @@ Beurre
 
 ### Étape 2 — Recette
 
-Elle crée une recette :
+Il crée une recette :
 
 ```text
 Nom : Crêpes
@@ -667,7 +788,7 @@ Préparation : 15 minutes
 Cuisson : 20 minutes
 ```
 
-Puis elle associe :
+Puis il associe :
 
 ```text
 Farine : 250 g
@@ -676,19 +797,25 @@ Lait : 500 ml
 Beurre : 50 g
 ```
 
-Elle peut également ajouter une image.
+Il peut également ajouter une image.
 
 ### Étape 3 — Planning
 
-Elle ajoute la recette au planning pour le repas souhaité.
+Il ajoute la recette au planning pour le jour et le repas souhaités.
 
 ### Étape 4 — Liste de courses
 
-Elle génère la liste de courses depuis le planning.
+Il génère la liste de courses depuis le planning.
 
 SUPMEAL récupère automatiquement les ingrédients nécessaires.
 
 Si d'autres recettes planifiées utilisent les mêmes ingrédients avec les mêmes unités, les quantités sont regroupées.
+
+### Étape 5 — Cookbook
+
+L'utilisateur peut également créer un cookbook afin de regrouper cette recette avec d'autres recettes.
+
+Il peut ensuite ajouter des membres disposant de différents rôles et, selon les permissions, ajouter ou retirer des recettes du cookbook.
 
 ---
 
@@ -701,7 +828,9 @@ Elles comprennent notamment :
 - la connexion avec OAuth2 ;
 - la messagerie instantanée dans les cookbooks ;
 - les commentaires collaboratifs ;
+- le système complet d'invitations ;
 - certaines permissions avancées des cookbooks ;
+- la recherche propre à chaque cookbook ;
 - certaines préférences culinaires ;
 - la gestion avancée des allergies ;
 - la conversion automatique entre toutes les unités compatibles.
@@ -721,6 +850,26 @@ Vérifier :
 - que l'application est correctement démarrée.
 
 Si l'application est exécutée localement, le serveur et PostgreSQL doivent être disponibles.
+
+---
+
+## Impossible d'ajouter un membre à un cookbook
+
+Vérifier notamment :
+
+- que l'adresse e-mail renseignée correspond à un compte SUPMEAL existant ;
+- que l'utilisateur n'est pas déjà membre du cookbook ;
+- que l'utilisateur effectuant l'action est bien propriétaire du cookbook.
+
+---
+
+## Impossible d'ajouter une recette à un cookbook
+
+Vérifier notamment :
+
+- que la recette appartient à l'utilisateur ;
+- que la recette n'est pas déjà associée à un autre cookbook ;
+- que l'utilisateur possède le rôle nécessaire dans le cookbook.
 
 ---
 
@@ -778,7 +927,7 @@ peuvent être traités séparément dans la version actuelle.
 | Favoris | Marquer les recettes importantes |
 | Planning | Organiser les repas |
 | Liste de courses | Calculer les ingrédients nécessaires |
-| Cookbooks | Regrouper des recettes |
+| Cookbooks | Regrouper des recettes et gérer des membres |
 | Import | Ajouter des données depuis un fichier |
 | Export | Sauvegarder ou transférer les données |
 

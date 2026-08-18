@@ -77,7 +77,7 @@ SUPMEAL permet de planifier des recettes afin d'organiser les repas.
 L'utilisateur peut notamment :
 
 - ajouter une recette au planning ;
-- définir une date ;
+- définir un jour de la semaine ;
 - définir un type de repas ;
 - choisir le nombre de portions ;
 - modifier une planification ;
@@ -93,7 +93,24 @@ Par exemple, deux recettes nécessitant respectivement `200 g` et `300 g` de far
 
 ### Cookbooks
 
-L'application permet de gérer des cookbooks afin de regrouper des recettes.
+L'application permet de créer et gérer des cookbooks afin de regrouper des recettes.
+
+Selon son rôle dans le cookbook, un utilisateur peut notamment :
+
+- consulter les recettes du cookbook ;
+- ajouter une de ses recettes personnelles au cookbook ;
+- retirer une recette du cookbook sans la supprimer ;
+- gérer les membres du cookbook ;
+- consulter les rôles des membres.
+
+Les rôles actuellement utilisés sont :
+
+- créateur ;
+- éditeur ;
+- lecteur ;
+- commentateur.
+
+Les fonctionnalités collaboratives avancées comme les commentaires, la messagerie instantanée et les invitations complètes restent des évolutions possibles.
 
 ### Import et export
 
@@ -202,7 +219,10 @@ SUPMEAL/
 │   └── Dockerfile
 │
 ├── documentation/
+│   ├── images/
 │   ├── README.md
+│   ├── documentation-technique.md
+│   ├── manuel-utilisateur.md
 │   ├── conception.md
 │   ├── modele-de-donnees.md
 │   └── suivi-du-projet.md

@@ -175,15 +175,19 @@ La structure backend permet plusieurs filtres avancés, mais tous ne disposent p
 
 Exemple actuellement fonctionnel :
 
+```text
 Farine — 200 g
 Farine — 300 g
 
 → Farine — 500 g
+```
 
-Améioration future :
+Amélioration future :
 
+```text
 1000 g + 1 kg
 → 2 kg
+```
 
 ---
 
@@ -196,16 +200,25 @@ Améioration future :
 - [x] Gestion des membres
 - [x] Ajout d'un membre
 - [x] Retrait d'un membre
+- [x] Notifications lors de l'ajout ou du retrait d'un membre
+- [x] Affichage des recettes du cookbook
+- [x] Ajout d'une recette dans un cookbook
+- [x] Retrait d'une recette d'un cookbook
+- [x] Conservation de la recette après son retrait
+- [x] Contrôle des permissions d'ajout côté serveur
+- [x] Notifications lors de l'ajout ou du retrait d'une recette
 - [~] Gestion des rôles
-- [~] Gestion des permissions
+- [~] Gestion avancée des permissions
 - [ ] Système complet d'invitations
 - [ ] Recherche propre à chaque cookbook
 - [ ] Commentaires de recettes
 - [ ] Messagerie instantanée
 
-Les fondations des cookbooks sont présentes.
+Les cookbooks permettent désormais de regrouper réellement plusieurs recettes et plusieurs membres.
 
-Les fonctions collaboratives avancées restent incomplètes.
+Les rôles `CREATOR` et `EDITOR` peuvent ajouter des recettes.
+
+Les fonctionnalités collaboratives avancées restent à développer.
 
 ---
 
@@ -247,7 +260,6 @@ Les fonctions collaboratives avancées restent incomplètes.
 - [x] Page d'inscription retravaillée
 - [x] Page de profil retravaillée
 
-
 ---
 
 # 15. Backend
@@ -266,6 +278,7 @@ Les fonctions collaboratives avancées restent incomplètes.
 - [x] API REST
 - [x] Génération de liste de courses
 - [x] Import / export
+- [x] Gestion de l'ajout et du retrait des recettes dans les cookbooks
 - [~] Permissions avancées des cookbooks
 - [ ] OAuth2
 - [ ] Temps réel
@@ -321,8 +334,8 @@ Les fonctions collaboratives avancées restent incomplètes.
 - [x] Diagramme de cas d'utilisation
 - [x] Diagramme d'architecture
 - [x] Diagramme du modèle relationnel
-- [ ] Captures d'écran définitives
-- [ ] Vérification finale de cohérence
+- [x] Captures d'écran du manuel utilisateur
+- [~] Vérification finale de cohérence
 - [ ] Création de l'archive ZIP
 
 ---
@@ -431,6 +444,26 @@ Liste de courses
 
 ---
 
+## Recettes dans les cookbooks
+
+La première version des cookbooks permettait de créer un cookbook et de gérer ses membres, mais ne permettait pas réellement d'y ajouter ou d'en retirer des recettes.
+
+La fonctionnalité a ensuite été complétée côté serveur et côté client.
+
+Le serveur vérifie notamment :
+
+- l'existence du cookbook ;
+- l'appartenance de l'utilisateur au cookbook ;
+- son rôle ;
+- la propriété de la recette ;
+- l'association éventuelle de la recette à un autre cookbook.
+
+L'interface permet désormais d'ajouter et de retirer des recettes selon les permissions de l'utilisateur.
+
+Le retrait d'une recette remet son `cookbookId` à `null` sans supprimer la recette.
+
+---
+
 # 21. Fonctionnalités majeures terminées
 
 Les fonctionnalités principales finalisées dans la version actuelle sont :
@@ -444,7 +477,7 @@ Les fonctionnalités principales finalisées dans la version actuelle sont :
 - favoris ;
 - planning ;
 - liste de courses automatique ;
-- cookbooks ;
+- cookbooks et gestion de leurs recettes ;
 - import/export ;
 - Docker Compose ;
 - persistance ;
@@ -465,7 +498,7 @@ Les principales fonctions encore absentes ou partielles sont :
 - recherche et filtres avancés complets ;
 - préférences culinaires avancées ;
 - allergies ;
-- normalisation des unités ;
+- normalisation et conversion des unités ;
 - tests automatisés complets ;
 - déploiement public.
 
@@ -496,19 +529,23 @@ Les builds du frontend et du backend ont été validés.
 
 Les contrôles ESLint ont également été validés avant la finalisation de la documentation.
 
+Les captures d'écran nécessaires au manuel utilisateur ont été réalisées.
+
+La documentation fait actuellement l'objet d'une dernière vérification de cohérence avec l'application.
+
 Le projet est désormais dans une phase de finalisation du rendu.
 
 ---
 
 # 25. Étapes restantes avant rendu
 
-- [ ] Ajouter les captures d'écran au manuel utilisateur
+- [x] Ajouter les captures d'écran au manuel utilisateur
+- [~] Vérifier la cohérence de toute la documentation
 - [ ] Vérifier tous les secrets
 - [ ] Vérifier le dépôt Git
-- [ ] Vérifier le lancement avec `docker compose up`
-- [ ] Vérifier la cohérence de toute la documentation
-- [ ] Faire un dernier commit documentation
-- [ ] Faire un dernier push
+- [ ] Vérifier le lancement complet avec `docker compose up`
+- [ ] Faire le dernier commit de documentation
+- [ ] Faire le dernier push
 - [ ] Créer l'archive ZIP
 - [ ] Passer le dépôt Git en public au moment du rendu
 

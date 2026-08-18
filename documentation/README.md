@@ -34,20 +34,24 @@ Elle présente notamment :
 
 ### `manuel-utilisateur.md`
 
-Le manuel utilisateur explique le fonctionnement de SUPMEAL du point de vue d'une utilisatrice de l'application.
+Le manuel utilisateur explique le fonctionnement de SUPMEAL du point de vue d'un utilisateur de l'application.
 
 Il décrit notamment :
 
 - la création d'un compte ;
-- la connexion ;
+- la connexion et la déconnexion ;
 - la navigation dans l'application ;
 - la gestion du profil ;
 - la gestion des ingrédients ;
-- la création et la gestion des recettes ;
+- la création, la consultation, la modification et la suppression des recettes ;
+- la gestion des ingrédients et des images des recettes ;
+- la recherche ;
 - les favoris ;
 - le planning des repas ;
 - la génération et la gestion de la liste de courses ;
-- les cookbooks ;
+- la création et la gestion des cookbooks ;
+- la gestion des membres et de leurs rôles ;
+- l'ajout et le retrait de recettes dans les cookbooks ;
 - l'import et l'export des données.
 
 ---
@@ -139,7 +143,7 @@ SUPMEAL repose sur trois composants principaux :
 └──────────────────────────┘
 ```
 
-Le client web sert d'interface avec l'utilisatrice.
+Le client web sert d'interface avec l'utilisateur.
 
 La logique métier et les contrôles d'accès sont réalisés par le serveur.
 

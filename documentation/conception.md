@@ -4,7 +4,7 @@
 
 SUPMEAL est une application web de gestion de recettes et de planification de repas développée dans le cadre d'un projet individuel SUPINFO.
 
-L'application a pour objectif de permettre à une utilisatrice de centraliser ses recettes, leurs ingrédients et ses repas au sein d'une interface unique.
+L'application a pour objectif de permettre à un utilisateur de centraliser ses recettes, leurs ingrédients et ses repas au sein d'une interface unique.
 
 Elle permet notamment de :
 
@@ -36,7 +36,7 @@ Les principaux objectifs retenus lors de la conception de SUPMEAL sont :
 - limiter la duplication du code ;
 - utiliser un modèle de données relationnel adapté ;
 - assurer la persistance des données ;
-- protéger les données personnelles des utilisatrices ;
+- protéger les données personnelles des utilisateurs ;
 - permettre l'évolution future vers davantage de fonctionnalités collaboratives.
 
 ---
@@ -123,7 +123,7 @@ Prisma ORM sert d'interface entre NestJS et PostgreSQL.
 
 Le modèle relationnel permet notamment de représenter :
 
-- les utilisatrices ;
+- les utilisateurs ;
 - les recettes ;
 - les ingrédients ;
 - les relations entre recettes et ingrédients ;
@@ -156,7 +156,7 @@ client/src/
 
 ## 5.1. Pages
 
-Les pages représentent les principales interfaces disponibles pour l'utilisatrice.
+Les pages représentent les principales interfaces disponibles pour l'utilisateur.
 
 Parmi elles :
 
@@ -193,6 +193,7 @@ favoriteService
 mealPlanService
 dataTransferService
 authService
+cookbookService
 ```
 
 ---
@@ -277,7 +278,7 @@ Ils permettent par exemple de contrôler :
 
 ## 7.1. Compte utilisateur
 
-Une utilisatrice peut créer un compte avec une adresse e-mail et un mot de passe.
+Un utilisateur peut créer un compte avec une adresse e-mail et un mot de passe.
 
 L'adresse e-mail permet d'identifier le compte.
 
@@ -307,9 +308,9 @@ Le JWT permet ensuite d'accéder aux routes protégées.
 
 ## 7.3. Profil
 
-L'utilisatrice peut gérer certaines informations personnelles depuis la page Profil.
+L'utilisateur peut gérer certaines informations personnelles depuis la page Profil.
 
-Elle peut également modifier son mot de passe.
+Il peut également modifier son mot de passe.
 
 ---
 
@@ -350,7 +351,7 @@ Une recette contient notamment :
 
 Dans la version actuelle, les instructions sont enregistrées comme un contenu textuel associé à la recette.
 
-Cela permet à l'utilisatrice de renseigner librement les différentes étapes.
+Cela permet à l'utilisateur de renseigner librement les différentes étapes.
 
 Exemple :
 
@@ -458,7 +459,7 @@ Cette approche évite de stocker directement de gros fichiers binaires dans la b
 
 # 11. Gestion des favoris
 
-Les favoris sont propres à chaque utilisatrice.
+Les favoris sont propres à chaque utilisateur.
 
 L'information n'est donc pas stockée directement dans la recette.
 
@@ -474,7 +475,7 @@ Favorite
 Recipe
 ```
 
-Ainsi, une même recette peut être favorite pour une utilisatrice sans l'être pour une autre.
+Ainsi, une même recette peut être favorite pour un utilisateur sans l'être pour un autre.
 
 ---
 
@@ -500,7 +501,7 @@ Une planification associe une recette à un repas.
 Elle contient notamment :
 
 - la recette ;
-- le moment planifié ;
+- le jour de la semaine ;
 - le type de repas ;
 - le nombre de portions.
 
@@ -516,7 +517,7 @@ MealPlan
 Recipe
 ```
 
-Une utilisatrice peut :
+Un utilisateur peut :
 
 - ajouter un repas ;
 - modifier une planification ;
@@ -568,7 +569,9 @@ Cette conception limite les doublons dans la liste de courses.
 
 ## 14.2. Gestion des unités
 
-Pour éviter des conversions incorrectes, les quantités ne sont regroupées que lorsque leur représentation est compatible.
+Pour éviter des conversions incorrectes, les quantités ne sont regroupées que lorsque leur unité est identique.
+
+La version actuelle ne réalise pas de conversion automatique entre des unités compatibles.
 
 Une évolution future pourrait implémenter une normalisation des unités.
 
@@ -585,7 +588,7 @@ Exemple :
 
 Les cookbooks permettent de créer des regroupements de recettes et d'ouvrir l'application à des usages collaboratifs.
 
-La version actuelle permet de gérer les cookbooks et leurs membres selon les fonctions effectivement disponibles dans l'application.
+La version actuelle permet de gérer les cookbooks, leurs membres et les recettes qui leur sont associées selon les fonctions effectivement disponibles dans l'application.
 
 ---
 
@@ -593,7 +596,7 @@ La version actuelle permet de gérer les cookbooks et leurs membres selon les fo
 
 La conception initiale prévoyait plusieurs rôles :
 
-- propriétaire ;
+- créateur ;
 - éditeur ;
 - commentateur ;
 - lecteur.
@@ -605,17 +608,64 @@ Elle prévoyait également :
 - des commentaires ;
 - une messagerie.
 
-Ces éléments faisaient partie du modèle conceptuel initial. :contentReference[oaicite:2]{index=2}
+Ces éléments faisaient partie du modèle conceptuel initial.
 
 ---
 
 ## 15.2. Version actuelle
 
-La version actuelle conserve les éléments principaux nécessaires à la gestion des cookbooks.
+La version actuelle permet :
 
-Les fonctions collaboratives avancées sont considérées comme des évolutions possibles.
+- de créer un cookbook ;
+- de consulter les cookbooks auxquels l'utilisateur appartient ;
+- de modifier ou supprimer un cookbook lorsqu'il en est propriétaire ;
+- d'ajouter et de retirer des membres ;
+- d'attribuer différents rôles aux membres ;
+- d'afficher les recettes présentes dans un cookbook ;
+- d'ajouter une recette personnelle dans un cookbook ;
+- de retirer une recette d'un cookbook sans supprimer la recette.
 
-Cette distinction permet de conserver la conception initiale sans présenter comme terminées des fonctionnalités qui ne le sont pas.
+L'ajout et le retrait des recettes respectent les permissions définies par le serveur.
+
+Les rôles `CREATOR` et `EDITOR` peuvent notamment ajouter des recettes dans un cookbook.
+
+Une recette est liée à un cookbook grâce au champ :
+
+```text
+Recipe.cookbookId
+```
+
+Lorsqu'une recette est ajoutée à un cookbook, son champ `cookbookId` reçoit l'identifiant du cookbook concerné.
+
+Le fonctionnement peut être représenté ainsi :
+
+```text
+Recette personnelle
+        ↓
+Ajout au cookbook
+        ↓
+Recipe.cookbookId = cookbook.id
+```
+
+Lorsqu'une recette est retirée d'un cookbook :
+
+```text
+Recipe.cookbookId = null
+```
+
+La recette n'est donc pas supprimée. Elle redevient une recette personnelle et peut à nouveau être ajoutée à un cookbook.
+
+Les contrôles de permissions sont effectués côté serveur afin d'empêcher un utilisateur non autorisé d'effectuer une opération, même s'il tente d'appeler directement l'API.
+
+L'interface adapte également les actions proposées selon les permissions de l'utilisateur.
+
+Les fonctions collaboratives suivantes restent des évolutions possibles :
+
+- système complet d'invitations ;
+- commentaires sur les recettes ;
+- messagerie instantanée ;
+- gestion plus avancée et plus granulaire des permissions ;
+- recherche propre à chaque cookbook.
 
 ---
 
@@ -636,7 +686,7 @@ L'export produit un fichier interprétable contenant les données sélectionnée
 
 Comme prévu dans le cahier des charges, les données exportées peuvent être lisibles directement.
 
-L'utilisatrice doit donc être consciente que le fichier doit être conservé avec précaution.
+L'utilisateur doit donc être conscient que le fichier doit être conservé avec précaution.
 
 Aucun secret d'authentification n'est destiné à être exporté.
 
@@ -719,7 +769,9 @@ Menu latéral | Contenu
 
 La barre latérale reste fixe afin de conserver un accès permanent aux différentes fonctionnalités de l'application.
 
-Lorsque la hauteur disponible n'est pas suffisante pour afficher l'ensemble des éléments du menu, la barre latérale devient défilable verticalement. Cela garantit notamment que les informations de l'utilisatrice connectée et le bouton de déconnexion restent toujours accessibles, quelle que soit la hauteur de la fenêtre.
+Lorsque la hauteur disponible n'est pas suffisante pour afficher l'ensemble des éléments du menu, la barre latérale devient défilable verticalement.
+
+Cela garantit notamment que les informations de l'utilisateur connecté et le bouton de déconnexion restent toujours accessibles, quelle que soit la hauteur de la fenêtre.
 
 Sur un écran plus petit, la navigation principale est remplacée par un menu mobile pouvant être ouvert à l'aide du bouton prévu à cet effet.
 
@@ -737,6 +789,7 @@ Les principales règles sont :
 - JWT pour les routes privées ;
 - validation des données côté serveur ;
 - contrôle des propriétaires des ressources ;
+- contrôle des permissions sur certaines ressources partagées ;
 - absence de secret dans le dépôt ;
 - accès à PostgreSQL uniquement depuis le serveur ;
 - fichiers utilisateurs séparés du code source.
@@ -787,7 +840,14 @@ L'application utilise plusieurs niveaux de gestion d'erreur.
 
 ### Client
 
-Le client affiche un message compréhensible à l'utilisatrice.
+Le client affiche un message compréhensible à l'utilisateur.
+
+Il peut notamment afficher :
+
+- une notification de succès ;
+- une notification d'erreur ;
+- une demande de confirmation ;
+- un message lorsque certaines données sont manquantes ou incorrectes.
 
 ### Serveur
 
@@ -796,6 +856,7 @@ Le serveur vérifie :
 - l'existence des ressources ;
 - les données reçues ;
 - l'accès aux ressources ;
+- les permissions ;
 - les conflits éventuels.
 
 ### Base
@@ -828,7 +889,7 @@ Cette organisation permet d'ajouter ou de modifier un domaine sans concentrer to
 ```mermaid
 flowchart LR
 
-    U[Utilisatrice]
+    U[Utilisateur]
 
     U --> AUTH[S'authentifier]
     U --> PROF[Gérer son profil]
@@ -854,6 +915,10 @@ flowchart LR
     SHOP --> AUTO[Générer depuis le planning]
 
     U --> COOK[Gérer les cookbooks]
+    COOK --> COOK1[Créer un cookbook]
+    COOK --> COOK2[Gérer les membres]
+    COOK --> COOK3[Ajouter une recette]
+    COOK --> COOK4[Retirer une recette]
 
     U --> IMP[Importer]
     U --> EXP[Exporter]
@@ -866,7 +931,7 @@ flowchart LR
 ```mermaid
 sequenceDiagram
 
-    actor U as Utilisatrice
+    actor U as Utilisateur
     participant F as Client React
     participant A as API NestJS
     participant D as PostgreSQL
@@ -898,10 +963,9 @@ flowchart TD
     P --> R[Recettes planifiées]
 
     R --> RI[RecipeIngredients]
-
     RI --> Q[Calcul des quantités]
 
-    Q --> G[Regroupement des ingrédients compatibles]
+    Q --> G[Regroupement des ingrédients de même unité]
 
     G --> S[Liste de courses]
 ```
@@ -920,9 +984,10 @@ Certaines fonctions prévues dans la conception initiale restent à développer 
 - préférences culinaires ;
 - allergies ;
 - certains filtres avancés ;
+- recherche propre à chaque cookbook ;
 - conversion automatique des unités.
 
-La conception initiale prévoyait bien l'authentification OAuth2 ainsi que les commentaires et la messagerie. :contentReference[oaicite:3]{index=3} :contentReference[oaicite:4]{index=4}
+La conception initiale prévoyait bien l'authentification OAuth2 ainsi que les commentaires et la messagerie.
 
 Ces fonctions peuvent être intégrées ultérieurement grâce à l'architecture modulaire choisie.
 
@@ -937,7 +1002,8 @@ Parmi les évolutions possibles :
 - messagerie temps réel avec WebSocket ;
 - commentaires par recette ;
 - système complet de permissions ;
-- invitations par lien ou e-mail.
+- invitations par lien ou e-mail ;
+- recherche dédiée à chaque cookbook.
 
 ### Cuisine
 

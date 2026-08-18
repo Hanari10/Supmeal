@@ -98,18 +98,30 @@ function CookbooksPage() {
     let cancelled = false;
 
     async function loadInitialData() {
-      const [cookbooksData, recipesData] = await Promise.all([
-        getCookbooks(),
-        getRecipes(),
-      ]);
+      try {
+        const [cookbooksData, recipesData] = await Promise.all([
+          getCookbooks(),
+          getRecipes(),
+        ]);
 
-      if (cancelled) {
-        return;
+        if (cancelled) {
+          return;
+        }
+
+        setCookbooks(cookbooksData);
+        setRecipes(recipesData);
+      } catch {
+        if (!cancelled) {
+          showError(
+            'Chargement impossible',
+            'Les cookbooks n’ont pas pu être chargés.',
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
-
-      setCookbooks(cookbooksData);
-      setRecipes(recipesData);
-      setLoading(false);
     }
 
     void loadInitialData();
@@ -117,7 +129,7 @@ function CookbooksPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [showError]);
 
   const filteredCookbooks = useMemo(() => {
     const value = search.trim().toLowerCase();
@@ -179,35 +191,87 @@ function CookbooksPage() {
     const trimmedName = name.trim();
 
     if (!trimmedName) {
+      showError(
+        'Nom obligatoire',
+        'Le cookbook doit posséder un nom.',
+      );
       return;
     }
 
-    if (selectedCookbook) {
-      await updateCookbook(selectedCookbook.id, {
-        name: trimmedName,
-      });
-    } else {
-      await createCookbook({
-        name: trimmedName,
-      });
-    }
+    try {
+      if (selectedCookbook) {
+        await updateCookbook(selectedCookbook.id, {
+          name: trimmedName,
+        });
 
-    setCookbookDialogVisible(false);
-    await loadCookbooks();
+        showSuccess(
+          'Cookbook modifié',
+          `Le cookbook « ${trimmedName} » a été modifié.`,
+        );
+      } else {
+        await createCookbook({
+          name: trimmedName,
+        });
+
+        showSuccess(
+          'Cookbook créé',
+          `Le cookbook « ${trimmedName} » a été créé.`,
+        );
+      }
+
+      setCookbookDialogVisible(false);
+      await loadCookbooks();
+    } catch {
+      showError(
+        'Enregistrement impossible',
+        'Le cookbook n’a pas pu être enregistré.',
+      );
+    }
   }
 
   async function saveMember() {
     if (!selectedCookbook || !memberEmail.trim()) {
+      showError(
+        'Informations manquantes',
+        'Veuillez renseigner une adresse e-mail.',
+      );
       return;
     }
 
-    await addCookbookMember(selectedCookbook.id, {
-      email: memberEmail.trim(),
-      role: memberRole,
-    });
+    const email = memberEmail.trim();
+    const cookbookId = selectedCookbook.id;
+    const cookbookName = selectedCookbook.name;
 
-    setMemberDialogVisible(false);
-    await loadCookbooks();
+    try {
+      await addCookbookMember(cookbookId, {
+        email,
+        role: memberRole,
+      });
+
+      const updatedCookbooks = await getCookbooks();
+
+      setCookbooks(updatedCookbooks);
+
+      const updatedCookbook = updatedCookbooks.find(
+        (cookbook) => cookbook.id === cookbookId,
+      );
+
+      setSelectedCookbook(updatedCookbook ?? null);
+
+      setMemberDialogVisible(false);
+      setMemberEmail('');
+      setMemberRole('READER');
+
+      showSuccess(
+        'Membre ajouté',
+        `${email} a été ajouté au cookbook « ${cookbookName} ».`,
+      );
+    } catch {
+      showError(
+        'Ajout impossible',
+        'Le membre n’a pas pu être ajouté. Vérifiez que cette adresse correspond à un compte SUPMEAL existant et que l’utilisateur n’est pas déjà membre du cookbook.',
+      );
+    }
   }
 
   async function saveRecipe() {
@@ -259,8 +323,25 @@ function CookbooksPage() {
       rejectLabel: 'Annuler',
       acceptClassName: 'p-button-danger',
       accept: async () => {
-        await deleteCookbook(cookbook.id);
-        await loadCookbooks();
+        try {
+          await deleteCookbook(cookbook.id);
+          await loadCookbooks();
+
+          if (selectedCookbook?.id === cookbook.id) {
+            setSelectedCookbook(null);
+            setDetailsDialogVisible(false);
+          }
+
+          showSuccess(
+            'Cookbook supprimé',
+            `Le cookbook « ${cookbook.name} » a été supprimé.`,
+          );
+        } catch {
+          showError(
+            'Suppression impossible',
+            'Le cookbook n’a pas pu être supprimé.',
+          );
+        }
       },
     });
   }
@@ -269,28 +350,44 @@ function CookbooksPage() {
     cookbook: Cookbook,
     member: CookbookMember,
   ) {
+    const memberEmail =
+      member.user?.email ?? 'Cet utilisateur';
+
     confirmDialog({
-      message: 'Supprimer ce membre du cookbook ?',
+      message: `Retirer ${memberEmail} du cookbook « ${cookbook.name} » ?`,
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Supprimer',
+      acceptLabel: 'Retirer',
       rejectLabel: 'Annuler',
       acceptClassName: 'p-button-danger',
+
       accept: async () => {
-        await removeCookbookMember(
-          cookbook.id,
-          member.id,
-        );
+        try {
+          await removeCookbookMember(
+            cookbook.id,
+            member.id,
+          );
 
-        const updatedCookbooks = await getCookbooks();
+          const updatedCookbooks = await getCookbooks();
 
-        setCookbooks(updatedCookbooks);
+          setCookbooks(updatedCookbooks);
 
-        const updatedCookbook = updatedCookbooks.find(
-          (item) => item.id === cookbook.id,
-        );
+          const updatedCookbook = updatedCookbooks.find(
+            (item) => item.id === cookbook.id,
+          );
 
-        setSelectedCookbook(updatedCookbook ?? null);
+          setSelectedCookbook(updatedCookbook ?? null);
+
+          showSuccess(
+            'Membre retiré',
+            `${memberEmail} a été retiré du cookbook « ${cookbook.name} ».`,
+          );
+        } catch {
+          showError(
+            'Suppression impossible',
+            'Le membre n’a pas pu être retiré du cookbook.',
+          );
+        }
       },
     });
   }
@@ -306,6 +403,7 @@ function CookbooksPage() {
       acceptLabel: 'Retirer',
       rejectLabel: 'Annuler',
       acceptClassName: 'p-button-danger',
+
       accept: async () => {
         try {
           const updatedCookbook =
@@ -597,6 +695,7 @@ function CookbooksPage() {
             <Button
               label="Ajouter"
               icon="pi pi-user-plus"
+              disabled={!memberEmail.trim()}
               onClick={() => {
                 void saveMember();
               }}

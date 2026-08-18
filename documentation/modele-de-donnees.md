@@ -20,7 +20,7 @@ Ce fichier constitue la référence technique principale du schéma réellement 
 
 Le modèle de données doit permettre de représenter les principaux domaines fonctionnels de SUPMEAL :
 
-- les utilisatrices ;
+- les utilisateurs ;
 - l'authentification ;
 - les recettes ;
 - les ingrédients ;
@@ -72,6 +72,7 @@ MealType
 erDiagram
 
     User ||--o{ Recipe : possede
+    User ||--o{ Ingredient : possede
     User ||--o{ OAuthAccount : possede
     User ||--o| ShoppingList : possede
     User ||--o{ Cookbook : cree
@@ -99,7 +100,7 @@ erDiagram
 
 ---
 
-# 5. Utilisatrice — `User`
+# 5. Utilisateur — `User`
 
 La table `User` représente un compte utilisateur de SUPMEAL.
 
@@ -132,9 +133,10 @@ L'adresse e-mail est unique.
 
 ## Relations
 
-Une utilisatrice peut posséder :
+Un utilisateur peut posséder :
 
 - plusieurs recettes ;
+- plusieurs ingrédients ;
 - plusieurs comptes OAuth ;
 - une liste de courses ;
 - plusieurs cookbooks créés ;
@@ -157,7 +159,7 @@ Le modèle `OAuthAccount` est prévu pour associer un compte SUPMEAL à un fourn
 | `provider` | String | Fournisseur OAuth |
 | `providerAccountId` | String | Identifiant chez le fournisseur |
 | `createdAt` | DateTime | Date de création |
-| `userId` | UUID | Utilisatrice associée |
+| `userId` | UUID | Utilisateur associé |
 
 La combinaison suivante est unique :
 
@@ -189,10 +191,9 @@ Le modèle `Ingredient` représente un ingrédient réutilisable.
 | `name` | String | Nom unique |
 | `category` | String? | Catégorie éventuelle |
 | `defaultMeasurementUnit` | String? | Unité par défaut |
+| `userId` | UUID | Propriétaire de l'ingrédient |
 | `createdAt` | DateTime | Date de création |
 | `updatedAt` | DateTime | Date de modification |
-
-Le champ `name` est unique.
 
 ---
 
@@ -202,6 +203,7 @@ Le champ `name` est unique.
 name = "Farine"
 category = "Épicerie"
 defaultMeasurementUnit = "g"
+userId = identifiant de l'utilisateur
 ```
 
 ---
@@ -251,7 +253,7 @@ false
 
 ## Remarque sur les favoris
 
-La gestion réellement utilisée des favoris repose sur le modèle `Favorite`, qui relie une utilisatrice à une recette.
+La gestion réellement utilisée des favoris repose sur le modèle `Favorite`, qui relie un utilisateur à une recette.
 
 Le champ booléen `favorite` présent dans `Recipe` est donc redondant avec le modèle relationnel actuel.
 
@@ -263,7 +265,7 @@ Il pourrait être supprimé lors d'une future migration afin d'éviter toute amb
 
 Une recette appartient à :
 
-- une utilisatrice ;
+- un utilisateur ;
 - éventuellement un cookbook.
 
 Elle peut posséder :
@@ -273,6 +275,10 @@ Elle peut posséder :
 - plusieurs commentaires ;
 - plusieurs favoris ;
 - plusieurs ingrédients.
+
+Une recette ne peut actuellement être associée qu'à un seul cookbook à la fois grâce au champ facultatif `cookbookId`.
+
+Lorsqu'elle est retirée d'un cookbook, ce champ peut être remis à `null` sans supprimer la recette.
 
 ---
 
@@ -335,7 +341,7 @@ onDelete: Cascade
 
 # 10. Liste de courses — `ShoppingList`
 
-Chaque utilisatrice peut posséder une liste de courses.
+Chaque utilisateur peut posséder une liste de courses.
 
 ## Champs
 
@@ -352,7 +358,7 @@ Chaque utilisatrice peut posséder une liste de courses.
 
 `userId` est unique.
 
-Cela signifie qu'une utilisatrice possède au maximum une liste de courses principale.
+Cela signifie qu'un utilisateur possède au maximum une liste de courses principale.
 
 ---
 
@@ -412,19 +418,25 @@ Un cookbook possède :
 
 - plusieurs recettes ;
 - plusieurs membres ;
-- une propriétaire.
+- un propriétaire.
+
+Les recettes sont associées au cookbook via leur champ `cookbookId`.
 
 ---
 
 ## Suppression
 
-La suppression de la propriétaire entraîne une suppression en cascade du cookbook dans le schéma actuel.
+La suppression du propriétaire entraîne une suppression en cascade du cookbook dans le schéma actuel.
+
+En revanche, la suppression du cookbook ne supprime pas automatiquement les recettes qui lui sont associées.
+
+Leur champ `cookbookId` est remis à `null`.
 
 ---
 
 # 13. Membre d'un cookbook — `CookbookMember`
 
-Cette table représente l'appartenance d'une utilisatrice à un cookbook.
+Cette table représente l'appartenance d'un utilisateur à un cookbook.
 
 ## Champs
 
@@ -432,7 +444,7 @@ Cette table représente l'appartenance d'une utilisatrice à un cookbook.
 | --- | --- | --- |
 | `id` | String | Identifiant |
 | `cookbookId` | String | Cookbook |
-| `userId` | UUID | Utilisatrice |
+| `userId` | UUID | Utilisateur |
 | `role` | String | Rôle |
 
 ---
@@ -447,7 +459,7 @@ cookbookId + userId
 
 est unique.
 
-Une utilisatrice ne peut donc être ajoutée qu'une seule fois au même cookbook.
+Un utilisateur ne peut donc être ajouté qu'une seule fois au même cookbook.
 
 ---
 
@@ -455,16 +467,20 @@ Une utilisatrice ne peut donc être ajoutée qu'une seule fois au même cookbook
 
 Le champ `role` est actuellement une chaîne de caractères.
 
-Une amélioration possible consisterait à utiliser un enum Prisma dédié afin de limiter les valeurs possibles.
-
-Exemple :
+La version actuelle de l'application utilise notamment les valeurs suivantes :
 
 ```text
-OWNER
+CREATOR
 EDITOR
 COMMENTER
 READER
 ```
+
+Le propriétaire du cookbook est enregistré comme membre avec le rôle `CREATOR`.
+
+Les rôles `CREATOR` et `EDITOR` permettent notamment d'ajouter des recettes au cookbook.
+
+Une amélioration possible consisterait à utiliser un enum Prisma dédié afin de limiter les valeurs possibles.
 
 ---
 
@@ -478,7 +494,7 @@ Le modèle existe pour représenter les commentaires associés à une recette.
 | --- | --- | --- |
 | `id` | String | Identifiant |
 | `recipeId` | String | Recette |
-| `userId` | UUID | Auteure |
+| `userId` | UUID | Auteur |
 | `content` | String | Contenu |
 | `createdAt` | DateTime | Création |
 | `updatedAt` | DateTime | Modification |
@@ -490,7 +506,7 @@ Le modèle existe pour représenter les commentaires associés à une recette.
 Chaque commentaire appartient :
 
 - à une recette ;
-- à une utilisatrice.
+- à un utilisateur.
 
 Les deux relations utilisent une suppression en cascade.
 
@@ -549,13 +565,13 @@ Une même association ne peut donc apparaître qu'une seule fois.
 
 # 17. Favori — `Favorite`
 
-Le modèle `Favorite` permet à une utilisatrice de marquer une recette comme favorite.
+Le modèle `Favorite` permet à un utilisateur de marquer une recette comme favorite.
 
 ## Champs
 
 | Champ | Type | Description |
 | --- | --- | --- |
-| `userId` | UUID | Utilisatrice |
+| `userId` | UUID | Utilisateur |
 | `recipeId` | String | Recette |
 | `createdAt` | DateTime | Date d'ajout |
 
@@ -569,13 +585,13 @@ La clé primaire est composée de :
 userId + recipeId
 ```
 
-Une même recette ne peut donc être ajoutée qu'une seule fois aux favoris d'une même utilisatrice.
+Une même recette ne peut donc être ajoutée qu'une seule fois aux favoris d'un même utilisateur.
 
 ---
 
 ## Suppression
 
-Si l'utilisatrice ou la recette est supprimée, le favori associé est supprimé automatiquement.
+Si l'utilisateur ou la recette est supprimé, le favori associé est supprimé automatiquement.
 
 ---
 
@@ -588,7 +604,7 @@ Le modèle `MealPlan` représente un repas planifié.
 | Champ | Type | Description |
 | --- | --- | --- |
 | `id` | UUID | Identifiant |
-| `userId` | UUID | Utilisatrice |
+| `userId` | UUID | Utilisateur |
 | `recipeId` | String | Recette |
 | `servings` | Int? | Nombre de portions |
 | `day` | WeekDay | Jour |
@@ -606,7 +622,7 @@ La combinaison suivante est unique :
 userId + day + mealType
 ```
 
-Une utilisatrice ne peut donc avoir qu'un seul repas planifié pour un même jour et un même type de repas.
+Un utilisateur ne peut donc avoir qu'un seul repas planifié pour un même jour et un même type de repas.
 
 ---
 
@@ -649,6 +665,7 @@ Les principales relations peuvent être résumées ainsi :
 ```text
 User
  ├── Recipe
+ ├── Ingredient
  ├── OAuthAccount
  ├── ShoppingList
  ├── Cookbook
@@ -684,12 +701,13 @@ Ingredient
 
 Le modèle utilise plusieurs stratégies de suppression.
 
-## Utilisatrice
+## Utilisateur
 
-Certaines données liées sont supprimées automatiquement lorsque l'utilisatrice est supprimée.
+Certaines données liées sont supprimées automatiquement lorsque l'utilisateur est supprimé.
 
 Exemples :
 
+- les ingrédients ;
 - comptes OAuth ;
 - liste de courses ;
 - commentaires ;
@@ -739,7 +757,7 @@ User.email UNIQUE
 ## Ingrédient
 
 ```text
-Ingredient.name UNIQUE
+Ingredient(userId, name) UNIQUE
 ```
 
 ---
@@ -786,6 +804,15 @@ userId + day + mealType UNIQUE
 
 # 24. Choix de modélisation
 
+
+## Isolation des ingrédients par utilisateur
+
+Les ingrédients sont rattachés directement à leur propriétaire grâce à :
+
+```text
+Ingredient.userId
+```
+
 ## Séparation entre `Ingredient` et `RecipeIngredient`
 
 La quantité n'est pas stockée directement dans `Ingredient`, car elle varie selon la recette.
@@ -796,7 +823,7 @@ Cette séparation permet de réutiliser le même ingrédient dans plusieurs rece
 
 ## Séparation entre `Recipe` et `Favorite`
 
-Un favori dépend de l'utilisatrice.
+Un favori dépend de l'utilisateur.
 
 Une recette ne peut donc pas simplement être globalement favorite pour tout le monde.
 
@@ -804,19 +831,57 @@ Le modèle `Favorite` représente cette relation de manière correcte.
 
 ---
 
-## Liste de courses liée à l'utilisatrice
+## Liste de courses liée à l'utilisateur
 
-Le modèle impose une liste de courses principale par utilisatrice.
+Le modèle impose une liste de courses principale par utilisateur.
 
 Les lignes associées permettent ensuite de conserver les différents ingrédients.
 
 ---
 
-## Cookbook et membership
+## Cookbook et appartenance des membres
 
-Les membres sont séparés du cookbook afin de permettre à plusieurs utilisatrices d'appartenir au même cookbook.
+Les membres sont séparés du cookbook afin de permettre à plusieurs utilisateurs d'appartenir au même cookbook.
 
 Le rôle est stocké dans la relation `CookbookMember`.
+
+Cette organisation permet d'attribuer à chaque membre un rôle propre au cookbook concerné.
+
+---
+
+## Association d'une recette à un cookbook
+
+Le champ :
+
+```text
+Recipe.cookbookId
+```
+
+permet d'associer une recette à un cookbook.
+
+Ce champ est facultatif.
+
+Une recette personnelle peut donc avoir :
+
+```text
+cookbookId = null
+```
+
+Lorsqu'elle est ajoutée à un cookbook :
+
+```text
+cookbookId = identifiant_du_cookbook
+```
+
+Lorsqu'elle est retirée du cookbook, ce champ revient à :
+
+```text
+cookbookId = null
+```
+
+Cette modélisation permet de retirer une recette d'un cookbook sans la supprimer.
+
+Elle implique également qu'une recette ne peut être directement associée qu'à un seul cookbook à la fois dans le schéma actuel.
 
 ---
 
@@ -843,6 +908,21 @@ Il pourrait être supprimé dans une future migration.
 Le rôle est actuellement stocké sous forme de chaîne.
 
 Un enum serait plus robuste.
+
+Par exemple :
+
+```text
+CREATOR
+EDITOR
+READER
+COMMENTER
+```
+
+Cela permettrait notamment :
+
+- d'empêcher l'enregistrement d'une valeur de rôle invalide ;
+- d'améliorer la cohérence du modèle ;
+- de bénéficier d'un typage plus strict côté Prisma.
 
 ---
 
@@ -887,6 +967,26 @@ et améliorer la génération de listes de courses.
 
 ---
 
+## Relation recette-cookbook
+
+Le modèle actuel repose sur une relation directe :
+
+```text
+Recipe.cookbookId
+```
+
+Cette solution est adaptée au fonctionnement actuel de SUPMEAL, dans lequel une recette ne peut être associée qu'à un seul cookbook à la fois.
+
+Si une future version devait permettre à une même recette d'appartenir simultanément à plusieurs cookbooks, une table d'association dédiée pourrait être introduite, par exemple :
+
+```text
+CookbookRecipe
+```
+
+Elle permettrait alors de représenter une relation plusieurs-à-plusieurs entre `Recipe` et `Cookbook`.
+
+---
+
 # 26. Conclusion
 
 Le modèle de données de SUPMEAL repose sur une base relationnelle adaptée aux fonctionnalités de l'application.
@@ -894,7 +994,7 @@ Le modèle de données de SUPMEAL repose sur une base relationnelle adaptée aux
 Les relations principales permettent notamment de gérer correctement :
 
 - les recettes personnelles ;
-- les ingrédients structurés ;
+- les ingrédients structurés et isolés par l'utilisateur;
 - les favoris personnels ;
 - les planifications ;
 - les listes de courses ;

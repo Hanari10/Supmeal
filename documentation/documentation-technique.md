@@ -61,7 +61,7 @@ L'application est divisée en trois composants principaux.
 
 Cette séparation permet de limiter les responsabilités de chaque composant.
 
-Le client est principalement chargé de l'affichage de l'interface et de l'envoi des actions de l'utilisatrice vers le serveur.
+Le client est principalement chargé de l'affichage de l'interface et de l'envoi des actions de l'utilisateur vers le serveur.
 
 Le serveur centralise la logique métier, la validation, l'authentification, les contrôles d'accès et les opérations sur les données.
 
@@ -78,7 +78,7 @@ Les données sont principalement échangées au format JSON.
 Le fonctionnement général d'une requête est le suivant :
 
 ```text
-Utilisatrice
+Utilisateur
      │
      ▼
 Interface React
@@ -424,7 +424,7 @@ Le détail exact des routes doit rester cohérent avec les contrôleurs présent
 
 ## 8.1. Création de compte
 
-Lors de l'inscription, l'utilisatrice fournit les informations nécessaires à la création de son compte.
+Lors de l'inscription, l'utilisateur fournit les informations nécessaires à la création de son compte.
 
 Le mot de passe n'est pas destiné à être stocké directement en clair dans PostgreSQL.
 
@@ -437,7 +437,7 @@ Une version dérivée sécurisée du mot de passe est enregistrée.
 Lors de la connexion :
 
 1. le client transmet les identifiants au serveur ;
-2. le serveur recherche l'utilisatrice ;
+2. le serveur recherche l'utilisateur ;
 3. le mot de passe fourni est vérifié ;
 4. si les informations sont valides, le serveur délivre un JWT ;
 5. ce jeton est utilisé pour authentifier les requêtes suivantes.
@@ -446,7 +446,7 @@ Lors de la connexion :
 
 ## 8.3. Protection des ressources
 
-Une utilisatrice authentifiée ne doit pas pouvoir modifier arbitrairement les ressources appartenant à une autre utilisatrice.
+Un utilisateur authentifié ne doit pas pouvoir modifier arbitrairement les ressources appartenant à un autre utilisateur.
 
 Les contrôles de propriété sont donc réalisés côté serveur.
 
@@ -514,7 +514,7 @@ Ingredient
 
 SUPMEAL permet d'associer une image à une recette.
 
-L'image peut être sélectionnée directement depuis le stockage de l'utilisatrice.
+L'image peut être sélectionnée directement depuis le stockage de l'utilisateur.
 
 Le fichier est transmis au serveur, qui le stocke dans un emplacement prévu pour les fichiers uploadés.
 
@@ -522,15 +522,15 @@ La recette conserve ensuite une référence permettant au client d'afficher l'im
 
 Le dossier contenant les fichiers uploadés ne doit pas être utilisé pour stocker du code source et n'a pas vocation à contenir des secrets.
 
-Les fichiers générés par les utilisatrices ne sont pas versionnés dans le dépôt Git.
+Les fichiers générés par les utilisateurs ne sont pas versionnés dans le dépôt Git.
 
 ---
 
 # 12. Favoris
 
-Une recette peut être ajoutée aux favoris d'une utilisatrice.
+Une recette peut être ajoutée aux favoris d'un utilisateur.
 
-L'association entre l'utilisatrice et la recette permet :
+L'association entre l'utilisateur et la recette permet :
 
 - d'ajouter une recette aux favoris ;
 - de retirer une recette des favoris ;
@@ -549,7 +549,7 @@ Une planification peut notamment contenir :
 - un type de repas ;
 - un nombre de portions.
 
-L'utilisatrice peut créer, modifier et supprimer ses planifications.
+L'utilisateur peut créer, modifier et supprimer ses planifications.
 
 ---
 
@@ -571,7 +571,7 @@ Résultat :
 Farine — 500 g
 ```
 
-La version actuelle ne réalise pas nécessairement de conversion automatique entre des unités différentes.
+La version actuelle ne réalise pas de conversion automatique entre des unités différentes.
 
 Ainsi :
 
@@ -588,13 +588,130 @@ Une normalisation automatique des unités constitue une amélioration future pos
 
 # 15. Cookbooks
 
-Les cookbooks permettent de regrouper des recettes.
+Les cookbooks permettent de regrouper des recettes et de partager un espace entre plusieurs utilisateurs.
 
-Ils constituent la base des fonctionnalités collaboratives prévues dans SUPMEAL.
+Un cookbook possède notamment :
 
-La version actuelle fournit la gestion principale des cookbooks.
+- un propriétaire ;
+- plusieurs membres ;
+- plusieurs recettes ;
+- un rôle associé à chaque membre.
 
-Les fonctionnalités collaboratives avancées prévues par le cahier des charges, telles que la messagerie instantanée, les commentaires et certaines permissions avancées, peuvent faire l'objet d'évolutions ultérieures.
+Les rôles actuellement utilisés sont :
+
+```text
+CREATOR
+EDITOR
+READER
+COMMENTER
+```
+
+---
+
+## 15.1. Gestion des recettes d'un cookbook
+
+Une recette peut être rattachée à un cookbook grâce au champ `cookbookId` présent dans le modèle `Recipe`.
+
+Lorsqu'un utilisateur souhaite ajouter une recette à un cookbook, le serveur vérifie plusieurs éléments avant d'effectuer l'association :
+
+- l'existence du cookbook ;
+- l'appartenance de l'utilisateur au cookbook ;
+- son rôle dans le cookbook ;
+- l'existence de la recette ;
+- la propriété de la recette ;
+- l'absence d'association de la recette avec un autre cookbook.
+
+Le processus d'ajout peut être représenté ainsi :
+
+```text
+Recette personnelle
+        ↓
+Vérification du cookbook
+        ↓
+Vérification des permissions
+        ↓
+Vérification de la recette
+        ↓
+Association au cookbook
+        ↓
+recipe.cookbookId = cookbook.id
+```
+
+Un utilisateur disposant du rôle `CREATOR` ou `EDITOR` peut ajouter ses propres recettes au cookbook.
+
+Les rôles `READER` et `COMMENTER` ne disposent pas de cette permission.
+
+Une recette déjà présente dans le cookbook ne peut pas être ajoutée une seconde fois.
+
+De même, une recette déjà associée à un autre cookbook ne peut pas être directement déplacée vers un nouveau cookbook. Elle doit d'abord être retirée du cookbook auquel elle appartient.
+
+Le retrait d'une recette d'un cookbook ne provoque pas sa suppression de la base de données.
+
+Le serveur modifie uniquement son association :
+
+```text
+cookbookId = null
+```
+
+La recette existe donc toujours et redevient disponible en dehors du cookbook.
+
+Les routes REST utilisées pour ces opérations sont :
+
+```text
+POST   /cookbooks/:id/recipes
+DELETE /cookbooks/:id/recipes/:recipeId
+```
+
+La requête d'ajout transmet l'identifiant de la recette à associer au cookbook.
+
+Cette organisation permet de séparer la suppression réelle d'une recette de son simple retrait d'un espace partagé.
+
+---
+
+## 15.2. Permissions liées aux recettes
+
+Les permissions relatives aux recettes d'un cookbook sont contrôlées côté serveur afin de ne pas dépendre uniquement des restrictions affichées par l'interface cliente.
+
+Les rôles disponibles sont :
+
+```text
+CREATOR
+EDITOR
+READER
+COMMENTER
+```
+
+Pour l'ajout d'une recette dans un cookbook :
+
+```text
+CREATOR   → autorisé
+EDITOR    → autorisé
+READER    → interdit
+COMMENTER → interdit
+```
+
+L'utilisateur doit également être propriétaire de la recette qu'il souhaite ajouter.
+
+Pour le retrait d'une recette, l'opération est autorisée notamment pour :
+
+- le propriétaire du cookbook ;
+- le créateur de la recette ;
+- un utilisateur disposant du rôle `EDITOR`.
+
+Avant chaque opération, le serveur vérifie les droits de l'utilisateur concerné.
+
+Le client adapte également les actions visibles en fonction du rôle. Un utilisateur ne disposant pas des permissions nécessaires ne voit pas les actions d'ajout ou de retrait correspondantes.
+
+Cette vérification côté client améliore l'expérience utilisateur, mais la sécurité repose sur les contrôles réalisés par le serveur.
+
+Après un ajout ou un retrait réussi, l'interface actualise les données du cookbook et affiche une notification confirmant l'opération.
+
+Les fonctionnalités collaboratives avancées suivantes restent à développer ou à approfondir :
+
+- système complet d'invitations ;
+- commentaires sur les recettes ;
+- messagerie instantanée ;
+- gestion plus avancée et plus granulaire des permissions.
 
 ---
 
@@ -787,6 +904,8 @@ supprime également les volumes associés.
 
 Elle doit donc être utilisée avec précaution car elle peut entraîner la suppression des données de la base.
 
+Les fichiers uploadés, notamment les images de recettes, doivent également être stockés dans un espace persistant afin de ne pas être perdus lors de la recréation du conteneur backend.
+
 ---
 
 # 22. Lancement en environnement de développement
@@ -889,7 +1008,7 @@ Les DTO permettent de définir les données acceptées par les différents endpo
 
 ## 24.4. Autorisations
 
-Le serveur vérifie qu'une utilisatrice possède les droits nécessaires avant d'effectuer certaines opérations.
+Le serveur vérifie qu'un utilisateur possède les droits nécessaires avant d'effectuer certaines opérations.
 
 Le contrôle ne doit pas reposer uniquement sur le client.
 
@@ -909,7 +1028,7 @@ Le fonctionnement principal de SUPMEAL peut être représenté ainsi :
 
 ```mermaid
 flowchart LR
-    U[Utilisatrice]
+    U[Utilisateur]
 
     U --> A[Créer un compte]
     U --> B[Se connecter]
@@ -935,6 +1054,11 @@ flowchart LR
     G --> G3[Supprimer une planification]
 
     H --> H1[Générer depuis le planning]
+
+    I --> I1[Créer un cookbook]
+    I --> I2[Gérer les membres]
+    I --> I3[Ajouter une recette]
+    I --> I4[Retirer une recette]
 ```
 
 ---
@@ -943,7 +1067,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    User[Utilisatrice]
+    User[Utilisateur]
     Front[Client React]
     API[API REST NestJS]
     Prisma[Prisma ORM]
@@ -981,6 +1105,10 @@ User
  │            └──────── ShoppingListItem
  │
  └──────── Cookbook
+              │
+              ├──────── CookbookMember ───────── User
+              │
+              └──────── Recipe
 ```
 
 Le schéma Prisma doit être considéré comme la référence exacte de l'implémentation de la base.
@@ -996,10 +1124,12 @@ Certaines fonctionnalités prévues par le cahier des charges peuvent être appr
 - authentification OAuth2 ;
 - commentaires sur les recettes partagées ;
 - messagerie instantanée dans les cookbooks ;
+- système complet d'invitations ;
 - gestion plus avancée des rôles et permissions ;
 - préférences culinaires ;
 - allergies ;
 - filtres supplémentaires ;
+- recherche propre à chaque cookbook ;
 - conversion automatique entre unités compatibles ;
 - amélioration des fonctions collaboratives.
 
