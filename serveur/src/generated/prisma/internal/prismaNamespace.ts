@@ -392,6 +392,7 @@ export const ModelName = {
   ShoppingListItem: 'ShoppingListItem',
   Cookbook: 'Cookbook',
   CookbookMember: 'CookbookMember',
+  CookbookMessage: 'CookbookMessage',
   RecipeComment: 'RecipeComment',
   Tag: 'Tag',
   RecipeTag: 'RecipeTag',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "oAuthAccount" | "ingredient" | "recipe" | "recipeIngredient" | "shoppingList" | "shoppingListItem" | "cookbook" | "cookbookMember" | "recipeComment" | "tag" | "recipeTag" | "favorite" | "mealPlan"
+    modelProps: "user" | "oAuthAccount" | "ingredient" | "recipe" | "recipeIngredient" | "shoppingList" | "shoppingListItem" | "cookbook" | "cookbookMember" | "cookbookMessage" | "recipeComment" | "tag" | "recipeTag" | "favorite" | "mealPlan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1082,6 +1083,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CookbookMessage: {
+      payload: Prisma.$CookbookMessagePayload<ExtArgs>
+      fields: Prisma.CookbookMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CookbookMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CookbookMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.CookbookMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CookbookMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        findMany: {
+          args: Prisma.CookbookMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>[]
+        }
+        create: {
+          args: Prisma.CookbookMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        createMany: {
+          args: Prisma.CookbookMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CookbookMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.CookbookMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        update: {
+          args: Prisma.CookbookMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.CookbookMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CookbookMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CookbookMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.CookbookMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CookbookMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.CookbookMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCookbookMessage>
+        }
+        groupBy: {
+          args: Prisma.CookbookMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CookbookMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CookbookMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CookbookMessageCountAggregateOutputType> | number
+        }
+      }
+    }
     RecipeComment: {
       payload: Prisma.$RecipeCommentPayload<ExtArgs>
       fields: Prisma.RecipeCommentFieldRefs
@@ -1613,6 +1688,18 @@ export const CookbookMemberScalarFieldEnum = {
 export type CookbookMemberScalarFieldEnum = (typeof CookbookMemberScalarFieldEnum)[keyof typeof CookbookMemberScalarFieldEnum]
 
 
+export const CookbookMessageScalarFieldEnum = {
+  id: 'id',
+  cookbookId: 'cookbookId',
+  userId: 'userId',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CookbookMessageScalarFieldEnum = (typeof CookbookMessageScalarFieldEnum)[keyof typeof CookbookMessageScalarFieldEnum]
+
+
 export const RecipeCommentScalarFieldEnum = {
   id: 'id',
   recipeId: 'recipeId',
@@ -1903,6 +1990,7 @@ export type GlobalOmitConfig = {
   shoppingListItem?: Prisma.ShoppingListItemOmit
   cookbook?: Prisma.CookbookOmit
   cookbookMember?: Prisma.CookbookMemberOmit
+  cookbookMessage?: Prisma.CookbookMessageOmit
   recipeComment?: Prisma.RecipeCommentOmit
   tag?: Prisma.TagOmit
   recipeTag?: Prisma.RecipeTagOmit

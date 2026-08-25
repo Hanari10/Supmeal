@@ -196,6 +196,41 @@ function RecipeDetailsPage() {
                   severity="secondary"
                 />
               </div>
+              {recipe.tags && recipe.tags.length > 0 && (
+                <div>
+                  <h3 className="mt-2 mb-2">
+                    Catégories / Tags
+                  </h3>
+
+                  <div className="flex flex-wrap gap-2">
+                    {recipe.tags.map((recipeTag) => (
+                      <Tag
+                        key={recipeTag.tag.id}
+                        icon="pi pi-tag"
+                        value={recipeTag.tag.name}
+                        severity="info"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {recipe.sourceUrl && (
+                <div>
+                  <h3 className="mt-2 mb-2">
+                    Source
+                  </h3>
+
+                  <a
+                    href={recipe.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary"
+                  >
+                    {recipe.sourceUrl}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

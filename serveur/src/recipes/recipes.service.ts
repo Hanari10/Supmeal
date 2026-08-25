@@ -91,6 +91,7 @@ export class RecipesService {
             tag: true,
           },
         },
+
         recipeIngredients: {
           include: {
             ingredient: true,
@@ -106,7 +107,24 @@ export class RecipesService {
       throw new NotFoundException('Recette introuvable.');
     }
 
-    if (recipe.userId !== userId) {
+    if (recipe.userId === userId) {
+      return recipe;
+    }
+
+    if (!recipe.cookbookId) {
+      throw new ForbiddenException("Vous n'avez pas accès à cette recette.");
+    }
+
+    const membership = await this.prisma.cookbookMember.findUnique({
+      where: {
+        cookbookId_userId: {
+          cookbookId: recipe.cookbookId,
+          userId,
+        },
+      },
+    });
+
+    if (!membership) {
       throw new ForbiddenException("Vous n'avez pas accès à cette recette.");
     }
 
@@ -114,7 +132,24 @@ export class RecipesService {
   }
 
   async update(id: string, userId: string, updateRecipeDto: UpdateRecipeDto) {
-    await this.findOne(id, userId);
+    const existingRecipe = await this.prisma.recipe.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    if (!existingRecipe) {
+      throw new NotFoundException('Recette introuvable.');
+    }
+
+    if (existingRecipe.userId !== userId) {
+      throw new ForbiddenException(
+        'Seul le propriétaire peut modifier cette recette.',
+      );
+    }
 
     const { tags, ...recipeData } = updateRecipeDto;
     const uniqueTags = tags ? [...new Set(tags)] : undefined;
@@ -191,6 +226,36 @@ export class RecipesService {
                 mode: 'insensitive',
               },
             },
+            {
+              instructions: {
+                contains: filters.query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              recipeIngredients: {
+                some: {
+                  ingredient: {
+                    name: {
+                      contains: filters.query,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            },
+            {
+              tags: {
+                some: {
+                  tag: {
+                    name: {
+                      contains: filters.query,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            },
           ],
         }),
 
@@ -204,6 +269,12 @@ export class RecipesService {
         ...(filters.maxPreparationTime !== undefined && {
           preparationTime: {
             lte: filters.maxPreparationTime,
+          },
+        }),
+
+        ...(filters.maxCookingTime !== undefined && {
+          cookingTime: {
+            lte: filters.maxCookingTime,
           },
         }),
 
@@ -229,6 +300,18 @@ export class RecipesService {
                   mode: 'insensitive',
                 },
               },
+            },
+          },
+        }),
+
+        ...(filters.cookbookId && {
+          cookbookId: filters.cookbookId,
+        }),
+
+        ...(filters.favorite === true && {
+          favorites: {
+            some: {
+              userId,
             },
           },
         }),

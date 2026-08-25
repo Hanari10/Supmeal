@@ -72,6 +72,9 @@ function CreateRecipePage() {
   const [servings, setServings] = useState<number>(1);
 
   const [difficulty, setDifficulty] = useState('');
+  const [sourceUrl, setSourceUrl] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
 
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [ingredientRows, setIngredientRows] = useState<
@@ -140,6 +143,41 @@ function CreateRecipePage() {
 
     setSelectedImage(null);
     setImagePreviewUrl('');
+  }
+
+  function addTag() {
+    const normalizedTag = tagInput.trim();
+
+    if (!normalizedTag) {
+      return;
+    }
+
+    const alreadyExists = tags.some(
+      (tag) =>
+        tag.toLowerCase() === normalizedTag.toLowerCase(),
+    );
+
+    if (alreadyExists) {
+      showError(
+        'Tag déjà présent',
+        `Le tag « ${normalizedTag} » est déjà associé à la recette.`,
+      );
+      return;
+    }
+
+    setTags((currentTags) => [
+      ...currentTags,
+      normalizedTag,
+    ]);
+    setTagInput('');
+  }
+
+  function removeTag(tagToRemove: string) {
+    setTags((currentTags) =>
+      currentTags.filter(
+        (tag) => tag !== tagToRemove,
+      ),
+    );
   }
 
   function addIngredientRow() {
@@ -302,6 +340,8 @@ function CreateRecipePage() {
           cookingTime > 0 ? cookingTime : undefined,
         servings,
         difficulty: difficulty || undefined,
+        sourceUrl: sourceUrl.trim() || undefined,
+        tags,
         imageUrl: uploadedImageUrl,
       });
 
@@ -495,6 +535,101 @@ function CreateRecipePage() {
             }
           />
         </div>
+
+        <div>
+          <label
+            htmlFor="recipe-source-url"
+            className="block mb-2"
+          >
+            Source
+          </label>
+
+          <InputText
+            id="recipe-source-url"
+            className="w-full"
+            type="url"
+            value={sourceUrl}
+            placeholder="https://exemple.com/recette"
+            onChange={(event) =>
+              setSourceUrl(event.target.value)
+            }
+          />
+
+          <small className="block mt-2 text-600">
+            URL d’origine de la recette, si elle provient d’un site externe.
+          </small>
+        </div>
+
+        <Card
+          title="Catégories / Tags"
+          className="surface-50"
+        >
+          <div className="flex flex-column gap-3">
+            <div className="flex flex-column md:flex-row gap-2">
+              <InputText
+                id="recipe-tag"
+                className="flex-1"
+                value={tagInput}
+                placeholder="Ex. Dessert, Italien, Rapide..."
+                onChange={(event) =>
+                  setTagInput(event.target.value)
+                }
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addTag();
+                  }
+                }}
+              />
+
+              <Button
+                type="button"
+                label="Ajouter le tag"
+                icon="pi pi-plus"
+                severity="secondary"
+                outlined
+                onClick={addTag}
+              />
+            </div>
+
+            {tags.length === 0 ? (
+              <p className="m-0 text-600">
+                Aucun tag ajouté.
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <div
+                    key={tag}
+                    className="flex align-items-center gap-2 px-3 py-2 border-round surface-100"
+                  >
+                    <span>{tag}</span>
+
+                    <Button
+                      type="button"
+                      icon="pi pi-times"
+                      rounded
+                      text
+                      severity="secondary"
+                      aria-label={`Retirer le tag ${tag}`}
+                      tooltip="Retirer le tag"
+                      tooltipOptions={{
+                        position: 'top',
+                      }}
+                      onClick={() =>
+                        removeTag(tag)
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <small className="text-600">
+              Les tags servent à catégoriser et filtrer les recettes.
+            </small>
+          </div>
+        </Card>
 
         <Card
           title="Ingrédients"

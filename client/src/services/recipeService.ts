@@ -2,6 +2,7 @@ import { api } from './api';
 import type {
   CreateRecipeData,
   Recipe,
+  RecipeSearchFilters,
   UpdateRecipeData,
 } from '../types/recipe';
 
@@ -12,6 +13,25 @@ export async function getRecipes(): Promise<Recipe[]> {
 
 export async function getRecipe(id: string): Promise<Recipe> {
   const response = await api.get<Recipe>(`/recipes/${id}`);
+  return response.data;
+}
+
+export async function searchRecipes(
+  filters: RecipeSearchFilters,
+): Promise<Recipe[]> {
+  const params = Object.fromEntries(
+    Object.entries(filters).filter(
+      ([, value]) =>
+        value !== undefined &&
+        value !== null &&
+        value !== '',
+    ),
+  );
+
+  const response = await api.get<Recipe[]>('/recipes/search', {
+    params,
+  });
+
   return response.data;
 }
 

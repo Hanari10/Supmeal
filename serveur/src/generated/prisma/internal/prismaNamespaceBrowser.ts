@@ -59,6 +59,7 @@ export const ModelName = {
   ShoppingListItem: 'ShoppingListItem',
   Cookbook: 'Cookbook',
   CookbookMember: 'CookbookMember',
+  CookbookMessage: 'CookbookMessage',
   RecipeComment: 'RecipeComment',
   Tag: 'Tag',
   RecipeTag: 'RecipeTag',
@@ -202,6 +203,18 @@ export const CookbookMemberScalarFieldEnum = {
 } as const
 
 export type CookbookMemberScalarFieldEnum = (typeof CookbookMemberScalarFieldEnum)[keyof typeof CookbookMemberScalarFieldEnum]
+
+
+export const CookbookMessageScalarFieldEnum = {
+  id: 'id',
+  cookbookId: 'cookbookId',
+  userId: 'userId',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CookbookMessageScalarFieldEnum = (typeof CookbookMessageScalarFieldEnum)[keyof typeof CookbookMessageScalarFieldEnum]
 
 
 export const RecipeCommentScalarFieldEnum = {

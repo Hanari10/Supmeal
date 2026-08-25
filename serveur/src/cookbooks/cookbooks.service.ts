@@ -91,16 +91,27 @@ export class CookbooksService {
     id: string,
     updateCookbookDto: UpdateCookbookDto,
   ) {
-    const cookbook = await this.findOne(userId, id);
+    await this.findOne(userId, id);
 
-    if (cookbook.ownerId !== userId) {
+    const membership = await this.prisma.cookbookMember.findUnique({
+      where: {
+        cookbookId_userId: {
+          cookbookId: id,
+          userId,
+        },
+      },
+    });
+
+    if (!membership || !['CREATOR', 'EDITOR'].includes(membership.role)) {
       throw new ForbiddenException(
-        'Seul le créateur peut modifier ce cookbook.',
+        "Vous n'avez pas la permission de modifier ce cookbook.",
       );
     }
 
     return this.prisma.cookbook.update({
-      where: { id },
+      where: {
+        id,
+      },
       data: updateCookbookDto,
     });
   }

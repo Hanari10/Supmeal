@@ -183,6 +183,7 @@ export type CookbookWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
   recipes?: Prisma.RecipeListRelationFilter
   members?: Prisma.CookbookMemberListRelationFilter
+  messages?: Prisma.CookbookMessageListRelationFilter
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -194,6 +195,7 @@ export type CookbookOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   recipes?: Prisma.RecipeOrderByRelationAggregateInput
   members?: Prisma.CookbookMemberOrderByRelationAggregateInput
+  messages?: Prisma.CookbookMessageOrderByRelationAggregateInput
   owner?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -208,6 +210,7 @@ export type CookbookWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Cookbook"> | Date | string
   recipes?: Prisma.RecipeListRelationFilter
   members?: Prisma.CookbookMemberListRelationFilter
+  messages?: Prisma.CookbookMessageListRelationFilter
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -240,6 +243,7 @@ export type CookbookCreateInput = {
   updatedAt?: Date | string
   recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
   members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageCreateNestedManyWithoutCookbookInput
   owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
@@ -251,6 +255,7 @@ export type CookbookUncheckedCreateInput = {
   updatedAt?: Date | string
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutCookbookInput
   members?: Prisma.CookbookMemberUncheckedCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageUncheckedCreateNestedManyWithoutCookbookInput
 }
 
 export type CookbookUpdateInput = {
@@ -260,6 +265,7 @@ export type CookbookUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
   members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUpdateManyWithoutCookbookNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
@@ -271,6 +277,7 @@ export type CookbookUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutCookbookNestedInput
   members?: Prisma.CookbookMemberUncheckedUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUncheckedUpdateManyWithoutCookbookNestedInput
 }
 
 export type CookbookCreateManyInput = {
@@ -412,6 +419,20 @@ export type CookbookUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CookbookUpdateToOneWithWhereWithoutMembersInput, Prisma.CookbookUpdateWithoutMembersInput>, Prisma.CookbookUncheckedUpdateWithoutMembersInput>
 }
 
+export type CookbookCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.CookbookCreateWithoutMessagesInput, Prisma.CookbookUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.CookbookCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.CookbookWhereUniqueInput
+}
+
+export type CookbookUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.CookbookCreateWithoutMessagesInput, Prisma.CookbookUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.CookbookCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.CookbookUpsertWithoutMessagesInput
+  connect?: Prisma.CookbookWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CookbookUpdateToOneWithWhereWithoutMessagesInput, Prisma.CookbookUpdateWithoutMessagesInput>, Prisma.CookbookUncheckedUpdateWithoutMessagesInput>
+}
+
 export type CookbookCreateWithoutOwnerInput = {
   id?: string
   name: string
@@ -419,6 +440,7 @@ export type CookbookCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
   members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageCreateNestedManyWithoutCookbookInput
 }
 
 export type CookbookUncheckedCreateWithoutOwnerInput = {
@@ -428,6 +450,7 @@ export type CookbookUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutCookbookInput
   members?: Prisma.CookbookMemberUncheckedCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageUncheckedCreateNestedManyWithoutCookbookInput
 }
 
 export type CookbookCreateOrConnectWithoutOwnerInput = {
@@ -473,6 +496,7 @@ export type CookbookCreateWithoutRecipesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageCreateNestedManyWithoutCookbookInput
   owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
@@ -483,6 +507,7 @@ export type CookbookUncheckedCreateWithoutRecipesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.CookbookMemberUncheckedCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageUncheckedCreateNestedManyWithoutCookbookInput
 }
 
 export type CookbookCreateOrConnectWithoutRecipesInput = {
@@ -507,6 +532,7 @@ export type CookbookUpdateWithoutRecipesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUpdateManyWithoutCookbookNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
@@ -517,6 +543,7 @@ export type CookbookUncheckedUpdateWithoutRecipesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.CookbookMemberUncheckedUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUncheckedUpdateManyWithoutCookbookNestedInput
 }
 
 export type CookbookCreateWithoutMembersInput = {
@@ -525,6 +552,7 @@ export type CookbookCreateWithoutMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageCreateNestedManyWithoutCookbookInput
   owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
 }
 
@@ -535,6 +563,7 @@ export type CookbookUncheckedCreateWithoutMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutCookbookInput
+  messages?: Prisma.CookbookMessageUncheckedCreateNestedManyWithoutCookbookInput
 }
 
 export type CookbookCreateOrConnectWithoutMembersInput = {
@@ -559,6 +588,7 @@ export type CookbookUpdateWithoutMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUpdateManyWithoutCookbookNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
 }
 
@@ -569,6 +599,63 @@ export type CookbookUncheckedUpdateWithoutMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUncheckedUpdateManyWithoutCookbookNestedInput
+}
+
+export type CookbookCreateWithoutMessagesInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recipes?: Prisma.RecipeCreateNestedManyWithoutCookbookInput
+  members?: Prisma.CookbookMemberCreateNestedManyWithoutCookbookInput
+  owner: Prisma.UserCreateNestedOneWithoutCookbooksInput
+}
+
+export type CookbookUncheckedCreateWithoutMessagesInput = {
+  id?: string
+  name: string
+  ownerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutCookbookInput
+  members?: Prisma.CookbookMemberUncheckedCreateNestedManyWithoutCookbookInput
+}
+
+export type CookbookCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.CookbookWhereUniqueInput
+  create: Prisma.XOR<Prisma.CookbookCreateWithoutMessagesInput, Prisma.CookbookUncheckedCreateWithoutMessagesInput>
+}
+
+export type CookbookUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.CookbookUpdateWithoutMessagesInput, Prisma.CookbookUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.CookbookCreateWithoutMessagesInput, Prisma.CookbookUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.CookbookWhereInput
+}
+
+export type CookbookUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.CookbookWhereInput
+  data: Prisma.XOR<Prisma.CookbookUpdateWithoutMessagesInput, Prisma.CookbookUncheckedUpdateWithoutMessagesInput>
+}
+
+export type CookbookUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
+  members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutCookbooksNestedInput
+}
+
+export type CookbookUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipes?: Prisma.RecipeUncheckedUpdateManyWithoutCookbookNestedInput
+  members?: Prisma.CookbookMemberUncheckedUpdateManyWithoutCookbookNestedInput
 }
 
 export type CookbookCreateManyOwnerInput = {
@@ -585,6 +672,7 @@ export type CookbookUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUpdateManyWithoutCookbookNestedInput
   members?: Prisma.CookbookMemberUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUpdateManyWithoutCookbookNestedInput
 }
 
 export type CookbookUncheckedUpdateWithoutOwnerInput = {
@@ -594,6 +682,7 @@ export type CookbookUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutCookbookNestedInput
   members?: Prisma.CookbookMemberUncheckedUpdateManyWithoutCookbookNestedInput
+  messages?: Prisma.CookbookMessageUncheckedUpdateManyWithoutCookbookNestedInput
 }
 
 export type CookbookUncheckedUpdateManyWithoutOwnerInput = {
@@ -611,11 +700,13 @@ export type CookbookUncheckedUpdateManyWithoutOwnerInput = {
 export type CookbookCountOutputType = {
   recipes: number
   members: number
+  messages: number
 }
 
 export type CookbookCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recipes?: boolean | CookbookCountOutputTypeCountRecipesArgs
   members?: boolean | CookbookCountOutputTypeCountMembersArgs
+  messages?: boolean | CookbookCountOutputTypeCountMessagesArgs
 }
 
 /**
@@ -642,6 +733,13 @@ export type CookbookCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Type
   where?: Prisma.CookbookMemberWhereInput
 }
 
+/**
+ * CookbookCountOutputType without action
+ */
+export type CookbookCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CookbookMessageWhereInput
+}
+
 
 export type CookbookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -651,6 +749,7 @@ export type CookbookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   recipes?: boolean | Prisma.Cookbook$recipesArgs<ExtArgs>
   members?: boolean | Prisma.Cookbook$membersArgs<ExtArgs>
+  messages?: boolean | Prisma.Cookbook$messagesArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CookbookCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cookbook"]>
@@ -685,6 +784,7 @@ export type CookbookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type CookbookInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recipes?: boolean | Prisma.Cookbook$recipesArgs<ExtArgs>
   members?: boolean | Prisma.Cookbook$membersArgs<ExtArgs>
+  messages?: boolean | Prisma.Cookbook$messagesArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.CookbookCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -700,6 +800,7 @@ export type $CookbookPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     recipes: Prisma.$RecipePayload<ExtArgs>[]
     members: Prisma.$CookbookMemberPayload<ExtArgs>[]
+    messages: Prisma.$CookbookMessagePayload<ExtArgs>[]
     owner: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1104,6 +1205,7 @@ export interface Prisma__CookbookClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   recipes<T extends Prisma.Cookbook$recipesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cookbook$recipesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   members<T extends Prisma.Cookbook$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cookbook$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CookbookMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messages<T extends Prisma.Cookbook$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cookbook$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CookbookMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1585,6 +1687,30 @@ export type Cookbook$membersArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.CookbookMemberScalarFieldEnum | Prisma.CookbookMemberScalarFieldEnum[]
+}
+
+/**
+ * Cookbook.messages
+ */
+export type Cookbook$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CookbookMessage
+   */
+  select?: Prisma.CookbookMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CookbookMessage
+   */
+  omit?: Prisma.CookbookMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CookbookMessageInclude<ExtArgs> | null
+  where?: Prisma.CookbookMessageWhereInput
+  orderBy?: Prisma.CookbookMessageOrderByWithRelationInput | Prisma.CookbookMessageOrderByWithRelationInput[]
+  cursor?: Prisma.CookbookMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CookbookMessageScalarFieldEnum | Prisma.CookbookMessageScalarFieldEnum[]
 }
 
 /**

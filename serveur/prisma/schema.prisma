@@ -43,6 +43,7 @@ model User {
   shoppingList        ShoppingList?
   cookbooks           Cookbook[]
   cookbookMemberships CookbookMember[]
+  cookbookMessages    CookbookMessage[]
   comments            RecipeComment[]
   mealPlans           MealPlan[]
   favorites           Favorite[]
@@ -165,8 +166,9 @@ model Cookbook {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  recipes Recipe[]
-  members CookbookMember[]
+  recipes   Recipe[]
+  members   CookbookMember[]
+  messages  CookbookMessage[]
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
@@ -182,6 +184,23 @@ model CookbookMember {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([cookbookId, userId])
+}
+
+model CookbookMessage {
+  id String @id @default(uuid())
+
+  cookbookId String
+  userId     String   @db.Uuid
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  cookbook Cookbook @relation(fields: [cookbookId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cookbookId, createdAt])
+  @@index([userId])
 }
 
 model RecipeComment {

@@ -62,6 +62,11 @@ export type Cookbook = Prisma.CookbookModel
  */
 export type CookbookMember = Prisma.CookbookMemberModel
 /**
+ * Model CookbookMessage
+ * 
+ */
+export type CookbookMessage = Prisma.CookbookMessageModel
+/**
  * Model RecipeComment
  * 
  */

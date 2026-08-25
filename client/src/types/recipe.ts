@@ -1,13 +1,23 @@
+export interface RecipeTag {
+  tag: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface Recipe {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   instructions: string;
-  preparationTime?: number;
-  cookingTime?: number;
-  servings?: number;
-  difficulty?: string;
-  imageUrl?: string;
+  preparationTime?: number | null;
+  cookingTime?: number | null;
+  servings?: number | null;
+  difficulty?: string | null;
+  imageUrl?: string | null;
+  sourceUrl?: string | null;
+  cookbookId?: string | null;
+  tags?: RecipeTag[];
 
   recipeIngredients?: {
     ingredientId: string;
@@ -29,6 +39,8 @@ export interface CreateRecipeData {
   servings?: number;
   difficulty?: string;
   imageUrl?: string;
+  sourceUrl?: string;
+  tags?: string[];
 }
 
 export type UpdateRecipeData = Omit<
@@ -37,3 +49,14 @@ export type UpdateRecipeData = Omit<
 > & {
   imageUrl?: string | null;
 };
+
+export interface RecipeSearchFilters {
+  query?: string;
+  tag?: string;
+  difficulty?: string;
+  ingredient?: string;
+  maxPreparationTime?: number;
+  maxCookingTime?: number;
+  cookbookId?: string;
+  favorite?: boolean;
+}
