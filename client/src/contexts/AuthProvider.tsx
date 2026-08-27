@@ -69,6 +69,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(response.user);
   }
 
+  async function completeOAuthLogin(accessToken: string): Promise<void> {
+    setToken(accessToken);
+
+    try {
+      const profile = await getProfile();
+      setUser(profile);
+    } catch (error) {
+      removeToken();
+      setUser(null);
+      throw error;
+    }
+  }
+
   function logout(): void {
     removeToken();
     setUser(null);
@@ -80,6 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isLoading,
       isAuthenticated: user !== null,
       login,
+      completeOAuthLogin,
       logout,
     }),
     [user, isLoading],

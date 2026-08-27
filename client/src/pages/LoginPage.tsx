@@ -19,6 +19,10 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  function handleGoogleLogin(): void {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
+
   async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
   ) {
@@ -110,6 +114,20 @@ function LoginPage() {
             loading={loading}
           />
         </form>
+
+        <Divider align="center">
+          <span className="text-color-secondary">ou</span>
+        </Divider>
+
+        <Button
+          type="button"
+          label="Continuer avec Google"
+          icon="pi pi-google"
+          severity="secondary"
+          outlined
+          className="w-full"
+          onClick={handleGoogleLogin}
+        />
 
         <Divider />
 

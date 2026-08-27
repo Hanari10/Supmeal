@@ -40,6 +40,11 @@ services:
       DATABASE_URL: postgresql://supmeal:supmeal_developpement@postgres:5432/supmeal?schema=public
       JWT_SECRET: ${JWT_SECRET:-change_me_before_delivery}
 
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+
     ports:
       - "3000:3000"
 

@@ -1,10 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { RegisterDto } from './dto/register.dto';
-import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
+import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import type { GoogleUser } from './google.strategy';
 
 @Injectable()
 export class AuthService {
@@ -56,6 +61,46 @@ export class AuthService {
       );
     }
 
+    return this.createSession(user.id);
+  }
+
+  async loginWithGoogle(googleUser: GoogleUser) {
+    const existingOAuthAccount = await this.usersService.findOAuthAccount(
+      googleUser.provider,
+      googleUser.providerAccountId,
+    );
+
+    if (existingOAuthAccount) {
+      return this.createSession(existingOAuthAccount.userId);
+    }
+
+    const existingUser = await this.usersService.findByEmail(googleUser.email);
+
+    if (existingUser) {
+      await this.usersService.linkOAuthAccount(
+        existingUser.id,
+        googleUser.provider,
+        googleUser.providerAccountId,
+      );
+
+      return this.createSession(existingUser.id);
+    }
+
+    const user = await this.usersService.createOAuthUser({
+      email: googleUser.email,
+      firstName: googleUser.firstName,
+      lastName: googleUser.lastName,
+      profileImage: googleUser.profileImage,
+      provider: googleUser.provider,
+      providerAccountId: googleUser.providerAccountId,
+    });
+
+    return this.createSession(user.id);
+  }
+
+  private async createSession(userId: string) {
+    const user = await this.usersService.findProfile(userId);
+
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,
       email: user.email,
@@ -63,19 +108,7 @@ export class AuthService {
 
     return {
       accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profileImage: user.profileImage,
-        defaultServings: user.defaultServings,
-        dietaryPreferences: user.dietaryPreferences,
-        allergies: user.allergies,
-        preferredCuisines: user.preferredCuisines,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
+      user,
     };
   }
 }

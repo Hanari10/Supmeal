@@ -4,15 +4,25 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+
 import { PrismaService } from '../database/prisma.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
 interface CreateUserData {
   email: string;
-  passwordHash: string;
+  passwordHash?: string | null;
   firstName?: string;
   lastName?: string;
+}
+
+interface CreateOAuthUserData {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+  provider: string;
+  providerAccountId: string;
 }
 
 const publicUserSelect = {
@@ -41,6 +51,17 @@ export class UsersService {
     });
   }
 
+  async findOAuthAccount(provider: string, providerAccountId: string) {
+    return this.prisma.oAuthAccount.findUnique({
+      where: {
+        provider_providerAccountId: {
+          provider,
+          providerAccountId,
+        },
+      },
+    });
+  }
+
   async findProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -60,6 +81,38 @@ export class UsersService {
     return this.prisma.user.create({
       data,
       select: publicUserSelect,
+    });
+  }
+
+  createOAuthUser(data: CreateOAuthUserData) {
+    return this.prisma.user.create({
+      data: {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        profileImage: data.profileImage,
+        oauthAccounts: {
+          create: {
+            provider: data.provider,
+            providerAccountId: data.providerAccountId,
+          },
+        },
+      },
+      select: publicUserSelect,
+    });
+  }
+
+  linkOAuthAccount(
+    userId: string,
+    provider: string,
+    providerAccountId: string,
+  ) {
+    return this.prisma.oAuthAccount.create({
+      data: {
+        userId,
+        provider,
+        providerAccountId,
+      },
     });
   }
 

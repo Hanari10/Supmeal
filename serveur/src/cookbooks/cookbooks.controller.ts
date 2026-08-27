@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -38,6 +39,16 @@ export class CookbooksController {
   @ApiOperation({ summary: 'Récupérer mes cookbooks' })
   findAll(@CurrentUser() user: AuthenticatedUser) {
     return this.cookbooksService.findAll(user.id);
+  }
+
+  @Get(':id/recipes/search')
+  @ApiOperation({ summary: 'Rechercher des recettes dans un cookbook' })
+  searchRecipes(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id') id: string,
+    @Query('query') query?: string,
+  ) {
+    return this.cookbooksService.searchRecipes(user.id, id, query);
   }
 
   @Get(':id')

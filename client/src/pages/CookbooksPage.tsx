@@ -26,6 +26,7 @@ import {
   getCookbooks,
   removeCookbookMember,
   removeCookbookRecipe,
+  searchCookbookRecipes,
   updateCookbook,
 } from '../services/cookbookService';
 import {
@@ -77,6 +78,11 @@ function CookbooksPage() {
   const [cookbooks, setCookbooks] = useState<Cookbook[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState('');
+  const [cookbookRecipeSearch, setCookbookRecipeSearch] = useState('');
+  const [cookbookRecipeResults, setCookbookRecipeResults] =
+    useState<Recipe[]>([]);
+  const [cookbookRecipeSearchLoading, setCookbookRecipeSearchLoading] =
+    useState(false);
   const [loading, setLoading] = useState(true);
 
   const [cookbookDialogVisible, setCookbookDialogVisible] =
@@ -231,6 +237,40 @@ function CookbooksPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!detailsDialogVisible || !selectedCookbook) {
+      return;
+    }
+
+    const cookbookId = selectedCookbook.id;
+    const timeoutId = window.setTimeout(() => {
+      setCookbookRecipeSearchLoading(true);
+
+      void searchCookbookRecipes(cookbookId, cookbookRecipeSearch)
+        .then((data) => {
+          setCookbookRecipeResults(data);
+        })
+        .catch(() => {
+          showError(
+            'Recherche impossible',
+            'Les recettes du cookbook n’ont pas pu être recherchées.',
+          );
+        })
+        .finally(() => {
+          setCookbookRecipeSearchLoading(false);
+        });
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [
+    cookbookRecipeSearch,
+    detailsDialogVisible,
+    selectedCookbook,
+    showError,
+  ]);
+
   const filteredCookbooks = useMemo(() => {
     const value = search.trim().toLowerCase();
 
@@ -301,6 +341,8 @@ function CookbooksPage() {
 
   function openDetailsDialog(cookbook: Cookbook) {
     setSelectedCookbook(cookbook);
+    setCookbookRecipeSearch('');
+    setCookbookRecipeResults([]);
     resetDiscussionState();
     setDetailsDialogVisible(true);
     void loadDiscussion(cookbook.id);
@@ -308,6 +350,8 @@ function CookbooksPage() {
 
   function closeDetailsDialog() {
     setDetailsDialogVisible(false);
+    setCookbookRecipeSearch('');
+    setCookbookRecipeResults([]);
     resetDiscussionState();
   }
 
@@ -1365,9 +1409,28 @@ function CookbooksPage() {
                 )}
               </div>
 
+              <div className="mb-3">
+                <span className="p-input-icon-left w-full">
+                  <i className="pi pi-search" />
+                  <InputText
+                    className="w-full"
+                    value={cookbookRecipeSearch}
+                    placeholder="Rechercher par titre, ingrédient, tag ou contenu..."
+                    onChange={(event) =>
+                      setCookbookRecipeSearch(event.target.value)
+                    }
+                  />
+                </span>
+              </div>
+
               <DataTable
-                value={selectedCookbook.recipes}
-                emptyMessage="Aucune recette dans ce cookbook."
+                value={cookbookRecipeResults}
+                loading={cookbookRecipeSearchLoading}
+                emptyMessage={
+                  cookbookRecipeSearch.trim()
+                    ? 'Aucune recette ne correspond à cette recherche.'
+                    : 'Aucune recette dans ce cookbook.'
+                }
                 stripedRows
                 responsiveLayout="scroll"
               >

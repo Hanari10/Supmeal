@@ -7,6 +7,7 @@ import type {
   CreateCookbookData,
   UpdateCookbookData,
 } from '../types/cookbook';
+import type { Recipe } from '../types/recipe';
 
 export async function getCookbooks(): Promise<Cookbook[]> {
   const response = await api.get<Cookbook[]>('/cookbooks');
@@ -15,6 +16,22 @@ export async function getCookbooks(): Promise<Cookbook[]> {
 
 export async function getCookbook(id: string): Promise<Cookbook> {
   const response = await api.get<Cookbook>(`/cookbooks/${id}`);
+  return response.data;
+}
+
+export async function searchCookbookRecipes(
+  cookbookId: string,
+  query: string,
+): Promise<Recipe[]> {
+  const response = await api.get<Recipe[]>(
+    `/cookbooks/${cookbookId}/recipes/search`,
+    {
+      params: {
+        query,
+      },
+    },
+  );
+
   return response.data;
 }
 

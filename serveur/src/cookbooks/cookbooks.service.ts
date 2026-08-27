@@ -86,6 +86,82 @@ export class CookbooksService {
     return cookbook;
   }
 
+  async searchRecipes(userId: string, cookbookId: string, query?: string) {
+    await this.findOne(userId, cookbookId);
+
+    const searchQuery = query?.trim();
+
+    return this.prisma.recipe.findMany({
+      where: {
+        cookbookId,
+        ...(searchQuery && {
+          OR: [
+            {
+              name: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+            {
+              instructions: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+            {
+              recipeIngredients: {
+                some: {
+                  ingredient: {
+                    name: {
+                      contains: searchQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            },
+            {
+              tags: {
+                some: {
+                  tag: {
+                    name: {
+                      contains: searchQuery,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        }),
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        recipeIngredients: {
+          include: {
+            ingredient: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   async update(
     userId: string,
     id: string,

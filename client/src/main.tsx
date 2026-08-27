@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './styles.css';
 import { PrimeReactProvider } from 'primereact/api';
 import { RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthProvider';

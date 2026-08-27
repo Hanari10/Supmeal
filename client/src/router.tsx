@@ -15,6 +15,7 @@ import FavoritesPage from './pages/FavoritesPage';
 import DataTransferPage from './pages/DataTransferPage';
 import RecipeDetailsPage from './pages/RecipeDetailsPage';
 import EditRecipePage from './pages/EditRecipePage';
+import OAuthCallbackPage from './pages/OAuthCallbackPage';
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: '/inscription',
     element: <RegisterPage />,
+  },
+  {
+    path: '/oauth/callback',
+    element: <OAuthCallbackPage />,
   },
   {
     element: (
