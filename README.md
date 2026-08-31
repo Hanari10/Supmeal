@@ -14,6 +14,38 @@ L'ensemble de l'application peut être déployé avec Docker Compose.
 
 ---
 
+## Sommaire
+
+- [Fonctionnalités](#fonctionnalités)
+  - [Authentification et profil](#authentification-et-profil)
+  - [Recettes](#recettes)
+  - [Ingrédients](#ingrédients)
+  - [Recherche](#recherche)
+  - [Favoris](#favoris)
+  - [Planning des repas](#planning-des-repas)
+  - [Liste de courses](#liste-de-courses)
+  - [Cookbooks](#cookbooks)
+  - [Import et export](#import-et-export)
+- [Technologies utilisées](#technologies-utilisées)
+- [Architecture](#architecture)
+- [Structure du projet](#structure-du-projet)
+- [Installation et lancement](#installation-et-lancement)
+  - [Prérequis](#prérequis)
+  - [Récupération du projet](#récupération-du-projet)
+  - [Variables d'environnement](#variables-denvironnement)
+- [Lancement avec Docker](#lancement-avec-docker)
+- [Lancement en développement](#lancement-en-développement)
+  - [Serveur](#serveur)
+  - [Client](#client)
+  - [Base de données](#base-de-données)
+- [Vérification du projet](#vérification-du-projet)
+- [Sécurité](#sécurité)
+- [Documentation](#documentation)
+- [État du projet](#état-du-projet)
+- [Auteure](#auteure)
+
+---
+
 ## Fonctionnalités
 
 ### Authentification et profil
