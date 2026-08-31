@@ -52,6 +52,11 @@ L'utilisateur peut ensuite se connecter à SUPMEAL.
 
 ---
 
+## Connexion avec Google
+
+Depuis la page de connexion, l'utilisateur peut également sélectionner **Continuer avec Google**. Après authentification auprès de Google, il est redirigé vers SUPMEAL et connecté automatiquement. Si l'adresse e-mail Google correspond à un compte SUPMEAL existant, le compte Google est associé à ce compte ; sinon, un nouveau compte SUPMEAL est créé.
+
+
 # 4. Connexion
 
 Depuis la page de connexion :
@@ -156,7 +161,7 @@ Lait : 500 ml
 
 # 8. Gestion des recettes
 
-La section **Recettes** regroupe les recettes de l'utilisateur.
+La section Recettes regroupe les recettes de l'utilisateur.
 
 Elle permet notamment :
 
@@ -179,7 +184,7 @@ Elle permet notamment :
 
 Pour créer une recette, sélectionner :
 
-**Nouvelle recette**
+Nouvelle recette
 
 ou utiliser le bouton de création disponible depuis la page des recettes.
 
@@ -261,7 +266,7 @@ L'image est optionnelle : une recette peut être créée sans image.
 
 # 12. Consulter une recette
 
-Depuis la liste des recettes, utiliser le bouton **Voir** associé à la recette souhaitée.
+Depuis la liste des recettes, utiliser le bouton Voir associé à la recette souhaitée.
 
 La fiche détaillée présente les informations de la recette, notamment :
 
@@ -289,7 +294,7 @@ Cette vue permet de consulter la recette sans entrer dans le formulaire de modif
 
 # 13. Modifier une recette
 
-Depuis la liste des recettes ou la fiche détaillée, utiliser le bouton **Modifier**.
+Depuis la liste des recettes ou la fiche détaillée, utiliser le bouton Modifier.
 
 Le formulaire de modification permet de mettre à jour les informations existantes.
 
@@ -332,7 +337,7 @@ Après enregistrement, la modification est appliquée à la recette.
 
 # 15. Supprimer une recette
 
-Depuis la liste des recettes, utiliser le bouton **Supprimer** correspondant à la recette.
+Depuis la liste des recettes, utiliser le bouton Supprimer correspondant à la recette.
 
 Une confirmation est demandée afin de limiter les suppressions accidentelles.
 
@@ -400,7 +405,7 @@ La recette est retirée des favoris sans être supprimée.
 
 ## 18.3. Consulter les favoris
 
-Sélectionner **Favoris** dans le menu.
+Sélectionner Favoris dans le menu.
 
 Cette page permet de retrouver les recettes précédemment marquées comme favorites.
 
@@ -408,7 +413,7 @@ Cette page permet de retrouver les recettes précédemment marquées comme favor
 
 # 19. Planning des repas
 
-La section **Planning** permet d'organiser les repas à l'avance.
+La section Planning permet d'organiser les repas à l'avance.
 
 Une recette peut être associée à une planification.
 
@@ -435,7 +440,7 @@ La recette apparaît dans le planning.
 
 Une planification existante peut être modifiée.
 
-Utiliser le bouton **Modifier** correspondant au repas souhaité.
+Utiliser le bouton Modifier correspondant au repas souhaité.
 
 Effectuer les changements puis enregistrer.
 
@@ -443,7 +448,7 @@ Effectuer les changements puis enregistrer.
 
 ## 19.3. Supprimer une planification
 
-Utiliser le bouton **Supprimer** associé à la planification.
+Utiliser le bouton Supprimer associé à la planification.
 
 Après confirmation, le repas est retiré du planning.
 
@@ -457,7 +462,7 @@ La recette elle-même n'est pas supprimée.
 
 # 20. Liste de courses
 
-La section **Liste de courses** permet de gérer les ingrédients nécessaires aux repas.
+La section Liste de courses permet de gérer les ingrédients nécessaires aux repas.
 
 Une liste peut être générée à partir du planning.
 
@@ -520,15 +525,15 @@ Cette conversion constitue une amélioration envisageable.
 
 # 21. Cookbooks
 
-La section **Cookbooks** permet de créer des espaces regroupant plusieurs recettes et plusieurs membres.
+La section Cookbooks permet de créer des espaces regroupant plusieurs recettes et plusieurs membres.
 
 ---
 
 ## 21.1. Créer un cookbook
 
-Depuis la page **Cookbooks**, sélectionner :
+Depuis la page Cookbooks, sélectionner :
 
-**Nouveau cookbook**
+Nouveau cookbook
 
 Renseigner le nom souhaité puis enregistrer.
 
@@ -540,7 +545,7 @@ Une notification confirme la création lorsque l'opération a réussi.
 
 ## 21.2. Consulter un cookbook
 
-Utiliser le bouton **Voir** associé au cookbook.
+Utiliser le bouton Voir associé au cookbook.
 
 La fenêtre affiche notamment :
 
@@ -552,7 +557,7 @@ La fenêtre affiche notamment :
 
 ## 21.3. Ajouter un membre
 
-Le propriétaire du cookbook peut utiliser le bouton **Ajouter un membre**.
+Le propriétaire du cookbook peut utiliser le bouton Ajouter un membre.
 
 Il doit renseigner :
 
@@ -588,7 +593,7 @@ Le créateur du cookbook ne peut pas être retiré de son propre cookbook.
 
 ## 21.5. Ajouter une recette
 
-Un utilisateur disposant des droits nécessaires peut sélectionner **Ajouter une recette**.
+Un utilisateur disposant des droits nécessaires peut sélectionner Ajouter une recette.
 
 Une liste des recettes personnelles disponibles est proposée.
 
@@ -596,7 +601,7 @@ Sélectionner la recette souhaitée puis valider.
 
 Une notification confirme l'ajout.
 
-La recette apparaît ensuite dans la section **Recettes** du cookbook.
+La recette apparaît ensuite dans la section Recettes du cookbook.
 
 Une recette déjà associée à un autre cookbook doit d'abord être retirée de celui-ci avant de pouvoir être ajoutée à un nouveau cookbook.
 
@@ -620,13 +625,23 @@ Elle redevient alors disponible en tant que recette personnelle.
 
 Les actions disponibles dépendent du rôle de l'utilisateur.
 
-Les rôles `CREATOR` et `EDITOR` permettent notamment d'ajouter des recettes.
+Les rôles CREATOR et EDITOR permettent notamment d'ajouter des recettes.
 
-Les rôles `READER` et `COMMENTER` disposent de droits plus limités.
+Les rôles READER et COMMENTER disposent de droits plus limités. Les contrôles de permissions sont appliqués côté serveur et l'interface masque les actions non autorisées.
 
-La gestion complète et détaillée de toutes les permissions reste partiellement limitée dans la version actuelle.
+Les commentaires et la messagerie instantanée sont disponibles dans les cookbooks selon les droits du membre.
 
-Les fonctions collaboratives avancées comme les commentaires et la messagerie instantanée ne sont pas encore disponibles.
+### Commenter une recette partagée
+
+Depuis l'aperçu d'une recette d'un cookbook, un membre disposant de la permission nécessaire peut consulter et publier des commentaires. Les commentaires sont liés à la recette et à leur auteur.
+
+### Utiliser la messagerie instantanée
+
+Le détail d'un cookbook dispose également d'une messagerie. Les messages sont synchronisés en temps réel entre les membres connectés au cookbook.
+
+### Rechercher dans un cookbook
+
+Une barre de recherche permet de filtrer les recettes du cookbook à partir du nom, de la description, des instructions, des ingrédients ou des tags.
 
 ### Aperçu de la gestion des cookbooks
 
@@ -636,7 +651,7 @@ Les fonctions collaboratives avancées comme les commentaires et la messagerie i
 
 # 22. Import et export
 
-La section **Import / Export** permet de transférer les données de SUPMEAL.
+La section Import / Export permet de transférer les données de SUPMEAL.
 
 Elle concerne notamment :
 
@@ -647,7 +662,7 @@ Elle concerne notamment :
 
 ## 22.1. Exporter les données
 
-Utiliser la fonction d'export disponible dans la page **Import / Export**.
+Utiliser la fonction d'export disponible dans la page Import / Export.
 
 L'application génère un fichier contenant les données exportées.
 
@@ -675,7 +690,7 @@ Il est recommandé de vérifier le contenu du fichier avant son import.
 
 # 23. Profil
 
-La section **Profil** permet de consulter et modifier les informations liées au compte.
+La section Profil permet de consulter et modifier les informations liées au compte.
 
 Selon les informations disponibles dans l'application, l'utilisateur peut mettre à jour ses données personnelles.
 
@@ -699,13 +714,13 @@ Le mot de passe ne doit pas être communiqué à d'autres personnes.
 
 # 25. Déconnexion
 
-Lorsque l'utilisateur a terminé d'utiliser SUPMEAL, il peut utiliser la fonction **Déconnexion** située dans la barre latérale.
+Lorsque l'utilisateur a terminé d'utiliser SUPMEAL, il peut utiliser la fonction Déconnexion située dans la barre latérale.
 
 La session active est alors terminée et l'application revient vers la partie publique ou la page de connexion.
 
 Sur un appareil partagé, il est recommandé de toujours se déconnecter après utilisation.
 
-Lorsque la hauteur de la fenêtre est insuffisante pour afficher toute la barre latérale, celle-ci peut être parcourue verticalement afin de conserver l'accès au bouton **Déconnexion**.
+Lorsque la hauteur de la fenêtre est insuffisante pour afficher toute la barre latérale, celle-ci peut être parcourue verticalement afin de conserver l'accès au bouton Déconnexion.
 
 ---
 
@@ -819,23 +834,18 @@ Il peut ensuite ajouter des membres disposant de différents rôles et, selon le
 
 ---
 
-# 29. Fonctionnalités non disponibles dans la version actuelle
+# 29. Fonctionnalités restant à approfondir
 
-Certaines fonctionnalités prévues dans le cahier des charges ne font pas encore partie de la version actuelle ou nécessitent d'être approfondies.
+La version actuelle couvre les principales fonctionnalités prévues, notamment Google OAuth2, la messagerie instantanée, les commentaires collaboratifs, la recherche interne aux cookbooks, les préférences alimentaires et les allergies.
 
-Elles comprennent notamment :
+Les principaux axes d'amélioration restants sont :
 
-- la connexion avec OAuth2 ;
-- la messagerie instantanée dans les cookbooks ;
-- les commentaires collaboratifs ;
-- le système complet d'invitations ;
-- certaines permissions avancées des cookbooks ;
-- la recherche propre à chaque cookbook ;
-- certaines préférences culinaires ;
-- la gestion avancée des allergies ;
-- la conversion automatique entre toutes les unités compatibles.
-
-Ces éléments constituent des perspectives d'évolution de SUPMEAL.
+- un système complet d'invitations par lien ou par e-mail ;
+- une granularité supplémentaire des permissions des cookbooks ;
+- la conversion automatique entre unités compatibles ;
+- une planification sur plusieurs semaines ;
+- une couverture de tests automatisés plus complète ;
+- le déploiement public et la CI/CD.
 
 ---
 

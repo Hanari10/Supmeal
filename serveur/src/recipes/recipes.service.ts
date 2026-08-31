@@ -198,7 +198,25 @@ export class RecipesService {
   }
 
   async remove(id: string, userId: string) {
-    await this.findOne(id, userId);
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        userId: true,
+      },
+    });
+
+    if (!recipe) {
+      throw new NotFoundException('Recette introuvable.');
+    }
+
+    if (recipe.userId !== userId) {
+      throw new ForbiddenException(
+        'Seul le propriétaire peut supprimer cette recette.',
+      );
+    }
 
     return this.prisma.recipe.delete({
       where: {

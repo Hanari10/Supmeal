@@ -21,7 +21,7 @@ Elle permet notamment de :
 - gérer des cookbooks ;
 - importer et exporter des données.
 
-Certaines fonctionnalités collaboratives prévues dans le cahier des charges restent des axes d'évolution.
+Les fonctions collaboratives principales prévues par le cahier des charges sont intégrées, notamment les rôles, les commentaires et la messagerie instantanée.
 
 ---
 
@@ -37,7 +37,7 @@ Les principaux objectifs retenus lors de la conception de SUPMEAL sont :
 - utiliser un modèle de données relationnel adapté ;
 - assurer la persistance des données ;
 - protéger les données personnelles des utilisateurs ;
-- permettre l'évolution future vers davantage de fonctionnalités collaboratives.
+- permettre l'évolution vers des fonctionnalités collaboratives supplémentaires sans remettre en cause l'architecture existante.
 
 ---
 
@@ -316,16 +316,13 @@ Il peut également modifier son mot de passe.
 
 ## 7.4. OAuth2
 
-La connexion OAuth2 faisait partie des fonctionnalités initialement prévues.
+SUPMEAL intègre une connexion OAuth2 avec Google.
 
-Elle n'est pas intégrée à la version actuelle de SUPMEAL.
+Le serveur utilise une stratégie Google pour authentifier l'utilisateur. Après validation par Google, SUPMEAL associe le compte externe à un utilisateur existant lorsque l'adresse e-mail correspond, ou crée un nouveau compte lorsque nécessaire. Un JWT SUPMEAL est ensuite généré puis transmis au client via la page de callback OAuth.
 
-L'architecture pourra être étendue pour permettre ultérieurement une connexion via :
+Les comptes externes sont enregistrés dans le modèle OAuthAccount, ce qui permet de conserver une séparation entre l'identité SUPMEAL et le fournisseur OAuth2.
 
-- Google ;
-- Microsoft ;
-- GitHub ;
-- ou un autre fournisseur compatible OAuth2.
+L'architecture reste extensible à d'autres fournisseurs compatibles OAuth2 si cela devient nécessaire.
 
 ---
 
@@ -407,7 +404,7 @@ RecipeIngredient
 Ingredient
 ```
 
-`RecipeIngredient` contient notamment :
+RecipeIngredient contient notamment :
 
 - la recette ;
 - l'ingrédient ;
@@ -425,7 +422,7 @@ Lait      500 ml
 Œufs        3
 ```
 
-Cette modélisation permet de réutiliser `Farine` dans une autre recette avec une quantité différente.
+Cette modélisation permet de réutiliser Farine dans une autre recette avec une quantité différente.
 
 ---
 
@@ -618,16 +615,19 @@ La version actuelle permet :
 
 - de créer un cookbook ;
 - de consulter les cookbooks auxquels l'utilisateur appartient ;
-- de modifier ou supprimer un cookbook lorsqu'il en est propriétaire ;
+- de modifier ou supprimer un cookbook selon les permissions ;
 - d'ajouter et de retirer des membres ;
-- d'attribuer différents rôles aux membres ;
+- d'attribuer les rôles CREATOR, EDITOR, COMMENTER et READER ;
 - d'afficher les recettes présentes dans un cookbook ;
 - d'ajouter une recette personnelle dans un cookbook ;
-- de retirer une recette d'un cookbook sans supprimer la recette.
+- de retirer une recette d'un cookbook sans supprimer la recette ;
+- de rechercher une recette à l'intérieur du cookbook ;
+- de commenter une recette partagée lorsque le rôle l'autorise ;
+- d'échanger des messages instantanés avec les autres membres du cookbook.
 
 L'ajout et le retrait des recettes respectent les permissions définies par le serveur.
 
-Les rôles `CREATOR` et `EDITOR` peuvent notamment ajouter des recettes dans un cookbook.
+Les rôles CREATOR et EDITOR peuvent notamment ajouter des recettes dans un cookbook.
 
 Une recette est liée à un cookbook grâce au champ :
 
@@ -635,7 +635,7 @@ Une recette est liée à un cookbook grâce au champ :
 Recipe.cookbookId
 ```
 
-Lorsqu'une recette est ajoutée à un cookbook, son champ `cookbookId` reçoit l'identifiant du cookbook concerné.
+Lorsqu'une recette est ajoutée à un cookbook, son champ cookbookId reçoit l'identifiant du cookbook concerné.
 
 Le fonctionnement peut être représenté ainsi :
 
@@ -659,13 +659,13 @@ Les contrôles de permissions sont effectués côté serveur afin d'empêcher un
 
 L'interface adapte également les actions proposées selon les permissions de l'utilisateur.
 
-Les fonctions collaboratives suivantes restent des évolutions possibles :
+Les principales évolutions collaboratives encore possibles sont :
 
-- système complet d'invitations ;
-- commentaires sur les recettes ;
-- messagerie instantanée ;
-- gestion plus avancée et plus granulaire des permissions ;
-- recherche propre à chaque cookbook.
+- un système complet d'invitations par lien ou par e-mail ;
+- une granularité encore plus fine des permissions ;
+- des notifications collaboratives plus avancées.
+
+La recherche interne, les commentaires et la messagerie instantanée sont déjà intégrés à la version actuelle.
 
 ---
 
@@ -972,24 +972,18 @@ flowchart TD
 
 ---
 
-# 28. Fonctionnalités initialement prévues mais non terminées
+# 28. Fonctionnalités restant à approfondir
 
-Certaines fonctions prévues dans la conception initiale restent à développer ou à approfondir :
+La majorité des fonctions prévues dans la conception initiale sont désormais intégrées. Les principaux éléments restant à développer ou à approfondir sont :
 
-- OAuth2 ;
-- commentaires ;
-- messagerie instantanée ;
-- invitations avancées ;
-- permissions avancées des cookbooks ;
-- préférences culinaires ;
-- allergies ;
-- certains filtres avancés ;
-- recherche propre à chaque cookbook ;
-- conversion automatique des unités.
+- un système d'invitations avancées pour les cookbooks ;
+- une granularité encore plus fine des permissions ;
+- la conversion automatique entre unités compatibles ;
+- une planification sur plusieurs semaines ;
+- une couverture de tests automatisés plus complète ;
+- le déploiement public et la CI/CD.
 
-La conception initiale prévoyait bien l'authentification OAuth2 ainsi que les commentaires et la messagerie.
-
-Ces fonctions peuvent être intégrées ultérieurement grâce à l'architecture modulaire choisie.
+Google OAuth2, les préférences alimentaires, les allergies, les filtres de recettes, la recherche interne aux cookbooks, les commentaires et la messagerie instantanée font partie de la version actuelle.
 
 ---
 
@@ -999,17 +993,13 @@ Parmi les évolutions possibles :
 
 ### Collaboration
 
-- messagerie temps réel avec WebSocket ;
-- commentaires par recette ;
-- système complet de permissions ;
 - invitations par lien ou e-mail ;
-- recherche dédiée à chaque cookbook.
+- notifications collaboratives plus avancées ;
+- granularité supplémentaire des permissions.
 
 ### Cuisine
 
 - conversion automatique des unités ;
-- préférences alimentaires ;
-- allergies ;
 - informations nutritionnelles.
 
 ### Assistance

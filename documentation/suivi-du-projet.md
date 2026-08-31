@@ -19,7 +19,7 @@ Il complète l'historique Git du dépôt en donnant une vue fonctionnelle des tr
 - [x] Création du modèle de données
 - [x] Mise en place des migrations Prisma
 - [x] Configuration de Docker
-- [x] Création du fichier `docker-compose.yml`
+- [x] Création du fichier docker-compose.yml
 - [x] Mise en place de la persistance PostgreSQL
 - [x] Mise en place de la persistance des images uploadées
 
@@ -37,11 +37,11 @@ Il complète l'historique Git du dépôt en donnant une vue fonctionnelle des tr
 - [x] Déconnexion
 - [x] Modification du profil
 - [x] Changement de mot de passe
-- [ ] OAuth2
+- [x] OAuth2 Google
+- [x] Association d'un compte Google à un compte existant
+- [x] Création d'un compte lors d'une première connexion Google
 
-L'authentification standard est fonctionnelle.
-
-OAuth2 reste une évolution prévue.
+L'authentification locale et Google OAuth2 sont fonctionnelles.
 
 ---
 
@@ -52,9 +52,10 @@ OAuth2 reste une évolution prévue.
 - [x] Modification du nom
 - [x] Modification du mot de passe
 - [x] Interface dédiée au profil
-- [ ] Préférences culinaires avancées
-- [ ] Gestion complète des allergies
-- [ ] Association d'un compte OAuth2
+- [x] Préférences alimentaires
+- [x] Gestion des allergies
+- [x] Cuisines préférées
+- [x] Association d'un compte OAuth2
 
 ---
 
@@ -96,9 +97,8 @@ OAuth2 reste une évolution prévue.
 - [x] Aperçu des ingrédients dans la liste des recettes
 - [x] Affichage complet des ingrédients dans la fiche recette
 - [x] Gestion des favoris
-- [ ] Gestion complète des catégories
-- [~] Gestion des tags
-- [~] Source de recette pleinement exploitée
+- [x] Gestion des tags
+- [x] Source de recette
 
 ---
 
@@ -123,15 +123,17 @@ OAuth2 reste une évolution prévue.
 - [x] Recherche dans la description
 - [x] Recherche dans les instructions
 - [x] Recherche par ingrédient
-- [~] Recherche avancée backend
-- [~] Filtrage par tag
-- [~] Filtrage par difficulté
-- [~] Filtrage par temps de préparation
-- [ ] Filtrage complet par cookbook
+- [x] Recherche avancée backend
+- [x] Filtrage par tag
+- [x] Filtrage par difficulté
+- [x] Filtrage par temps de préparation
+- [x] Filtrage par temps de cuisson
+- [x] Filtrage par ingrédient
+- [x] Filtrage par cookbook
+- [x] Filtrage des favoris
 - [x] Accès aux favoris via une page dédiée
-- [ ] Interface complète de filtres combinés
-
-La structure backend permet plusieurs filtres avancés, mais tous ne disposent pas encore d'une interface complète côté client.
+- [x] Interface de filtres combinés
+- [x] Recherche interne à chaque cookbook
 
 ---
 
@@ -207,18 +209,15 @@ Amélioration future :
 - [x] Conservation de la recette après son retrait
 - [x] Contrôle des permissions d'ajout côté serveur
 - [x] Notifications lors de l'ajout ou du retrait d'une recette
-- [~] Gestion des rôles
-- [~] Gestion avancée des permissions
+- [x] Gestion des rôles
+- [x] Gestion des permissions
 - [ ] Système complet d'invitations
-- [ ] Recherche propre à chaque cookbook
-- [ ] Commentaires de recettes
-- [ ] Messagerie instantanée
+- [x] Recherche propre à chaque cookbook
+- [x] Commentaires de recettes
+- [x] Messagerie instantanée
+- [x] Synchronisation temps réel avec Socket.IO
 
-Les cookbooks permettent désormais de regrouper réellement plusieurs recettes et plusieurs membres.
-
-Les rôles `CREATOR` et `EDITOR` peuvent ajouter des recettes.
-
-Les fonctionnalités collaboratives avancées restent à développer.
+Les cookbooks permettent de regrouper des recettes et plusieurs membres avec les rôles CREATOR, EDITOR, COMMENTER et READER. Les permissions sont contrôlées côté serveur. Les commentaires, la recherche interne et la messagerie instantanée sont fonctionnels.
 
 ---
 
@@ -279,9 +278,9 @@ Les fonctionnalités collaboratives avancées restent à développer.
 - [x] Génération de liste de courses
 - [x] Import / export
 - [x] Gestion de l'ajout et du retrait des recettes dans les cookbooks
-- [~] Permissions avancées des cookbooks
-- [ ] OAuth2
-- [ ] Temps réel
+- [x] Permissions des cookbooks
+- [x] OAuth2 Google
+- [x] Temps réel avec Socket.IO
 
 ---
 
@@ -291,7 +290,7 @@ Les fonctionnalités collaboratives avancées restent à développer.
 - [x] Dockerfile frontend
 - [x] Nginx
 - [x] PostgreSQL conteneurisé
-- [x] `docker-compose.yml`
+- [x] docker-compose.yml
 - [x] Trois services distincts
 - [x] Persistance de PostgreSQL
 - [x] Persistance des images
@@ -317,7 +316,7 @@ Les fonctionnalités collaboratives avancées restent à développer.
 - [x] Historique Git
 - [x] Commits réguliers
 - [x] Dépôt Git distant
-- [~] Tests automatisés
+- [ ] Tests automatisés métier
 - [ ] Couverture de tests complète
 
 ---
@@ -346,10 +345,10 @@ Les fonctionnalités collaboratives avancées restent à développer.
 - [x] Authentification JWT
 - [x] Routes privées protégées
 - [x] Secrets prévus via variables d'environnement
-- [x] `.env` exclu du dépôt
+- [x] .env exclu du dépôt
 - [x] Uploads exclus du dépôt
 - [~] Audit complet des secrets avant rendu
-- [ ] OAuth2 sécurisé
+- [x] OAuth2 Google configuré par variables d’environnement
 
 ---
 
@@ -357,7 +356,7 @@ Les fonctionnalités collaboratives avancées restent à développer.
 
 ## Connexion à PostgreSQL
 
-Plusieurs erreurs `ECONNREFUSED` ont été rencontrées lorsque PostgreSQL n'était pas lancé.
+Plusieurs erreurs ECONNREFUSED ont été rencontrées lorsque PostgreSQL n'était pas lancé.
 
 La solution a consisté à vérifier le conteneur PostgreSQL avant le démarrage du backend.
 
@@ -416,7 +415,7 @@ La gestion de l'état React a été corrigée afin que l'interface se mette à j
 
 Les premières versions du formulaire de recette ne permettaient pas d'associer des ingrédients.
 
-Un service dédié `RecipeIngredient` a ensuite été intégré afin de gérer :
+Un service dédié RecipeIngredient a ensuite été intégré afin de gérer :
 
 - l'ajout ;
 - la quantité ;
@@ -430,7 +429,7 @@ Un service dédié `RecipeIngredient` a ensuite été intégré afin de gérer :
 
 La génération de la liste de courses nécessitait des recettes disposant réellement d'ingrédients structurés.
 
-L'intégration des `RecipeIngredient` a permis de rendre la chaîne complète fonctionnelle :
+L'intégration des RecipeIngredient a permis de rendre la chaîne complète fonctionnelle :
 
 ```text
 Recette
@@ -460,7 +459,7 @@ Le serveur vérifie notamment :
 
 L'interface permet désormais d'ajouter et de retirer des recettes selon les permissions de l'utilisateur.
 
-Le retrait d'une recette remet son `cookbookId` à `null` sans supprimer la recette.
+Le retrait d'une recette remet son cookbookId à null sans supprimer la recette.
 
 ---
 
@@ -488,19 +487,16 @@ Les fonctionnalités principales finalisées dans la version actuelle sont :
 
 # 22. Fonctionnalités restant à développer
 
-Les principales fonctions encore absentes ou partielles sont :
+Les principales fonctions encore absentes ou à approfondir sont :
 
-- OAuth2 ;
-- commentaires ;
-- messagerie instantanée ;
-- invitations complètes ;
-- permissions avancées des cookbooks ;
-- recherche et filtres avancés complets ;
-- préférences culinaires avancées ;
-- allergies ;
-- normalisation et conversion des unités ;
-- tests automatisés complets ;
-- déploiement public.
+- invitations complètes pour les cookbooks ;
+- granularité supplémentaire des permissions ;
+- normalisation et conversion automatique des unités ;
+- planification sur plusieurs semaines ;
+- tests automatisés métier et couverture complète ;
+- déploiement public et CI/CD.
+
+Google OAuth2, les commentaires, la messagerie instantanée, les filtres avancés, les préférences alimentaires, les allergies et la recherche interne aux cookbooks sont désormais fonctionnels.
 
 ---
 
@@ -509,15 +505,13 @@ Les principales fonctions encore absentes ou partielles sont :
 Si du temps supplémentaire est disponible, les priorités d'amélioration possibles sont :
 
 1. conversion automatique des unités ;
-2. amélioration des filtres ;
-3. permissions avancées des cookbooks ;
-4. commentaires ;
-5. OAuth2 ;
-6. messagerie temps réel ;
-7. préférences culinaires ;
-8. suggestions intelligentes de recettes ;
-9. déploiement public ;
-10. CI/CD.
+2. invitations avancées pour les cookbooks ;
+3. tests automatisés métier ;
+4. planification sur plusieurs semaines ;
+5. suggestions intelligentes de recettes ;
+6. informations nutritionnelles ;
+7. déploiement public ;
+8. CI/CD.
 
 ---
 
@@ -543,7 +537,7 @@ Le projet est désormais dans une phase de finalisation du rendu.
 - [~] Vérifier la cohérence de toute la documentation
 - [ ] Vérifier tous les secrets
 - [ ] Vérifier le dépôt Git
-- [ ] Vérifier le lancement complet avec `docker compose up`
+- [ ] Vérifier le lancement complet avec docker compose up
 - [ ] Faire le dernier commit de documentation
 - [ ] Faire le dernier push
 - [ ] Créer l'archive ZIP

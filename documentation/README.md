@@ -8,7 +8,7 @@ Ce dossier regroupe la documentation du projet **SUPMEAL**, une application web 
 
 La documentation du projet est répartie en plusieurs fichiers afin de séparer les informations destinées aux développeurs, la conception de l'application et les informations destinées aux utilisateurs.
 
-### `documentation-technique.md`
+### documentation-technique.md
 
 La documentation technique constitue le document de référence pour l'installation, le déploiement et la maintenance de SUPMEAL.
 
@@ -32,7 +32,7 @@ Elle présente notamment :
 
 ---
 
-### `manuel-utilisateur.md`
+### manuel-utilisateur.md
 
 Le manuel utilisateur explique le fonctionnement de SUPMEAL du point de vue d'un utilisateur de l'application.
 
@@ -52,11 +52,15 @@ Il décrit notamment :
 - la création et la gestion des cookbooks ;
 - la gestion des membres et de leurs rôles ;
 - l'ajout et le retrait de recettes dans les cookbooks ;
+- la recherche interne aux cookbooks ;
+- les commentaires sur les recettes partagées ;
+- la messagerie instantanée ;
+- la connexion Google OAuth2 ;
 - l'import et l'export des données.
 
 ---
 
-### `conception.md`
+### conception.md
 
 Ce document présente les choix réalisés lors de la conception de SUPMEAL.
 
@@ -76,7 +80,7 @@ Il permet également de distinguer les fonctionnalités actuellement implément�
 
 ---
 
-### `modele-de-donnees.md`
+### modele-de-donnees.md
 
 Ce document décrit le modèle de données utilisé par SUPMEAL.
 
@@ -94,11 +98,11 @@ Il présente :
 - les listes de courses ;
 - les autres données nécessaires au fonctionnement de l'application.
 
-Le modèle de données est implémenté avec **PostgreSQL** et **Prisma ORM**.
+Le modèle de données est implémenté avec PostgreSQL et Prisma ORM.
 
 ---
 
-### `suivi-du-projet.md`
+### suivi-du-projet.md
 
 Ce document retrace l'avancement du développement.
 
@@ -153,7 +157,7 @@ La persistance des données est assurée par PostgreSQL via Prisma ORM.
 
 ## Déploiement
 
-Le projet dispose d'un fichier `docker-compose.yml` situé à la racine.
+Le projet dispose d'un fichier docker-compose.yml situé à la racine.
 
 Il permet de déployer les trois services principaux :
 
@@ -186,7 +190,7 @@ Cela concerne notamment :
 - les mots de passe de base de données ;
 - le secret utilisé pour les JWT ;
 - les éventuelles clés d'API ;
-- les futurs identifiants OAuth2.
+- les identifiants OAuth2.
 
 Les mots de passe des comptes utilisateurs ne sont pas conservés en clair.
 

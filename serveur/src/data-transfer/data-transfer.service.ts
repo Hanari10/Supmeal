@@ -238,7 +238,7 @@ export class DataTransferService {
       []) {
       const importedIngredient = importedRecipeIngredient.ingredient;
 
-      const ingredient = await this.prisma.ingredient.upsert({
+      const ingredient = await transaction.ingredient.upsert({
         where: {
           userId_name: {
             userId,

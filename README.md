@@ -25,9 +25,10 @@ SUPMEAL dispose d'un système d'authentification permettant :
 - l'authentification par JWT ;
 - la protection des routes privées ;
 - la modification des informations du profil ;
-- le changement de mot de passe.
+- le changement de mot de passe ;
+- la connexion avec Google via OAuth2.
 
-Les mots de passe ne sont pas stockés en clair dans la base de données.
+Les mots de passe ne sont pas stockés en clair dans la base de données. Un compte Google peut être associé à un compte SUPMEAL existant lorsque les adresses e-mail correspondent.
 
 ### Recettes
 
@@ -60,9 +61,9 @@ Les ingrédients peuvent ensuite être associés aux recettes avec :
 - une unité de mesure ;
 - un ordre d'affichage.
 
-### Recherche
+### Recherche et filtrage
 
-La liste des recettes dispose d'un système de recherche permettant notamment de rechercher une recette à partir de son contenu ou de ses ingrédients.
+La liste des recettes dispose d'un système de recherche et de filtrage permettant de retrouver une recette à partir de son nom, de sa description, de ses instructions, de ses ingrédients ou de ses tags. Des filtres peuvent également être appliqués sur la difficulté, les temps de préparation et de cuisson, les tags, les ingrédients, les favoris et les cookbooks.
 
 ### Favoris
 
@@ -89,7 +90,7 @@ Une liste de courses peut être générée à partir des recettes planifiées.
 
 Les ingrédients identiques utilisant la même unité sont regroupés automatiquement et leurs quantités sont additionnées.
 
-Par exemple, deux recettes nécessitant respectivement `200 g` et `300 g` de farine produisent une entrée de `500 g` de farine dans la liste de courses.
+Par exemple, deux recettes nécessitant respectivement 200 g et 300 g de farine produisent une entrée de 500 g de farine dans la liste de courses.
 
 ### Cookbooks
 
@@ -101,7 +102,10 @@ Selon son rôle dans le cookbook, un utilisateur peut notamment :
 - ajouter une de ses recettes personnelles au cookbook ;
 - retirer une recette du cookbook sans la supprimer ;
 - gérer les membres du cookbook ;
-- consulter les rôles des membres.
+- consulter les rôles des membres ;
+- rechercher une recette directement dans un cookbook ;
+- commenter les recettes partagées selon les permissions ;
+- échanger des messages en temps réel avec les membres du cookbook.
 
 Les rôles actuellement utilisés sont :
 
@@ -110,7 +114,7 @@ Les rôles actuellement utilisés sont :
 - lecteur ;
 - commentateur.
 
-Les fonctionnalités collaboratives avancées comme les commentaires, la messagerie instantanée et les invitations complètes restent des évolutions possibles.
+Les commentaires et la messagerie instantanée sont intégrés. Un système d'invitations plus avancé, par exemple par lien ou par e-mail, reste une évolution possible.
 
 ### Import et export
 
@@ -122,17 +126,14 @@ L'import et l'export prennent en charge les recettes et les cookbooks.
 
 ## Fonctionnalités prévues ou à approfondir
 
-Certaines fonctionnalités prévues dans le cahier des charges constituent des pistes d'évolution du projet :
+Les principales pistes d'évolution restantes concernent :
 
-- authentification OAuth2 ;
-- gestion avancée des membres et permissions des cookbooks ;
-- commentaires sur les recettes partagées ;
-- messagerie instantanée au sein des cookbooks ;
-- recherche et filtrage avancés supplémentaires ;
-- préférences culinaires et allergies ;
-- conversion automatique des unités, par exemple `1000 g` vers `1 kg`.
-
-Ces fonctionnalités pourront être ajoutées dans de futures versions de SUPMEAL.
+- un système d'invitations plus complet pour les cookbooks ;
+- une granularité encore plus fine des permissions ;
+- la conversion automatique entre unités compatibles, par exemple 1000 g vers 1 kg ;
+- une vue de planning sur plusieurs semaines ;
+- une couverture de tests automatisés plus complète ;
+- le déploiement public et la mise en place d'une chaîne CI/CD.
 
 ---
 
@@ -269,13 +270,17 @@ L'application nécessite certaines variables d'environnement pour fonctionner.
 
 Les secrets réels ne doivent jamais être enregistrés dans le dépôt Git.
 
-Un fichier `.env` doit être créé à partir des exemples fournis dans le projet lorsque cela est nécessaire.
+Un fichier .env doit être créé à partir des exemples fournis dans le projet lorsque cela est nécessaire.
 
 Exemple :
 
 ```env
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
 JWT_SECRET=CHANGE_ME
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+FRONTEND_URL=http://localhost:5173
 ```
 
 Les valeurs ci-dessus sont uniquement des exemples et doivent être remplacées par les valeurs correspondant à l'environnement utilisé.
@@ -316,7 +321,7 @@ docker compose down
 
 Les données PostgreSQL sont conservées grâce à un volume Docker.
 
-> Attention : l'utilisation de `docker compose down -v` supprime également les volumes et peut donc supprimer les données persistantes de la base.
+> Attention : l'utilisation de 'docker compose down -v' supprime également les volumes et peut donc supprimer les données persistantes de la base.
 
 ---
 
@@ -421,7 +426,7 @@ Plusieurs mesures sont mises en place afin de protéger l'application et les don
 - les secrets sont configurés avec des variables d'environnement ;
 - aucun secret réel ne doit être versionné dans Git.
 
-Les fichiers `.env` contenant des informations sensibles doivent être exclus du dépôt.
+Les fichiers .env contenant des informations sensibles doivent être exclus du dépôt.
 
 ---
 
@@ -450,7 +455,7 @@ La version actuelle fournit les principales fonctionnalités de gestion personne
 
 L'architecture Docker permet de déployer ensemble le client web, l'API et PostgreSQL.
 
-Certaines fonctionnalités collaboratives avancées prévues dans le cahier des charges restent des axes d'évolution, notamment OAuth2, la messagerie instantanée, les commentaires et la gestion avancée des permissions des cookbooks.
+La version actuelle intègre également Google OAuth2, les commentaires de recettes partagées, la messagerie instantanée des cookbooks, la recherche interne aux cookbooks ainsi que la gestion des rôles et permissions. Les évolutions restantes concernent principalement les invitations avancées, la conversion d'unités, les tests automatisés et le déploiement public.
 
 ---
 

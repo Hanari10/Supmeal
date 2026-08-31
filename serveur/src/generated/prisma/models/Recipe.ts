@@ -47,7 +47,6 @@ export type RecipeMinAggregateOutputType = {
   difficulty: string | null
   imageUrl: string | null
   sourceUrl: string | null
-  favorite: boolean | null
   instructions: string | null
   cookbookId: string | null
   userId: string | null
@@ -65,7 +64,6 @@ export type RecipeMaxAggregateOutputType = {
   difficulty: string | null
   imageUrl: string | null
   sourceUrl: string | null
-  favorite: boolean | null
   instructions: string | null
   cookbookId: string | null
   userId: string | null
@@ -83,7 +81,6 @@ export type RecipeCountAggregateOutputType = {
   difficulty: number
   imageUrl: number
   sourceUrl: number
-  favorite: number
   instructions: number
   cookbookId: number
   userId: number
@@ -115,7 +112,6 @@ export type RecipeMinAggregateInputType = {
   difficulty?: true
   imageUrl?: true
   sourceUrl?: true
-  favorite?: true
   instructions?: true
   cookbookId?: true
   userId?: true
@@ -133,7 +129,6 @@ export type RecipeMaxAggregateInputType = {
   difficulty?: true
   imageUrl?: true
   sourceUrl?: true
-  favorite?: true
   instructions?: true
   cookbookId?: true
   userId?: true
@@ -151,7 +146,6 @@ export type RecipeCountAggregateInputType = {
   difficulty?: true
   imageUrl?: true
   sourceUrl?: true
-  favorite?: true
   instructions?: true
   cookbookId?: true
   userId?: true
@@ -256,7 +250,6 @@ export type RecipeGroupByOutputType = {
   difficulty: string | null
   imageUrl: string | null
   sourceUrl: string | null
-  favorite: boolean
   instructions: string
   cookbookId: string | null
   userId: string
@@ -297,7 +290,6 @@ export type RecipeWhereInput = {
   difficulty?: Prisma.StringNullableFilter<"Recipe"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
   sourceUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
-  favorite?: Prisma.BoolFilter<"Recipe"> | boolean
   instructions?: Prisma.StringFilter<"Recipe"> | string
   cookbookId?: Prisma.StringNullableFilter<"Recipe"> | string | null
   userId?: Prisma.UuidFilter<"Recipe"> | string
@@ -322,7 +314,6 @@ export type RecipeOrderByWithRelationInput = {
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  favorite?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   cookbookId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -350,7 +341,6 @@ export type RecipeWhereUniqueInput = Prisma.AtLeast<{
   difficulty?: Prisma.StringNullableFilter<"Recipe"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
   sourceUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
-  favorite?: Prisma.BoolFilter<"Recipe"> | boolean
   instructions?: Prisma.StringFilter<"Recipe"> | string
   cookbookId?: Prisma.StringNullableFilter<"Recipe"> | string | null
   userId?: Prisma.UuidFilter<"Recipe"> | string
@@ -375,7 +365,6 @@ export type RecipeOrderByWithAggregationInput = {
   difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  favorite?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   cookbookId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -401,7 +390,6 @@ export type RecipeScalarWhereWithAggregatesInput = {
   difficulty?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
   sourceUrl?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
-  favorite?: Prisma.BoolWithAggregatesFilter<"Recipe"> | boolean
   instructions?: Prisma.StringWithAggregatesFilter<"Recipe"> | string
   cookbookId?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
   userId?: Prisma.UuidWithAggregatesFilter<"Recipe"> | string
@@ -419,7 +407,6 @@ export type RecipeCreateInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -442,7 +429,6 @@ export type RecipeUncheckedCreateInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -465,7 +451,6 @@ export type RecipeUpdateInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -488,7 +473,6 @@ export type RecipeUncheckedUpdateInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -511,7 +495,6 @@ export type RecipeCreateManyInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -529,7 +512,6 @@ export type RecipeUpdateManyMutationInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -545,7 +527,6 @@ export type RecipeUncheckedUpdateManyInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -573,7 +554,6 @@ export type RecipeCountOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
-  favorite?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   cookbookId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -597,7 +577,6 @@ export type RecipeMaxOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
-  favorite?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   cookbookId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -615,7 +594,6 @@ export type RecipeMinOrderByAggregateInput = {
   difficulty?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
-  favorite?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   cookbookId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -682,10 +660,6 @@ export type NullableIntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type RecipeCreateNestedOneWithoutRecipeIngredientsInput = {
@@ -810,7 +784,6 @@ export type RecipeCreateWithoutUserInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -832,7 +805,6 @@ export type RecipeUncheckedCreateWithoutUserInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   createdAt?: Date | string
@@ -883,7 +855,6 @@ export type RecipeScalarWhereInput = {
   difficulty?: Prisma.StringNullableFilter<"Recipe"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
   sourceUrl?: Prisma.StringNullableFilter<"Recipe"> | string | null
-  favorite?: Prisma.BoolFilter<"Recipe"> | boolean
   instructions?: Prisma.StringFilter<"Recipe"> | string
   cookbookId?: Prisma.StringNullableFilter<"Recipe"> | string | null
   userId?: Prisma.UuidFilter<"Recipe"> | string
@@ -901,7 +872,6 @@ export type RecipeCreateWithoutRecipeIngredientsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -923,7 +893,6 @@ export type RecipeUncheckedCreateWithoutRecipeIngredientsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -961,7 +930,6 @@ export type RecipeUpdateWithoutRecipeIngredientsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -983,7 +951,6 @@ export type RecipeUncheckedUpdateWithoutRecipeIngredientsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1005,7 +972,6 @@ export type RecipeCreateWithoutCookbookInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1027,7 +993,6 @@ export type RecipeUncheckedCreateWithoutCookbookInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   userId: string
   createdAt?: Date | string
@@ -1075,7 +1040,6 @@ export type RecipeCreateWithoutCommentsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1097,7 +1061,6 @@ export type RecipeUncheckedCreateWithoutCommentsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -1135,7 +1098,6 @@ export type RecipeUpdateWithoutCommentsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1157,7 +1119,6 @@ export type RecipeUncheckedUpdateWithoutCommentsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1179,7 +1140,6 @@ export type RecipeCreateWithoutTagsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1201,7 +1161,6 @@ export type RecipeUncheckedCreateWithoutTagsInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -1239,7 +1198,6 @@ export type RecipeUpdateWithoutTagsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1261,7 +1219,6 @@ export type RecipeUncheckedUpdateWithoutTagsInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1283,7 +1240,6 @@ export type RecipeCreateWithoutFavoritesInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1305,7 +1261,6 @@ export type RecipeUncheckedCreateWithoutFavoritesInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -1343,7 +1298,6 @@ export type RecipeUpdateWithoutFavoritesInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1365,7 +1319,6 @@ export type RecipeUncheckedUpdateWithoutFavoritesInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1387,7 +1340,6 @@ export type RecipeCreateWithoutMealPlansInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1409,7 +1361,6 @@ export type RecipeUncheckedCreateWithoutMealPlansInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   userId: string
@@ -1447,7 +1398,6 @@ export type RecipeUpdateWithoutMealPlansInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1469,7 +1419,6 @@ export type RecipeUncheckedUpdateWithoutMealPlansInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1491,7 +1440,6 @@ export type RecipeCreateManyUserInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   cookbookId?: string | null
   createdAt?: Date | string
@@ -1508,7 +1456,6 @@ export type RecipeUpdateWithoutUserInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1530,7 +1477,6 @@ export type RecipeUncheckedUpdateWithoutUserInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1552,7 +1498,6 @@ export type RecipeUncheckedUpdateManyWithoutUserInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   cookbookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1569,7 +1514,6 @@ export type RecipeCreateManyCookbookInput = {
   difficulty?: string | null
   imageUrl?: string | null
   sourceUrl?: string | null
-  favorite?: boolean
   instructions?: string
   userId: string
   createdAt?: Date | string
@@ -1586,7 +1530,6 @@ export type RecipeUpdateWithoutCookbookInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1608,7 +1551,6 @@ export type RecipeUncheckedUpdateWithoutCookbookInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1630,7 +1572,6 @@ export type RecipeUncheckedUpdateManyWithoutCookbookInput = {
   difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   instructions?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1714,7 +1655,6 @@ export type RecipeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   difficulty?: boolean
   imageUrl?: boolean
   sourceUrl?: boolean
-  favorite?: boolean
   instructions?: boolean
   cookbookId?: boolean
   userId?: boolean
@@ -1740,7 +1680,6 @@ export type RecipeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   difficulty?: boolean
   imageUrl?: boolean
   sourceUrl?: boolean
-  favorite?: boolean
   instructions?: boolean
   cookbookId?: boolean
   userId?: boolean
@@ -1760,7 +1699,6 @@ export type RecipeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   difficulty?: boolean
   imageUrl?: boolean
   sourceUrl?: boolean
-  favorite?: boolean
   instructions?: boolean
   cookbookId?: boolean
   userId?: boolean
@@ -1780,7 +1718,6 @@ export type RecipeSelectScalar = {
   difficulty?: boolean
   imageUrl?: boolean
   sourceUrl?: boolean
-  favorite?: boolean
   instructions?: boolean
   cookbookId?: boolean
   userId?: boolean
@@ -1788,7 +1725,7 @@ export type RecipeSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "preparationTime" | "cookingTime" | "servings" | "difficulty" | "imageUrl" | "sourceUrl" | "favorite" | "instructions" | "cookbookId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
+export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "preparationTime" | "cookingTime" | "servings" | "difficulty" | "imageUrl" | "sourceUrl" | "instructions" | "cookbookId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
 export type RecipeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tags?: boolean | Prisma.Recipe$tagsArgs<ExtArgs>
   mealPlans?: boolean | Prisma.Recipe$mealPlansArgs<ExtArgs>
@@ -1829,7 +1766,6 @@ export type $RecipePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     difficulty: string | null
     imageUrl: string | null
     sourceUrl: string | null
-    favorite: boolean
     instructions: string
     cookbookId: string | null
     userId: string
@@ -2274,7 +2210,6 @@ export interface RecipeFieldRefs {
   readonly difficulty: Prisma.FieldRef<"Recipe", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Recipe", 'String'>
   readonly sourceUrl: Prisma.FieldRef<"Recipe", 'String'>
-  readonly favorite: Prisma.FieldRef<"Recipe", 'Boolean'>
   readonly instructions: Prisma.FieldRef<"Recipe", 'String'>
   readonly cookbookId: Prisma.FieldRef<"Recipe", 'String'>
   readonly userId: Prisma.FieldRef<"Recipe", 'String'>

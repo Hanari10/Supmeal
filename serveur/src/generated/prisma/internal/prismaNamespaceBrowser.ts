@@ -135,7 +135,6 @@ export const RecipeScalarFieldEnum = {
   difficulty: 'difficulty',
   imageUrl: 'imageUrl',
   sourceUrl: 'sourceUrl',
-  favorite: 'favorite',
   instructions: 'instructions',
   cookbookId: 'cookbookId',
   userId: 'userId',

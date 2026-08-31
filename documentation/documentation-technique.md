@@ -416,7 +416,7 @@ Les principaux domaines de l'API concernent :
 
 Les routes protégées nécessitent une authentification valide.
 
-Le détail exact des routes doit rester cohérent avec les contrôleurs présents dans `serveur/src/`.
+Le détail exact des routes doit rester cohérent avec les contrôleurs présents dans serveur/src/.
 
 ---
 
@@ -610,7 +610,7 @@ COMMENTER
 
 ## 15.1. Gestion des recettes d'un cookbook
 
-Une recette peut être rattachée à un cookbook grâce au champ `cookbookId` présent dans le modèle `Recipe`.
+Une recette peut être rattachée à un cookbook grâce au champ cookbookId présent dans le modèle Recipe.
 
 Lorsqu'un utilisateur souhaite ajouter une recette à un cookbook, le serveur vérifie plusieurs éléments avant d'effectuer l'association :
 
@@ -637,9 +637,9 @@ Association au cookbook
 recipe.cookbookId = cookbook.id
 ```
 
-Un utilisateur disposant du rôle `CREATOR` ou `EDITOR` peut ajouter ses propres recettes au cookbook.
+Un utilisateur disposant du rôle CREATOR ou EDITOR peut ajouter ses propres recettes au cookbook.
 
-Les rôles `READER` et `COMMENTER` ne disposent pas de cette permission.
+Les rôles READER et COMMENTER ne disposent pas de cette permission.
 
 Une recette déjà présente dans le cookbook ne peut pas être ajoutée une seconde fois.
 
@@ -696,7 +696,7 @@ Pour le retrait d'une recette, l'opération est autorisée notamment pour :
 
 - le propriétaire du cookbook ;
 - le créateur de la recette ;
-- un utilisateur disposant du rôle `EDITOR`.
+- un utilisateur disposant du rôle EDITOR.
 
 Avant chaque opération, le serveur vérifie les droits de l'utilisateur concerné.
 
@@ -706,12 +706,9 @@ Cette vérification côté client améliore l'expérience utilisateur, mais la s
 
 Après un ajout ou un retrait réussi, l'interface actualise les données du cookbook et affiche une notification confirmant l'opération.
 
-Les fonctionnalités collaboratives avancées suivantes restent à développer ou à approfondir :
+La version actuelle intègre les rôles, les commentaires sur les recettes partagées, la recherche interne aux cookbooks et la messagerie instantanée via Socket.IO.
 
-- système complet d'invitations ;
-- commentaires sur les recettes ;
-- messagerie instantanée ;
-- gestion plus avancée et plus granulaire des permissions.
+Les améliorations collaboratives restantes concernent principalement un système complet d'invitations et une granularité encore plus fine des permissions.
 
 ---
 
@@ -777,7 +774,7 @@ Sont notamment considérés comme secrets :
 - les mots de passe de base de données ;
 - le secret JWT ;
 - les éventuelles clés d'API ;
-- les futurs secrets OAuth2.
+- les secrets OAuth2.
 
 Ils ne doivent apparaître :
 
@@ -1085,7 +1082,7 @@ flowchart LR
 
 # 26. Schéma relationnel simplifié
 
-Le modèle complet est décrit dans `modele-de-donnees.md`.
+Le modèle complet est décrit dans modele-de-donnees.md.
 
 Une représentation simplifiée des relations principales est la suivante :
 
@@ -1119,19 +1116,16 @@ Le schéma Prisma doit être considéré comme la référence exacte de l'implé
 
 La version actuelle de SUPMEAL fournit le cœur fonctionnel nécessaire à la gestion personnelle de recettes et de repas.
 
-Certaines fonctionnalités prévues par le cahier des charges peuvent être approfondies ou ajoutées ultérieurement :
+Les principales améliorations encore envisageables concernent :
 
-- authentification OAuth2 ;
-- commentaires sur les recettes partagées ;
-- messagerie instantanée dans les cookbooks ;
-- système complet d'invitations ;
-- gestion plus avancée des rôles et permissions ;
-- préférences culinaires ;
-- allergies ;
-- filtres supplémentaires ;
-- recherche propre à chaque cookbook ;
-- conversion automatique entre unités compatibles ;
-- amélioration des fonctions collaboratives.
+- un système complet d'invitations ;
+- une gestion encore plus granulaire des rôles et permissions ;
+- la conversion automatique entre unités compatibles ;
+- une planification sur plusieurs semaines ;
+- une couverture de tests automatisés plus importante ;
+- le déploiement public et la CI/CD.
+
+Google OAuth2, les préférences alimentaires et allergies, les filtres de recettes, la recherche interne aux cookbooks, les commentaires et la messagerie instantanée sont intégrés à la version actuelle.
 
 D'autres améliorations peuvent également être envisagées :
 
@@ -1157,13 +1151,13 @@ documentation/
 └── suivi-du-projet.md
 ```
 
-`conception.md` détaille les choix de conception.
+conception.md détaille les choix de conception.
 
-`modele-de-donnees.md` présente le modèle relationnel et les entités.
+modele-de-donnees.md présente le modèle relationnel et les entités.
 
-`suivi-du-projet.md` retrace l'évolution du développement.
+suivi-du-projet.md retrace l'évolution du développement.
 
-`manuel-utilisateur.md` explique l'utilisation de l'application.
+manuel-utilisateur.md explique l'utilisation de l'application.
 
 ---
 

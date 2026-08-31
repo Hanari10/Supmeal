@@ -512,6 +512,10 @@ export type ShoppingListItemUncheckedUpdateManyWithoutShoppingListNestedInput = 
   deleteMany?: Prisma.ShoppingListItemScalarWhereInput | Prisma.ShoppingListItemScalarWhereInput[]
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type ShoppingListItemCreateWithoutIngredientInput = {
   id?: string
   quantity: number

@@ -93,7 +93,6 @@ model Recipe {
   difficulty      String?
   imageUrl        String?
   sourceUrl       String?
-  favorite        Boolean  @default(false)
   instructions    String   @default("")
   cookbookId      String?
   userId          String   @db.Uuid
