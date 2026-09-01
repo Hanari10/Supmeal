@@ -1,498 +1,165 @@
 # SUPMEAL
 
-SUPMEAL est une application web de gestion de recettes et de planification de repas développée dans le cadre d'un projet individuel SUPINFO.
+**SUPMEAL** est une application web de gestion de recettes et de planification de repas. Elle permet de centraliser ses recettes, organiser ses repas, générer des listes de courses et partager des recettes à travers des cookbooks collaboratifs.
 
-L'objectif de l'application est de proposer une solution permettant de centraliser ses recettes, gérer leurs ingrédients, organiser ses repas et générer des listes de courses depuis une interface unique.
+# Sommaire
 
-Le projet repose sur une architecture composée de trois briques distinctes :
+- [1. Introduction](#1-introduction)
+- [2. Fonctionnalités principales](#2-fonctionnalités-principales)
+- [3. Installation et configuration](#3-installation-et-configuration)
+- [4. Structure du projet](#4-structure-du-projet)
+- [5. Déploiement via Docker](#5-déploiement-via-docker)
+- [6. Description des composants Docker](#6-description-des-composants-docker)
+- [7. Documentation](#7-documentation)
+- [8. Auteure](#8-auteure)
 
-- un client web React ;
-- une API REST NestJS ;
-- une base de données PostgreSQL.
+## 1. Introduction
 
-L'ensemble de l'application peut être déployé avec Docker Compose.
+**SUPMEAL** est une plateforme de gestion de recettes composée de trois éléments principaux :
 
----
+- **Backend** : une API REST développée avec **NestJS**, **TypeScript** et **Prisma ORM**, assurant la logique métier, l'authentification et l'accès aux données.
+- **Frontend** : une application web développée avec **React**, **Vite**, **TypeScript** et **PrimeReact**.
+- **Base de données** : une base **PostgreSQL** utilisée pour stocker les utilisateurs, recettes, ingrédients, cookbooks, plannings et listes de courses.
 
-## Sommaire
+L'application intègre également une authentification par **JWT et Google OAuth2**, ainsi que **Socket.IO** pour la messagerie instantanée des cookbooks.
 
-- [Fonctionnalités](#fonctionnalités)
-  - [Authentification et profil](#authentification-et-profil)
-  - [Recettes](#recettes)
-  - [Ingrédients](#ingrédients)
-  - [Recherche](#recherche)
-  - [Favoris](#favoris)
-  - [Planning des repas](#planning-des-repas)
-  - [Liste de courses](#liste-de-courses)
-  - [Cookbooks](#cookbooks)
-  - [Import et export](#import-et-export)
-- [Technologies utilisées](#technologies-utilisées)
-- [Architecture](#architecture)
-- [Structure du projet](#structure-du-projet)
-- [Installation et lancement](#installation-et-lancement)
-  - [Prérequis](#prérequis)
-  - [Récupération du projet](#récupération-du-projet)
-  - [Variables d'environnement](#variables-denvironnement)
-- [Lancement avec Docker](#lancement-avec-docker)
-- [Lancement en développement](#lancement-en-développement)
-  - [Serveur](#serveur)
-  - [Client](#client)
-  - [Base de données](#base-de-données)
-- [Vérification du projet](#vérification-du-projet)
-- [Sécurité](#sécurité)
-- [Documentation](#documentation)
-- [État du projet](#état-du-projet)
-- [Auteure](#auteure)
+## 2. Fonctionnalités principales
 
----
+- **Authentification et profil** : création de compte, connexion, Google OAuth2, modification du profil et changement de mot de passe.
+- **Gestion des recettes** : création, consultation, modification et suppression de recettes avec ingrédients, quantités, instructions, images, tags et favoris.
+- **Recherche et filtrage** : recherche par nom, description, ingrédients, tags et différents critères.
+- **Planning des repas** : organisation des recettes par jour, type de repas et nombre de portions.
+- **Liste de courses** : génération automatique à partir du planning avec regroupement des ingrédients.
+- **Cookbooks collaboratifs** : partage de recettes entre utilisateurs avec différents rôles et permissions.
+- **Commentaires et messagerie** : commentaires sur les recettes partagées et échanges en temps réel dans les cookbooks.
+- **Import et export** : importation et exportation des données de l'utilisateur.
 
-## Fonctionnalités
+## 3. Installation et configuration
 
-### Authentification et profil
+### Prérequis
 
-SUPMEAL dispose d'un système d'authentification permettant :
+- **Git**
+- **Docker** et **Docker Compose**
+- **Node.js** et **npm** pour un lancement sans Docker
 
-- la création d'un compte ;
-- la connexion à un compte existant ;
-- l'authentification par JWT ;
-- la protection des routes privées ;
-- la modification des informations du profil ;
-- le changement de mot de passe ;
-- la connexion avec Google via OAuth2.
+### 1. Cloner le dépôt
 
-Les mots de passe ne sont pas stockés en clair dans la base de données. Un compte Google peut être associé à un compte SUPMEAL existant lorsque les adresses e-mail correspondent.
-
-### Recettes
-
-L'utilisateur peut :
-
-- créer une recette ;
-- consulter ses recettes ;
-- modifier une recette ;
-- supprimer une recette ;
-- renseigner une description ;
-- renseigner les instructions de préparation ;
-- définir le temps de préparation ;
-- définir le temps de cuisson ;
-- définir le nombre de portions ;
-- définir la difficulté ;
-- ajouter une image ;
-- ajouter plusieurs ingrédients avec quantité et unité ;
-- modifier ou supprimer les ingrédients d'une recette ;
-- ajouter une recette aux favoris.
-
-Les images peuvent être sélectionnées directement depuis le stockage de l'utilisateur puis envoyées au serveur.
-
-### Ingrédients
-
-Une section dédiée permet de gérer les ingrédients utilisés dans les recettes.
-
-Les ingrédients peuvent ensuite être associés aux recettes avec :
-
-- une quantité ;
-- une unité de mesure ;
-- un ordre d'affichage.
-
-### Recherche et filtrage
-
-La liste des recettes dispose d'un système de recherche et de filtrage permettant de retrouver une recette à partir de son nom, de sa description, de ses instructions, de ses ingrédients ou de ses tags. Des filtres peuvent également être appliqués sur la difficulté, les temps de préparation et de cuisson, les tags, les ingrédients, les favoris et les cookbooks.
-
-### Favoris
-
-Les recettes peuvent être ajoutées ou retirées des favoris.
-
-Une page dédiée permet de retrouver rapidement les recettes favorites.
-
-### Planning des repas
-
-SUPMEAL permet de planifier des recettes afin d'organiser les repas.
-
-L'utilisateur peut notamment :
-
-- ajouter une recette au planning ;
-- définir un jour de la semaine ;
-- définir un type de repas ;
-- choisir le nombre de portions ;
-- modifier une planification ;
-- supprimer une planification.
-
-### Liste de courses
-
-Une liste de courses peut être générée à partir des recettes planifiées.
-
-Les ingrédients identiques utilisant la même unité sont regroupés automatiquement et leurs quantités sont additionnées.
-
-Par exemple, deux recettes nécessitant respectivement 200 g et 300 g de farine produisent une entrée de 500 g de farine dans la liste de courses.
-
-### Cookbooks
-
-L'application permet de créer et gérer des cookbooks afin de regrouper des recettes.
-
-Selon son rôle dans le cookbook, un utilisateur peut notamment :
-
-- consulter les recettes du cookbook ;
-- ajouter une de ses recettes personnelles au cookbook ;
-- retirer une recette du cookbook sans la supprimer ;
-- gérer les membres du cookbook ;
-- consulter les rôles des membres ;
-- rechercher une recette directement dans un cookbook ;
-- commenter les recettes partagées selon les permissions ;
-- échanger des messages en temps réel avec les membres du cookbook.
-
-Les rôles actuellement utilisés sont :
-
-- créateur ;
-- éditeur ;
-- lecteur ;
-- commentateur.
-
-Les commentaires et la messagerie instantanée sont intégrés. Un système d'invitations plus avancé, par exemple par lien ou par e-mail, reste une évolution possible.
-
-### Import et export
-
-SUPMEAL permet d'importer et d'exporter des données afin de faciliter leur sauvegarde ou leur transfert.
-
-L'import et l'export prennent en charge les recettes et les cookbooks.
-
----
-
-## Fonctionnalités prévues ou à approfondir
-
-Les principales pistes d'évolution restantes concernent :
-
-- un système d'invitations plus complet pour les cookbooks ;
-- une granularité encore plus fine des permissions ;
-- la conversion automatique entre unités compatibles, par exemple 1000 g vers 1 kg ;
-- une vue de planning sur plusieurs semaines ;
-- une couverture de tests automatisés plus complète ;
-- le déploiement public et la mise en place d'une chaîne CI/CD.
-
----
-
-## Technologies utilisées
-
-### Client web
-
-- React
-- TypeScript
-- Vite
-- PrimeReact
-- React Router
-- Axios
-
-### Serveur
-
-- Node.js
-- NestJS
-- TypeScript
-- Prisma ORM
-- JWT
-
-### Base de données
-
-- PostgreSQL
-
-### Déploiement
-
-- Docker
-- Docker Compose
-- Nginx
-
----
-
-## Architecture
-
-SUPMEAL utilise une architecture en trois parties :
-
-```text
-┌──────────────────────┐
-│                      │
-│     Client React     │
-│                      │
-└──────────┬───────────┘
-           │
-           │ HTTP / REST
-           ▼
-┌──────────────────────┐
-│                      │
-│     API NestJS       │
-│                      │
-└──────────┬───────────┘
-           │
-           │ Prisma ORM
-           ▼
-┌──────────────────────┐
-│                      │
-│     PostgreSQL       │
-│                      │
-└──────────────────────┘
+```bash
+git clone https://github.com/Hanari10/Supmeal.git
+cd Supmeal
 ```
 
-Le client web sert d'interface utilisateur et communique avec l'API REST.
+### 2. Configuration
 
-Le serveur contient la logique métier, assure l'authentification et réalise les opérations nécessaires sur les données.
+Les fichiers `.env.example` présents dans le projet indiquent les variables d'environnement nécessaires.
 
-Prisma assure l'accès à PostgreSQL.
+Les principales variables concernent :
 
----
+- la connexion à PostgreSQL ;
+- le secret JWT ;
+- Google OAuth2 ;
+- l'URL du frontend.
 
-## Structure du projet
+Les secrets réels ne doivent pas être enregistrés dans le dépôt Git.
+
+### 3. Installation manuelle
+
+#### Backend
+
+```bash
+cd serveur
+npm install
+npx prisma generate
+npm run start:dev
+```
+
+#### Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Pour une installation et une configuration plus détaillées, consulter la documentation technique disponible dans le dossier `documentation/`.
+
+## 4. Structure du projet
 
 ```text
 SUPMEAL/
-│
-├── client/
-│   ├── src/
+├── client/                # Application web React/Vite
+│   ├── src/               # Pages, composants, services et types
 │   ├── Dockerfile
 │   └── nginx.conf
-│
-├── serveur/
-│   ├── prisma/
-│   ├── src/
+├── serveur/               # API NestJS
+│   ├── prisma/            # Schéma et migrations de la base de données
+│   ├── src/               # Modules et logique métier
 │   └── Dockerfile
-│
-├── documentation/
+├── documentation/         # Documentation complète du projet
 │   ├── images/
-│   ├── README.md
 │   ├── documentation-technique.md
 │   ├── manuel-utilisateur.md
 │   ├── conception.md
 │   ├── modele-de-donnees.md
 │   └── suivi-du-projet.md
-│
-├── docker-compose.yml
+├── docker-compose.yml     # Orchestration des services
 └── README.md
 ```
 
----
+## 5. Déploiement via Docker
 
-# Installation et lancement
+Le projet est entièrement conteneurisé.
 
-## Prérequis
-
-Pour lancer SUPMEAL avec Docker, il faut disposer de :
-
-- Git ;
-- Docker ;
-- Docker Compose.
-
-Pour le développement sans Docker, Node.js et npm sont également nécessaires.
-
----
-
-## Récupération du projet
-
-Cloner le dépôt :
-
-```bash
-git clone https://github.com/Hanari10/Supmeal.git
-```
-
-Puis entrer dans le dossier :
-
-```bash
-cd Supmeal
-```
-
----
-
-## Variables d'environnement
-
-L'application nécessite certaines variables d'environnement pour fonctionner.
-
-Les secrets réels ne doivent jamais être enregistrés dans le dépôt Git.
-
-Un fichier .env doit être créé à partir des exemples fournis dans le projet lorsque cela est nécessaire.
-
-Exemple :
-
-```env
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
-JWT_SECRET=CHANGE_ME
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
-FRONTEND_URL=http://localhost:5173
-```
-
-Les valeurs ci-dessus sont uniquement des exemples et doivent être remplacées par les valeurs correspondant à l'environnement utilisé.
-
----
-
-# Lancement avec Docker
-
-Depuis la racine du projet :
+Depuis la racine :
 
 ```bash
 docker compose up --build
 ```
 
-Pour lancer les conteneurs en arrière-plan :
+Pour lancer les services en arrière-plan :
 
 ```bash
 docker compose up -d --build
 ```
 
-Docker Compose démarre les trois services principaux :
+L'application web est ensuite accessible à l'adresse :
 
-- le client web ;
-- le serveur ;
-- PostgreSQL.
-
-Pour vérifier leur état :
-
-```bash
-docker compose ps
+```text
+http://localhost:8080
 ```
 
-Pour arrêter l'application :
+Pour arrêter les services :
 
 ```bash
 docker compose down
 ```
 
-Les données PostgreSQL sont conservées grâce à un volume Docker.
+## 6. Description des composants Docker
 
-> Attention : l'utilisation de 'docker compose down -v' supprime également les volumes et peut donc supprimer les données persistantes de la base.
+Le fichier `docker-compose.yml` orchestre trois services principaux :
 
----
+- `frontend` : application React compilée et servie avec **Nginx** ;
+- `backend` : API **NestJS** et accès aux données avec **Prisma** ;
+- `postgres` : base de données **PostgreSQL**.
 
-# Lancement en développement
+Des volumes Docker assurent la persistance de la base de données et des images de recettes.
 
-## Serveur
+## 7. Documentation
 
-Se placer dans :
-
-```bash
-cd serveur
-```
-
-Installer les dépendances :
-
-```bash
-npm install
-```
-
-Puis lancer le serveur :
-
-```bash
-npm run start:dev
-```
-
----
-
-## Client
-
-Dans un autre terminal :
-
-```bash
-cd client
-```
-
-Installer les dépendances :
-
-```bash
-npm install
-```
-
-Puis lancer le client :
-
-```bash
-npm run dev
-```
-
----
-
-## Base de données
-
-Le serveur nécessite une instance PostgreSQL fonctionnelle.
-
-Dans l'environnement de développement du projet, PostgreSQL peut être démarré avec Docker.
-
-En cas d'erreur Prisma de type :
-
-```text
-ECONNREFUSED
-```
-
-il faut notamment vérifier que le conteneur PostgreSQL est démarré :
-
-```bash
-docker compose ps
-```
-
----
-
-# Vérification du projet
-
-Avant un commit ou un déploiement, le client et le serveur peuvent être vérifiés avec ESLint et leur système de build.
-
-## Serveur
-
-```bash
-cd serveur
-
-npm run lint
-npm run build
-```
-
-## Client
-
-```bash
-cd client
-
-npm run lint
-npm run build
-```
-
----
-
-# Sécurité
-
-Plusieurs mesures sont mises en place afin de protéger l'application et les données :
-
-- les mots de passe ne sont pas stockés en clair ;
-- l'authentification utilise des jetons JWT ;
-- les routes nécessitant une authentification sont protégées ;
-- les opérations sur les données sont contrôlées côté serveur ;
-- les secrets sont configurés avec des variables d'environnement ;
-- aucun secret réel ne doit être versionné dans Git.
-
-Les fichiers .env contenant des informations sensibles doivent être exclus du dépôt.
-
----
-
-# Documentation
-
-La documentation complète du projet se trouve dans le dossier :
-
-```text
-documentation/
-```
+La documentation détaillée est disponible dans le dossier [`documentation`](documentation/).
 
 Elle comprend notamment :
 
-- la documentation technique ;
+- la documentation technique et le guide de déploiement ;
 - le manuel utilisateur ;
 - les choix de conception ;
-- le modèle de données ;
-- les diagrammes ;
+- le modèle de données et les diagrammes ;
 - le suivi du développement.
 
----
-
-# État du projet
-
-La version actuelle fournit les principales fonctionnalités de gestion personnelle de recettes et de planification de repas.
-
-L'architecture Docker permet de déployer ensemble le client web, l'API et PostgreSQL.
-
-La version actuelle intègre également Google OAuth2, les commentaires de recettes partagées, la messagerie instantanée des cookbooks, la recherche interne aux cookbooks ainsi que la gestion des rôles et permissions. Les évolutions restantes concernent principalement les invitations avancées, la conversion d'unités, les tests automatisés et le déploiement public.
-
----
-
-# Auteure
+## 8. Auteure
 
 **Marion LEFEBVRE**
 
-Projet individuel réalisé dans le cadre de la formation SUPINFO.
+Projet individuel réalisé dans le cadre de la formation **SUPINFO**.
+
+Dépôt GitHub : https://github.com/Hanari10/Supmeal
