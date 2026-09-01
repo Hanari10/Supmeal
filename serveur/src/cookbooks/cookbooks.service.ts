@@ -26,7 +26,18 @@ export class CookbooksService {
         },
       },
       include: {
-        members: true,
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
         recipes: true,
       },
     });
@@ -46,9 +57,22 @@ export class CookbooksService {
           select: {
             id: true,
             email: true,
+            firstName: true,
+            lastName: true,
           },
         },
-        members: true,
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
         recipes: true,
       },
       orderBy: {
@@ -72,9 +96,22 @@ export class CookbooksService {
           select: {
             id: true,
             email: true,
+            firstName: true,
+            lastName: true,
           },
         },
-        members: true,
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
         recipes: true,
       },
     });

@@ -1345,7 +1345,10 @@ function CookbooksPage() {
                 <Column
                   header="Utilisateur"
                   body={(member: CookbookMember) =>
-                    member.user?.email ??
+                    [member.user?.firstName, member.user?.lastName]
+                      .filter(Boolean)
+                      .join(' ') ||
+                    member.user?.email ||
                     member.userId
                   }
                 />
